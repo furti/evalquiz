@@ -1,0 +1,53 @@
+/**
+ * Level
+ */
+.riddle-card {
+    cursor: pointer;
+    padding: 0;
+}
+
+.riddle-title {
+    padding-right: 10px;
+}
+
+.riddle-card md-card-content {
+    padding: 8px;
+    display: block;
+}
+
+/**
+ * Toolbar
+ */
+.md-toolbar-item {
+    margin-right: 10px;
+}
+
+.md-toolbar-item .md-button {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/**
+ * Transitions
+ */
+.grow {
+    transition: all .2s ease-in-out;
+}
+
+.grow:hover {
+    transform: scale(1.05);
+}
+
+/**
+ * Code
+ */
+code {
+    background: #F6F6F6;
+    padding: 2px 5px;
+    color: #4285F4;
+}
+
+.md-actions {
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+    padding: 5px 10px;
+}

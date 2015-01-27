@@ -1,0 +1,14 @@
+[
+  {
+    "level": 0,
+    "title": "Intro",
+    "shortDescription": "eval(Quiz) sounds like fun :)",
+    "location": "intro"
+  },
+  {
+    "level": 1,
+    "title": "Dwarfs and dragons",
+    "shortDescription": "Help the dwarfs to save their lives.",
+    "location": "dwarfs"
+  }
+]

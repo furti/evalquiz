@@ -1,0 +1,15 @@
+{
+  "name": "add",
+  "params": [
+    {
+      "name": "a",
+      "type": "number",
+      "description": "Random number"
+    },
+    {
+      "name": "b",
+      "type": "number",
+      "description": "Another random number"
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html ng-app="evalquiz">
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>eval(Quiz)</title>
+
+    <!--<link href="css/bootstrap.min.css" rel="stylesheet">-->
+    <!--<link href="css/material.css" rel="stylesheet">-->
+    <link href="css/angular-material.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/evalquiz.css" rel="stylesheet">
+</head>
+<body ng-controller="EvalQuizController as quiz" layout="column">
+<md-toolbar class="md-default-theme">
+    <div class="md-toolbar-tools" layout="row">
+        <div class="md-toolbar-item"><span>eval(Quiz)</span></div>
+
+        <div class="md-toolbar-item">
+            <md-button ng-click="quiz.showRiddles($event)">Riddles</md-button>
+        </div>
+
+        <div flex=""></div>
+        <div class="md-toolbar-item">
+            <md-button ng-click="quiz.showCredits($event)">Credits</md-button>
+        </div>
+    </div>
+</md-toolbar>
+
+<ng-view layout="row" flex=""></ng-view>
+
+<script type="text/javascript" src="js/lib/hammer.js"></script>
+<script type="text/javascript" src="js/lib/angular.js"></script>
+<script type="text/javascript" src="js/lib/angular-route.js"></script>
+<script type="text/javascript" src="js/lib/angular-animate.js"></script>
+<script type="text/javascript" src="js/lib/angular-aria.js"></script>
+<script type="text/javascript" src="js/lib/angular-sanitize.js"></script>
+<script type="text/javascript" src="js/lib/angular-material.js"></script>
+<script type="text/javascript" src="js/lib/showdown.js"></script>
+<script type="text/javascript" src="js/lib/markdown.js"></script>
+
+<!--<script type="text/javascript" src="js/ui-bootstrap.js"></script>-->
+<script type="text/javascript" src="js/evalquiz.js"></script>
+<script type="text/javascript" src="js/asyncHelper.js"></script>
+<script type="text/javascript" src="js/riddleManager.js"></script>
+<script type="text/javascript" src="js/riddleCard.js"></script>
+<script type="text/javascript" src="js/attributeInfo.js"></script>
+</body>
+</html>

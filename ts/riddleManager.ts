@@ -17,7 +17,8 @@ module riddle {
 
     export interface FunctionData {
         name: string;
-        paramsString: string;
+        paramsString:string;
+        code:string;
         params: Array<FunctionParam>;
     }
 
@@ -114,17 +115,7 @@ module riddle {
                     riddle.functionData = data.functionData.data;
                     riddle.functionDescription = data.functionDescription.data;
 
-                    if (riddle.functionData.params) {
-                        riddle.functionData.paramsString = '';
-
-                        riddle.functionData.params.forEach(function (param) {
-                            if (riddle.functionData.paramsString.length >= 1) {
-                                riddle.functionData.paramsString += ', ';
-                            }
-
-                            riddle.functionData.paramsString += param.name;
-                        });
-                    }
+                    riddleManager.prepareCode(riddle);
 
                     riddle.initialized = true;
                     defered.resolve(riddle);
@@ -132,6 +123,28 @@ module riddle {
             });
 
             return defered.promise;
+        }
+
+        private prepareCode(riddle:FullRiddle):void {
+            if (riddle.functionData.params) {
+                riddle.functionData.paramsString = '';
+
+                riddle.functionData.params.forEach(function (param) {
+                    if (riddle.functionData.paramsString.length >= 1) {
+                        riddle.functionData.paramsString += ', ';
+                    }
+
+                    riddle.functionData.paramsString += param.name;
+                });
+            }
+
+            riddle.functionData.code = 'function ' + riddle.functionData.name + '(';
+
+            if (riddle.functionData.paramsString) {
+                riddle.functionData.code += riddle.functionData.paramsString;
+            }
+
+            riddle.functionData.code += ') {\n\n}';
         }
 
         private prepareRiddles(riddles:Array<FullRiddle>):Array<FullRiddle> {
@@ -150,8 +163,8 @@ module riddle {
             return riddles;
         }
 
-        solveRiddle(riddle:Riddle, code:string):void {
-            var solution = new Function(riddle.functionData.paramsString, code);
+        solveRiddle(riddle:Riddle):void {
+            var solution = new Function(riddle.functionData.paramsString, riddle.functionData.code);
             var riddleEngine = new Function();
             alert(solution(Math.random(), Math.random()));
         }

@@ -60,9 +60,8 @@ module evalquiz {
 
     class RiddleController {
         public riddle:riddle.Riddle;
-        public paramsString:string;
-        public code:string;
         public loading:boolean;
+        public editorOptions:any;
 
         private riddleManager:riddle.RiddleManager;
 
@@ -75,6 +74,25 @@ module evalquiz {
 
             this.loading = true;
 
+            //After the value of the editor is set we mark the first and last line as readonly
+            var cmChange = function (editor:any, change:any) {
+                if (change.origin === 'setValue') {
+                    editor.markText({line: 0, ch: 0}, {line: 0}, {readOnly: true});
+                    editor.markText({line: 2, ch: 0}, {line: 2}, {readOnly: true});
+
+                    //Remove the change listener as we do not need it anymore
+                    editor.off('change', cmChange);
+                }
+            };
+
+            this.editorOptions = {
+                lineNumbers: true,
+                mode: 'javascript',
+                onLoad: function (cm:any) {
+                    cm.on('change', cmChange);
+                }
+            };
+
             riddleManager.startRiddle(parseInt($routeParams['riddleId'])).then(function (riddle) {
                 ctrl.riddle = riddle;
                 ctrl.loading = false;
@@ -82,11 +100,11 @@ module evalquiz {
         }
 
         public solve($event:any):void {
-            this.riddleManager.solveRiddle(this.riddle, this.code);
+            this.riddleManager.solveRiddle(this.riddle);
         }
     }
 
-    angular.module('evalquiz', ['ngRoute', 'ngMaterial', 'btford.markdown'])
+    angular.module('evalquiz', ['ngRoute', 'ngMaterial', 'btford.markdown', 'ui.codemirror'])
         .controller('EvalQuizController', EvalQuizController)
         .controller('ShowRiddlesController', ShowRiddlesController)
         .controller('RiddleController', RiddleController)

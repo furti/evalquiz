@@ -49,18 +49,34 @@ var evalquiz;
             this.riddleManager = riddleManager;
             var ctrl = this;
             this.loading = true;
+            //After the value of the editor is set we mark the first and last line as readonly
+            var cmChange = function (editor, change) {
+                if (change.origin === 'setValue') {
+                    editor.markText({ line: 0, ch: 0 }, { line: 0 }, { readOnly: true });
+                    editor.markText({ line: 2, ch: 0 }, { line: 2 }, { readOnly: true });
+                    //Remove the change listener as we do not need it anymore
+                    editor.off('change', cmChange);
+                }
+            };
+            this.editorOptions = {
+                lineNumbers: true,
+                mode: 'javascript',
+                onLoad: function (cm) {
+                    cm.on('change', cmChange);
+                }
+            };
             riddleManager.startRiddle(parseInt($routeParams['riddleId'])).then(function (riddle) {
                 ctrl.riddle = riddle;
                 ctrl.loading = false;
             });
         }
         RiddleController.prototype.solve = function ($event) {
-            this.riddleManager.solveRiddle(this.riddle, this.code);
+            this.riddleManager.solveRiddle(this.riddle);
         };
         RiddleController.$inject = ['$routeParams', 'riddleManager'];
         return RiddleController;
     })();
-    angular.module('evalquiz', ['ngRoute', 'ngMaterial', 'btford.markdown']).controller('EvalQuizController', EvalQuizController).controller('ShowRiddlesController', ShowRiddlesController).controller('RiddleController', RiddleController).run(['riddleManager', function (riddleManager) {
+    angular.module('evalquiz', ['ngRoute', 'ngMaterial', 'btford.markdown', 'ui.codemirror']).controller('EvalQuizController', EvalQuizController).controller('ShowRiddlesController', ShowRiddlesController).controller('RiddleController', RiddleController).run(['riddleManager', function (riddleManager) {
         riddleManager.setupRiddles();
     }]).config(['$mdThemingProvider', '$routeProvider', function ($mdThemingProvider, $routeProvider) {
         console.log('Hmmm... I dont\'t think you need the console right now ;)');

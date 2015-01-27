@@ -63,20 +63,28 @@ var riddle;
                     riddle.description = data.description.data;
                     riddle.functionData = data.functionData.data;
                     riddle.functionDescription = data.functionDescription.data;
-                    if (riddle.functionData.params) {
-                        riddle.functionData.paramsString = '';
-                        riddle.functionData.params.forEach(function (param) {
-                            if (riddle.functionData.paramsString.length >= 1) {
-                                riddle.functionData.paramsString += ', ';
-                            }
-                            riddle.functionData.paramsString += param.name;
-                        });
-                    }
+                    riddleManager.prepareCode(riddle);
                     riddle.initialized = true;
                     defered.resolve(riddle);
                 });
             });
             return defered.promise;
+        };
+        RiddleManager.prototype.prepareCode = function (riddle) {
+            if (riddle.functionData.params) {
+                riddle.functionData.paramsString = '';
+                riddle.functionData.params.forEach(function (param) {
+                    if (riddle.functionData.paramsString.length >= 1) {
+                        riddle.functionData.paramsString += ', ';
+                    }
+                    riddle.functionData.paramsString += param.name;
+                });
+            }
+            riddle.functionData.code = 'function ' + riddle.functionData.name + '(';
+            if (riddle.functionData.paramsString) {
+                riddle.functionData.code += riddle.functionData.paramsString;
+            }
+            riddle.functionData.code += ') {\n\n}';
         };
         RiddleManager.prototype.prepareRiddles = function (riddles) {
             if (!riddles) {
@@ -90,8 +98,8 @@ var riddle;
             });
             return riddles;
         };
-        RiddleManager.prototype.solveRiddle = function (riddle, code) {
-            var solution = new Function(riddle.functionData.paramsString, code);
+        RiddleManager.prototype.solveRiddle = function (riddle) {
+            var solution = new Function(riddle.functionData.paramsString, riddle.functionData.code);
             var riddleEngine = new Function();
             alert(solution(Math.random(), Math.random()));
         };

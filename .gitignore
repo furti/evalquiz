@@ -2,3 +2,7 @@
 evalquiz.iml
 bower_components
 Denksportaufgaben2.doc
+ts/.baseDir.ts
+js/.baseDir.js
+.tscache
+node_modules

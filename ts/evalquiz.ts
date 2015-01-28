@@ -78,7 +78,7 @@ module evalquiz {
             var cmChange = function (editor:any, change:any) {
                 if (change.origin === 'setValue') {
                     editor.markText({line: 0, ch: 0}, {line: 0}, {readOnly: true});
-                    editor.markText({line: 2, ch: 0}, {line: 2}, {readOnly: true});
+                    editor.markText({line: editor.lastLine(), ch: 0}, {line: editor.lastLine(), ch: 2}, {readOnly: true});
 
                     //Remove the change listener as we do not need it anymore
                     editor.off('change', cmChange);
@@ -90,6 +90,9 @@ module evalquiz {
                 mode: 'javascript',
                 onLoad: function (cm:any) {
                     cm.on('change', cmChange);
+
+                    //TOOD: A litte bit hacky. Find a better way to set the height
+                    cm.getWrapperElement().style.height = (cm.getWrapperElement().parentNode.clientHeight - 20) + 'px';
                 }
             };
 

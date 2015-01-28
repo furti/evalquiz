@@ -99,9 +99,13 @@ var riddle;
             return riddles;
         };
         RiddleManager.prototype.solveRiddle = function (riddle) {
-            var solution = new Function(riddle.functionData.paramsString, riddle.functionData.code);
+            var solution = this.parseSolution(riddle);
             var riddleEngine = new Function();
             alert(solution(Math.random(), Math.random()));
+        };
+        RiddleManager.prototype.parseSolution = function (riddle) {
+            var create = new Function(riddle.functionData.paramsString, 'return ' + riddle.functionData.code);
+            return create();
         };
         RiddleManager.$inject = ['$http', '$q'];
         return RiddleManager;

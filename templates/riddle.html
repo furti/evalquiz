@@ -24,7 +24,9 @@
 </md-content>
 <!--Editor-->
 <md-content flex="50" layout="column">
-    <textarea flex="" ng-model="riddleCtrl.riddle.functionData.code" ui-codemirror="riddleCtrl.editorOptions"></textarea>
+    <div flex="">
+        <textarea ng-model="riddleCtrl.riddle.functionData.code" ui-codemirror="riddleCtrl.editorOptions"></textarea>
+    </div>
 
     <div class="md-actions" layout="row" layout-align="end">
         <md-button class="md-primary md-raised" ng-click="riddleCtrl.solve($event)">Solve</md-button>

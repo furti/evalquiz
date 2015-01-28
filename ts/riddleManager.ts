@@ -163,10 +163,17 @@ module riddle {
             return riddles;
         }
 
-        solveRiddle(riddle:Riddle):void {
-            var solution = new Function(riddle.functionData.paramsString, riddle.functionData.code);
+        public solveRiddle(riddle:Riddle):void {
+            var solution = this.parseSolution(riddle);
             var riddleEngine = new Function();
+
             alert(solution(Math.random(), Math.random()));
+        }
+
+        private parseSolution(riddle:Riddle):any {
+            var create = new Function(riddle.functionData.paramsString, 'return ' + riddle.functionData.code);
+
+            return create();
         }
     }
 

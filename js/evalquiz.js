@@ -52,8 +52,11 @@ var evalquiz;
             //After the value of the editor is set we mark the first and last line as readonly
             var cmChange = function (editor, change) {
                 if (change.origin === 'setValue') {
-                    editor.markText({ line: 0, ch: 0 }, { line: 0 }, { readOnly: true });
-                    editor.markText({ line: editor.lastLine(), ch: 0 }, { line: editor.lastLine(), ch: 2 }, { readOnly: true });
+                    editor.markText({ line: 0, ch: 0 }, { line: 1 }, { readOnly: true });
+                    editor.markText({ line: editor.lastLine(), ch: 0 }, {
+                        line: editor.lastLine(),
+                        ch: 2
+                    }, { readOnly: true });
                     //Remove the change listener as we do not need it anymore
                     editor.off('change', cmChange);
                 }
@@ -61,6 +64,8 @@ var evalquiz;
             this.editorOptions = {
                 lineNumbers: true,
                 mode: 'javascript',
+                gutters: ["CodeMirror-lint-markers"],
+                lint: true,
                 onLoad: function (cm) {
                     cm.on('change', cmChange);
                     //TOOD: A litte bit hacky. Find a better way to set the height
@@ -73,7 +78,12 @@ var evalquiz;
             });
         }
         RiddleController.prototype.solve = function ($event) {
-            this.riddleManager.solveRiddle(this.riddle);
+            try {
+                this.riddleManager.solveRiddle(this.riddle);
+            }
+            catch (e) {
+                console.log(e);
+            }
         };
         RiddleController.$inject = ['$routeParams', 'riddleManager'];
         return RiddleController;

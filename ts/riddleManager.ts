@@ -144,7 +144,7 @@ module riddle {
                 riddle.functionData.code += riddle.functionData.paramsString;
             }
 
-            riddle.functionData.code += ') {\n\n}';
+            riddle.functionData.code += ') {\n  "use strict";\n  \n}';
         }
 
         private prepareRiddles(riddles:Array<FullRiddle>):Array<FullRiddle> {

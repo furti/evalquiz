@@ -77,8 +77,11 @@ module evalquiz {
             //After the value of the editor is set we mark the first and last line as readonly
             var cmChange = function (editor:any, change:any) {
                 if (change.origin === 'setValue') {
-                    editor.markText({line: 0, ch: 0}, {line: 0}, {readOnly: true});
-                    editor.markText({line: editor.lastLine(), ch: 0}, {line: editor.lastLine(), ch: 2}, {readOnly: true});
+                    editor.markText({line: 0, ch: 0}, {line: 1}, {readOnly: true});
+                    editor.markText({line: editor.lastLine(), ch: 0}, {
+                        line: editor.lastLine(),
+                        ch: 2
+                    }, {readOnly: true});
 
                     //Remove the change listener as we do not need it anymore
                     editor.off('change', cmChange);
@@ -88,6 +91,8 @@ module evalquiz {
             this.editorOptions = {
                 lineNumbers: true,
                 mode: 'javascript',
+                gutters: ["CodeMirror-lint-markers"],
+                lint: true,
                 onLoad: function (cm:any) {
                     cm.on('change', cmChange);
 
@@ -103,7 +108,12 @@ module evalquiz {
         }
 
         public solve($event:any):void {
-            this.riddleManager.solveRiddle(this.riddle);
+            try {
+                this.riddleManager.solveRiddle(this.riddle);
+            }
+            catch (e) {
+                console.log(e);
+            }
         }
     }
 

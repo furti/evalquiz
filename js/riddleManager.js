@@ -84,7 +84,7 @@ var riddle;
             if (riddle.functionData.paramsString) {
                 riddle.functionData.code += riddle.functionData.paramsString;
             }
-            riddle.functionData.code += ') {\n\n}';
+            riddle.functionData.code += ') {\n  "use strict";\n  \n}';
         };
         RiddleManager.prototype.prepareRiddles = function (riddles) {
             if (!riddles) {

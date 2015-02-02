@@ -1,13 +1,13 @@
-<!--Locked message-->
-<md-content class="md-padding" flex="50" layout="column" layout-align="center center" layout-fill=""
-            ng-if="!riddleCtrl.riddle.unlocked">
-    <i class="fa fa-5x fa-frown-o"></i>
-
-    <div>Unfortunately the riddle is not unlocked right now. Please complete the previous riddles.</div>
-</md-content>
 <!--Show progress while loading -->
 <md-content class="md-padding" flex="50" ng-if="riddleCtrl.loading">
     <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+</md-content>
+<!--Locked message-->
+<md-content class="md-padding" flex="50" layout="column" layout-align="center center" layout-fill=""
+            ng-if="riddleCtrl.riddle && !riddleCtrl.riddle.unlocked">
+    <i class="fa fa-5x fa-frown-o"></i>
+
+    <div>Unfortunately the riddle is not unlocked right now. Please complete the previous riddles.</div>
 </md-content>
 <!--Riddle Description-->
 <md-content class="md-padding" flex="50" ng-if="riddleCtrl.riddle.unlocked">

@@ -45,8 +45,10 @@ var evalquiz;
         return ShowRiddlesController;
     })();
     var RiddleController = (function () {
-        function RiddleController($routeParams, riddleManager) {
+        function RiddleController($routeParams, riddleManager, $mdDialog, $location) {
             this.riddleManager = riddleManager;
+            this.$mdDialog = $mdDialog;
+            this.$location = $location;
             var ctrl = this;
             this.loading = true;
             //After the value of the editor is set we mark the first and last line as readonly
@@ -79,16 +81,34 @@ var evalquiz;
         }
         RiddleController.prototype.solve = function ($event) {
             try {
-                this.riddleManager.solveRiddle(this.riddle);
+                var result = this.riddleManager.solveRiddle(this.riddle), ctrl = this;
+                if (result.solved) {
+                    var dialog;
+                    if (result.nextLevel) {
+                        dialog = this.$mdDialog.confirm().title('Congratulations').content(this.riddle.solvedMessage).ok('Next riddle').cancel('Enough for now');
+                    }
+                    else {
+                        dialog = this.$mdDialog.alert().title('Congratulations').content(this.riddle.solvedMessage + ' You solved the last level. Come back later to check if more levels are available.').ok('It\'s done');
+                    }
+                    this.$mdDialog.show(dialog).then(function () {
+                        if (result.nextLevel) {
+                            //Redirect to the next riddle
+                            ctrl.$location.path('/riddles/' + result.nextLevel);
+                        }
+                    });
+                }
+                else {
+                    this.$mdDialog.show(this.$mdDialog.alert().title('Evaluation failed').content('Hmmm... something seems to be wrong. Change some code and try it again.').ok('Got it'));
+                }
             }
             catch (e) {
-                console.log(e);
+                this.$mdDialog.show(this.$mdDialog.alert().title('Ooops! Something went wrong').content(e.message).ok('Got it'));
             }
         };
-        RiddleController.$inject = ['$routeParams', 'riddleManager'];
+        RiddleController.$inject = ['$routeParams', 'riddleManager', '$mdDialog', '$location'];
         return RiddleController;
     })();
-    angular.module('evalquiz', ['ngRoute', 'ngMaterial', 'btford.markdown', 'ui.codemirror']).controller('EvalQuizController', EvalQuizController).controller('ShowRiddlesController', ShowRiddlesController).controller('RiddleController', RiddleController).run(['riddleManager', function (riddleManager) {
+    angular.module('evalquiz', ['ngRoute', 'ngMaterial', 'btford.markdown', 'ui.codemirror', 'angularLocalStorage']).controller('EvalQuizController', EvalQuizController).controller('ShowRiddlesController', ShowRiddlesController).controller('RiddleController', RiddleController).run(['riddleManager', function (riddleManager) {
         riddleManager.setupRiddles();
     }]).config(['$mdThemingProvider', '$routeProvider', function ($mdThemingProvider, $routeProvider) {
         console.log('Hmmm... I dont\'t think you need the console right now ;)');

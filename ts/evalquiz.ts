@@ -64,11 +64,16 @@ module evalquiz {
         public editorOptions:any;
 
         private riddleManager:riddle.RiddleManager;
+        private $mdDialog:ng.material.ModalService;
+        private $location:ng.ILocationService;
 
-        static $inject = ['$routeParams', 'riddleManager'];
+        static $inject = ['$routeParams', 'riddleManager', '$mdDialog', '$location'];
 
-        constructor($routeParams:ng.route.IRouteParamsService, riddleManager:riddle.RiddleManager) {
+        constructor($routeParams:ng.route.IRouteParamsService, riddleManager:riddle.RiddleManager,
+                    $mdDialog:ng.material.ModalService, $location:ng.ILocationService) {
             this.riddleManager = riddleManager;
+            this.$mdDialog = $mdDialog;
+            this.$location = $location;
 
             var ctrl = this;
 
@@ -109,15 +114,53 @@ module evalquiz {
 
         public solve($event:any):void {
             try {
-                this.riddleManager.solveRiddle(this.riddle);
+                var result = this.riddleManager.solveRiddle(this.riddle),
+                    ctrl = this;
+
+                if (result.solved) {
+                    var dialog:any;
+
+                    if (result.nextLevel) {
+                        dialog = this.$mdDialog.confirm()
+                            .title('Congratulations')
+                            .content(this.riddle.solvedMessage)
+                            .ok('Next riddle')
+                            .cancel('Enough for now');
+                    }
+                    else {
+                        dialog = this.$mdDialog.alert()
+                            .title('Congratulations')
+                            .content(this.riddle.solvedMessage + ' You solved the last level. Come back later to check if more levels are available.')
+                            .ok('It\'s done');
+                    }
+
+                    this.$mdDialog.show(dialog).then(function () {
+                        if (result.nextLevel) {
+                            //Redirect to the next riddle
+                            ctrl.$location.path('/riddles/' + result.nextLevel);
+                        }
+                    });
+                }
+                else {
+                    this.$mdDialog.show(
+                        this.$mdDialog.alert()
+                            .title('Evaluation failed')
+                            .content('Hmmm... something seems to be wrong. Change some code and try it again.')
+                            .ok('Got it'));
+                }
             }
             catch (e) {
-                console.log(e);
+                this.$mdDialog.show(
+                    this.$mdDialog.alert()
+                        .title('Ooops! Something went wrong')
+                        .content(e.message)
+                        .ok('Got it'));
+
             }
         }
     }
 
-    angular.module('evalquiz', ['ngRoute', 'ngMaterial', 'btford.markdown', 'ui.codemirror'])
+    angular.module('evalquiz', ['ngRoute', 'ngMaterial', 'btford.markdown', 'ui.codemirror', 'angularLocalStorage'])
         .controller('EvalQuizController', EvalQuizController)
         .controller('ShowRiddlesController', ShowRiddlesController)
         .controller('RiddleController', RiddleController)

@@ -3,6 +3,7 @@
     "level": 0,
     "title": "Intro",
     "shortDescription": "eval(Quiz) sounds like fun :)",
+    "solvedMessage": "You've got it. It wasn't that hard to solve i guess. So let's start with the real riddles now.",
     "location": "intro"
   },
   {

@@ -15,7 +15,7 @@ module.exports = function (grunt) {
                     declaration: false,
                     removeComments: false,
                     failOnTypeErrors: true,
-                    noImplizitAny: true,
+                    noImplicitAny: true,
                     basePath: 'ts',
                     watch: 'ts'
                 }

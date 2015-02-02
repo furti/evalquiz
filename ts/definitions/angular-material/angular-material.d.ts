@@ -5,6 +5,21 @@ declare module ng.material {
     interface ModalService {
         show(optionsOrPreset:ModalOpenOptions): ng.IPromise<any>;
         hide(response?:any): void;
+        alert():ModalAlertPresets;
+        confirm():ModalConfirmPresets;
+    }
+
+    interface ModalAlertPresets {
+        title(title:string):ModalAlertPresets;
+        content(content:string):ModalAlertPresets;
+        ok(okText:string):ModalAlertPresets;
+    }
+
+    interface ModalConfirmPresets {
+        title(title:string):ModalConfirmPresets;
+        content(content:string):ModalConfirmPresets;
+        ok(okText:string):ModalConfirmPresets;
+        cancel(cancelText:string):ModalConfirmPresets;
     }
 
     interface  ModalOpenOptions {

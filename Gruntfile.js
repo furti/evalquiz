@@ -4,8 +4,7 @@ module.exports = function (grunt) {
 
     grunt.initConfig({
         typescript: {
-            // A specific target
-            build: {
+            watch: {
                 src: ["ts/*.ts"],
                 dest: 'js',
                 options: {
@@ -19,9 +18,24 @@ module.exports = function (grunt) {
                     basePath: 'ts',
                     watch: 'ts'
                 }
+            },
+            build: {
+                src: ["ts/*.ts"],
+                dest: 'js',
+                options: {
+                    target: 'es5',
+                    module: 'commonjs',
+                    sourceMap: false,
+                    declaration: false,
+                    removeComments: false,
+                    failOnTypeErrors: true,
+                    noImplicitAny: true,
+                    basePath: 'ts'
+                }
             }
         }
     });
 
-    grunt.registerTask("default", ["typescript:build"]);
+    grunt.registerTask("watch", ["typescript:watch"]);
+    grunt.registerTask("build", ["typescript:build"]);
 };

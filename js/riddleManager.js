@@ -137,6 +137,7 @@ var riddle;
         RiddleManager.prototype.solveRiddle = function (riddle) {
             var solve = this.parseCode(riddle);
             var riddleEngine = this.buildEngine(riddle);
+            riddleEngine.init();
             var solved = riddleEngine.run(solve);
             var result = {
                 solved: solved
@@ -151,6 +152,10 @@ var riddle;
                 else {
                     this.persist([riddle]);
                 }
+            }
+            else {
+                result.failedMessage = riddleEngine.failedMessage();
+                this.persist([riddle]);
             }
             return result;
         };

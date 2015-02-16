@@ -36,6 +36,7 @@ module riddle {
     export interface Result {
         solved:boolean;
         nextLevel?:number;
+        failedMessage?:string;
     }
 
     interface FullRiddle extends Riddle {
@@ -229,6 +230,8 @@ module riddle {
             var solve = this.parseCode(riddle);
             var riddleEngine = this.buildEngine(riddle);
 
+            riddleEngine.init();
+
             var solved = riddleEngine.run(solve);
 
             var result:Result = {
@@ -248,6 +251,10 @@ module riddle {
                 else {
                     this.persist([riddle]);
                 }
+            }
+            else {
+                result.failedMessage = riddleEngine.failedMessage();
+                this.persist([riddle]);
             }
 
             return result;

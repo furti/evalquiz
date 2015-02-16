@@ -101,8 +101,10 @@ module evalquiz {
                 onLoad: function (cm:any) {
                     cm.on('change', cmChange);
 
-                    //TOOD: A litte bit hacky. Find a better way to set the height
-                    cm.getWrapperElement().style.height = (cm.getWrapperElement().parentNode.clientHeight - 20) + 'px';
+                    window.setTimeout(function () {
+                        //TOOD: A litte bit hacky. Find a better way to set the height
+                        cm.getWrapperElement().style.height = (cm.getWrapperElement().parentNode.clientHeight - 20) + 'px';
+                    }, 10);
                 }
             };
 
@@ -110,6 +112,16 @@ module evalquiz {
                 ctrl.riddle = riddle;
                 ctrl.loading = false;
             });
+        }
+
+        public save($event:any):void {
+            this.riddleManager.persist([this.riddle]);
+
+            this.$mdDialog.show(
+                this.$mdDialog.alert()
+                    .title('Saved')
+                    .content('The code was saved')
+                    .ok('OK'));
         }
 
         public solve($event:any):void {
@@ -145,7 +157,7 @@ module evalquiz {
                     this.$mdDialog.show(
                         this.$mdDialog.alert()
                             .title('Evaluation failed')
-                            .content('Hmmm... something seems to be wrong. Change some code and try it again.')
+                            .content('Hmmm... something seems to be wrong. Change some code and try it again. ' + result.failedMessage)
                             .ok('Got it'));
                 }
             }
@@ -153,7 +165,7 @@ module evalquiz {
                 this.$mdDialog.show(
                     this.$mdDialog.alert()
                         .title('Ooops! Something went wrong')
-                        .content(e.message)
+                        .content(e.message || e)
                         .ok('Got it'));
 
             }

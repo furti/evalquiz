@@ -70,8 +70,10 @@ var evalquiz;
                 lint: true,
                 onLoad: function (cm) {
                     cm.on('change', cmChange);
-                    //TOOD: A litte bit hacky. Find a better way to set the height
-                    cm.getWrapperElement().style.height = (cm.getWrapperElement().parentNode.clientHeight - 20) + 'px';
+                    window.setTimeout(function () {
+                        //TOOD: A litte bit hacky. Find a better way to set the height
+                        cm.getWrapperElement().style.height = (cm.getWrapperElement().parentNode.clientHeight - 20) + 'px';
+                    }, 10);
                 }
             };
             riddleManager.startRiddle(parseInt($routeParams['riddleId'])).then(function (riddle) {
@@ -79,6 +81,10 @@ var evalquiz;
                 ctrl.loading = false;
             });
         }
+        RiddleController.prototype.save = function ($event) {
+            this.riddleManager.persist([this.riddle]);
+            this.$mdDialog.show(this.$mdDialog.alert().title('Saved').content('The code was saved').ok('OK'));
+        };
         RiddleController.prototype.solve = function ($event) {
             try {
                 var result = this.riddleManager.solveRiddle(this.riddle), ctrl = this;
@@ -98,11 +104,11 @@ var evalquiz;
                     });
                 }
                 else {
-                    this.$mdDialog.show(this.$mdDialog.alert().title('Evaluation failed').content('Hmmm... something seems to be wrong. Change some code and try it again.').ok('Got it'));
+                    this.$mdDialog.show(this.$mdDialog.alert().title('Evaluation failed').content('Hmmm... something seems to be wrong. Change some code and try it again. ' + result.failedMessage).ok('Got it'));
                 }
             }
             catch (e) {
-                this.$mdDialog.show(this.$mdDialog.alert().title('Ooops! Something went wrong').content(e.message).ok('Got it'));
+                this.$mdDialog.show(this.$mdDialog.alert().title('Ooops! Something went wrong').content(e.message || e).ok('Got it'));
             }
         };
         RiddleController.$inject = ['$routeParams', 'riddleManager', '$mdDialog', '$location'];

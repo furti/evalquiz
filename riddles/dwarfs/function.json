@@ -1,0 +1,21 @@
+{
+  "name": "join",
+  "params": [
+    {
+      "name": "row",
+      "type": "object",
+      "attributes": [
+        {
+          "name": "checkColor(position)",
+          "type": "function",
+          "description": "Returns the color ('red', 'blue') of the dwarfs hat at the position as a string. The position is zero based. So the first dwarf is at position 0 and the last one at size - 1."
+        },
+        {
+          "name": "getLength()",
+          "type": "function",
+          "description": "Returns the number of dwarfs currently in the row"
+        }
+      ]
+    }
+  ]
+}

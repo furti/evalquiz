@@ -1,10 +1,14 @@
-Vor langer Zeit wurde ein Zwergenvolk von einem Drachen gefangen genommen und in eine dunkle Höhle gesperrt. Der Drache war jedoch noch nicht sehr hungrig und liebte Rätsel über alles. Deshalb stellte er den Zwergen eine Aufgabe. Sollten die Zwerge die Aufgabe lösen können, können sie alle von dannen ziehen. Wenn sie jedoch versagen, werden sie vom Drachen gefressen.
+A long time ago a group of dwarfs was captured by a big dragon. The dragon locked them in to a dark cave.
+But the dragon was not that hungry and he loved riddles a lot. So he gave them a task to solve. It they are able
+to solve the task they will be free to go. But if they fail the dragon will eat them all.
 
-Jeder Zwerg hatte eine Mütze auf. Es gab rote und blaue Mützen. Doch die Höhle war so dunkel, dass die Zwerge nicht erkennen konnten welche Mützen sie auf dem Kopf trugen.
-Der Drache verlangte nun, dass sich die Zwerge außerhalb der Höhle in einer Reihe aufstellen mussten. Auf der einen Seite mussten alle Zwerge mit roter, auf der anderen Seite alle Zwerge mit blauer Mütze stehen.
+Each dwarf wears a hat. There are blue and read ones. But the cave is so dark so that no dwarf could see the color of is own hat.
+The dwarfs should line up in a row outside of the cave so that all dwarfs with red hats are standing on the one side and the dwarfs
+with blue hats are standing on the other side.
 
-Sollten die Zwerge jedoch versuchen miteinander zu sprechen oder sonst irgendwie einem Zwerg seine Mützenfarbe mitzueteilen, würden sie sofort gefressen werden.
+The dwarfs are not allowed to talk to each other or tell another dwarf the color of his hat. If they break this rule they will
+be eaten by the dragon immediately.
 
-Zwerge dürfen, nachdem sie sich in dei Reihe gestellt haben, die Position nicht mehr wechseln. Sobald also ein Zwerg an der falschen Stelle steht, gilt die Aufgabe als gescheitert.
+The dwarfs are also not allowed to change position once they stand in the line. So the task fails once a dwarfs stands at the wrong position.
 
-Kannst du den Zwergen helfen und die Funktion zur Rechten für sie implementieren, so dass die Aufgabe erfolgreich erfüllt werden kann?
+Could you help the dwarfs to solve the task and save their lifes?

@@ -10,6 +10,7 @@
     "level": 1,
     "title": "Dwarfs and dragons",
     "shortDescription": "Help the dwarfs to save their lives.",
+    "solvedMessage": "The dwarfs are save now and they lived happily ever after.",
     "location": "dwarfs"
   }
 ]

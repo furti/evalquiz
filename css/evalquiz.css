@@ -55,3 +55,7 @@ code {
 .md-actions .md-button {
     margin-left: 10px;
 }
+
+ng-view {
+    overflow: hidden;
+}

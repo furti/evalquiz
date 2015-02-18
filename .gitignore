@@ -7,3 +7,4 @@ ts/.baseDir.ts
 js/.baseDir.js
 .tscache
 node_modules
+test.json

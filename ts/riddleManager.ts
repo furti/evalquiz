@@ -261,7 +261,8 @@ module riddle {
         }
 
         public persist(riddles:Array<Riddle>):void {
-            var saveGames:Array<SaveGame> = [];
+            var saveGames:Array<SaveGame> = [],
+                toSave:Array<number> = [];
 
             angular.forEach(riddles, function (riddle) {
                 var saveGame:SaveGame = {
@@ -275,6 +276,16 @@ module riddle {
                 }
 
                 saveGames.push(saveGame);
+                toSave.push(riddle.level);
+            });
+
+            //Merge the actualSavegames into the new ones
+            var actualSavegames:Array<SaveGame> = this.storage.get(SAVE_GAME_KEY);
+            angular.forEach(actualSavegames, function (saveGame:SaveGame) {
+                //If the level is not into the riddles to save --> add the actual saved one
+                if (toSave.indexOf(saveGame.level) === -1) {
+                    saveGames.push(saveGame);
+                }
             });
 
             this.storage.set(SAVE_GAME_KEY, saveGames);

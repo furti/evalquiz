@@ -160,7 +160,7 @@ var riddle;
             return result;
         };
         RiddleManager.prototype.persist = function (riddles) {
-            var saveGames = [];
+            var saveGames = [], toSave = [];
             angular.forEach(riddles, function (riddle) {
                 var saveGame = {
                     level: riddle.level,
@@ -171,6 +171,15 @@ var riddle;
                     saveGame.code = riddle.functionData.code;
                 }
                 saveGames.push(saveGame);
+                toSave.push(riddle.level);
+            });
+            //Merge the actualSavegames into the new ones
+            var actualSavegames = this.storage.get(SAVE_GAME_KEY);
+            angular.forEach(actualSavegames, function (saveGame) {
+                //If the level is not into the riddles to save --> add the actual saved one
+                if (toSave.indexOf(saveGame.level) === -1) {
+                    saveGames.push(saveGame);
+                }
             });
             this.storage.set(SAVE_GAME_KEY, saveGames);
         };

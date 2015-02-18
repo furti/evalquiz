@@ -8,8 +8,8 @@
 
     <div flex="15"><code>{{attribute.type}}</code></div>
 
-    <span flex="60" ng-if="attribute.type !== 'object'">{{attribute.description}}</span>
-    <span flex="60" ng-if="attribute.type === 'object'">
+    <span flex="60" ng-if="attribute.type !== 'object' && attribute.type !== 'array'">{{attribute.description}}</span>
+    <span flex="60" ng-if="attribute.type === 'object' || attribute.type === 'array'">
         <div ng-repeat="subattribute in attribute.attributes">
             <code>{{subattribute.name}} { {{subattribute.type}} }</code> {{subattribute.description}}
         </div>

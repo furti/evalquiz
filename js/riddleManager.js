@@ -190,6 +190,21 @@ var riddle;
             var factory = new Function('return ' + riddle.engine);
             return factory();
         };
+        RiddleManager.prototype.lastUnlockedRiddle = function () {
+            return this.asyncHelper.call(function (riddleManager) {
+                var index, last;
+                for (index in riddleManager.riddles) {
+                    var riddle = riddleManager.riddles[index];
+                    if (!riddle.unlocked) {
+                        return last.level;
+                    }
+                    else {
+                        last = riddle;
+                    }
+                }
+                return last.level;
+            });
+        };
         RiddleManager.$inject = ['$http', '$q', 'storage'];
         return RiddleManager;
     })();

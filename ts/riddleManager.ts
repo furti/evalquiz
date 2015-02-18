@@ -302,6 +302,25 @@ module riddle {
 
             return factory();
         }
+
+        public lastUnlockedRiddle():ng.IPromise<number> {
+            return this.asyncHelper.call(function (riddleManager) {
+                var index:any, last:FullRiddle;
+
+                for (index in riddleManager.riddles) {
+                    var riddle = riddleManager.riddles[index];
+
+                    if (!riddle.unlocked) {
+                        return last.level;
+                    }
+                    else {
+                        last = riddle;
+                    }
+                }
+
+                return last.level;
+            });
+        }
     }
 
     angular.module('evalquiz')

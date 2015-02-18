@@ -124,8 +124,9 @@ var evalquiz;
             controller: 'RiddleController',
             controllerAs: 'riddleCtrl'
         });
-        $routeProvider.otherwise({
-            redirectTo: '/riddles/0'
+    }]).run(['$location', 'riddleManager', function ($location, riddleManager) {
+        riddleManager.lastUnlockedRiddle().then(function (level) {
+            $location.path('/riddles/' + level);
         });
     }]);
 })(evalquiz || (evalquiz = {}));

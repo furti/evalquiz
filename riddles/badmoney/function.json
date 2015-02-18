@@ -1,0 +1,26 @@
+{
+  "name": "find",
+  "params": [
+    {
+      "name": "scale",
+      "type": "function",
+      "description": "A function that takes an array of coins as a parameter and returns the weight of the coins."
+    },
+    {
+      "name": "bags",
+      "type": "array",
+      "attributes": [
+        {
+          "name": "id",
+          "type": "number",
+          "description": "The unique id of the bag. You have to return the id of the bad bag."
+        },
+        {
+          "name": "getCoins",
+          "type": "function",
+          "description": "Takes the number of coins you want to take out of the bag as an argument, and returns a array of coins. You can use this array, concatenate it with other coins and put it on the weight."
+        }
+      ]
+    }
+  ]
+}

@@ -12,5 +12,12 @@
     "shortDescription": "Help the dwarfs to save their lives.",
     "solvedMessage": "The dwarfs are save now and they lived happily ever after.",
     "location": "dwarfs"
+  },
+  {
+    "level": 2,
+    "title": "Bad Money",
+    "shortDescription": "All that glitters is not gold.",
+    "solvedMessage": "You found the bag that is to light.",
+    "location": "badmoney"
   }
 ]

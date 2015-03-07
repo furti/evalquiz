@@ -1,0 +1,10 @@
+{
+  "name": "carly",
+  "params": [
+    {
+      "name": "r",
+      "type": "number",
+      "description": "Random number"
+    }
+  ]
+}

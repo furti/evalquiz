@@ -1,0 +1,21 @@
+{
+  "name": "maximum",
+  "params": [
+    {
+      "name": "data",
+      "type": "object",
+      "attributes": [
+        {
+          "name": "getDifference(index)",
+          "type": "function",
+          "description": "Returns the difference."
+        },
+        {
+          "name": "getLength()",
+          "type": "function",
+          "description": "Returns the number of altitude difference"
+        }
+      ]
+    }
+  ]
+}

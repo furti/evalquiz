@@ -22,6 +22,13 @@
   },
   {
     "level": 3,
+    "title": "Altitude Differences",
+    "shortDescription": "Know where your blisters come from.",
+    "solvedMessage": "Now Peter knows where his blisters come from. I hope you solved the riddle in O(n).",
+    "location": "subsetsum"
+  },
+  {
+    "level": 3,
     "title": "Bad Money",
     "shortDescription": "All that glitters is not gold.",
     "solvedMessage": "You found the bag that is to light.",

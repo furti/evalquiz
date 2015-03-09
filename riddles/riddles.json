@@ -8,13 +8,20 @@
   },
   {
     "level": 1,
+    "title": "Little Carly",
+    "shortDescription": "Help litte Carly to solve his task.",
+    "solvedMessage": "The full name of little Carly is Carl Friedrich Gauss, a mathematician from the 19th century. At the age of nine he solved the task with a simple multiplication.",
+    "location": "gauss"
+  },
+  {
+    "level": 2,
     "title": "Dwarfs and dragons",
     "shortDescription": "Help the dwarfs to save their lives.",
     "solvedMessage": "The dwarfs are save now and they lived happily ever after.",
     "location": "dwarfs"
   },
   {
-    "level": 2,
+    "level": 3,
     "title": "Bad Money",
     "shortDescription": "All that glitters is not gold.",
     "solvedMessage": "You found the bag that is to light.",

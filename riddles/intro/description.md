@@ -5,11 +5,12 @@ eval(Quiz) is a game where you solve riddles by writing javascript code.
 
 ####Where to find the riddles
 The ```Riddles``` button in the toolbar on top gives you an overview of all available riddles.
-Simply click on a riddle to start it (providing that it is already unlocked).
+Simply click on a riddle to start it.
+
+All riddles you haven't solved yet are marked with an empty square. Every solved riddle is marked with
+a checked square.
 
 ####How does it all work?
-At the beginning all riddles (except the intro) are locked. You have to solve a riddle to unlock the next one.
-
 On the left hand side of the page you have a general description of the riddle.
 I guess you have found it as you are reading here right now.
 Below the general description is a description of the javascript function you have to implement.

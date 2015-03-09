@@ -125,7 +125,7 @@ var evalquiz;
             controllerAs: 'riddleCtrl'
         });
     }]).run(['$location', 'riddleManager', function ($location, riddleManager) {
-        riddleManager.lastUnlockedRiddle().then(function (level) {
+        riddleManager.lastPlayedRiddle().then(function (level) {
             $location.path('/riddles/' + level);
         });
     }]);

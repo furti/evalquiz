@@ -193,7 +193,7 @@ module evalquiz {
             });
         }])
         .run(['$location', 'riddleManager', function ($location:ng.ILocationService, riddleManager:riddle.RiddleManager) {
-            riddleManager.lastUnlockedRiddle().then(function (level) {
+            riddleManager.lastPlayedRiddle().then(function (level) {
                 $location.path('/riddles/' + level);
             });
         }]);

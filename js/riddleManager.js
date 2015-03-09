@@ -4,6 +4,7 @@
 var riddle;
 (function (_riddle) {
     var SAVE_GAME_KEY = 'riddleQuiz.saveGames';
+    var LAST_RIDDLE_KEY = 'riddleQuiz.lastPlayedRiddle';
     var RiddleManager = (function () {
         function RiddleManager($http, $q, storage) {
             this.$http = $http;
@@ -14,7 +15,7 @@ var riddle;
         RiddleManager.prototype.setupRiddles = function () {
             var riddleManager = this;
             this.$http.get('riddles/riddles.json').success(function (riddles) {
-                riddleManager.riddles = riddleManager.prepareRiddles(riddles);
+                riddleManager.prepareRiddles(riddles);
                 riddleManager.asyncHelper.init();
             });
         };
@@ -29,27 +30,26 @@ var riddle;
             });
         };
         RiddleManager.prototype.startRiddle = function (riddleId) {
-            return this.initializeRiddle(riddleId);
+            var riddle = this.initializeRiddle(riddleId);
+            if (riddle) {
+                //Save the last started riddle so we can restart it when the page is opened again
+                this.storage.set(LAST_RIDDLE_KEY, riddleId);
+            }
+            return riddle;
         };
         RiddleManager.prototype.getRiddle = function (riddleId) {
             return this.asyncHelper.call(function (riddleManager) {
-                if (!riddleManager.riddles) {
+                if (!riddleManager.riddleMap || !riddleManager.riddleMap[riddleId]) {
                     return;
                 }
-                var riddle;
-                for (var index in riddleManager.riddles) {
-                    riddle = riddleManager.riddles[index];
-                    if (riddle.level === riddleId) {
-                        return riddle;
-                    }
-                }
+                return riddleManager.riddleMap[riddleId];
             });
         };
         RiddleManager.prototype.initializeRiddle = function (riddleId) {
             var defered = this.$q.defer();
             var riddleManager = this;
             this.getRiddle(riddleId).then(function (riddle) {
-                if (!riddle || riddle.initialized || !riddle.unlocked) {
+                if (!riddle || riddle.initialized) {
                     defered.resolve(riddle);
                     return;
                 }
@@ -108,14 +108,11 @@ var riddle;
                 return;
             }
             var saveGames = this.loadGames(), saveGame;
+            this.riddleMap = {};
+            var riddleMap = this.riddleMap;
             riddles.forEach(function (riddle) {
-                //The intro must be unlocked
-                if (riddle.level === 0) {
-                    riddle.unlocked = true;
-                }
                 if (saveGames[riddle.level]) {
                     saveGame = saveGames[riddle.level];
-                    riddle.unlocked = saveGame.unlocked;
                     riddle.finished = saveGame.finished;
                     if (saveGame.code) {
                         riddle.functionData = {
@@ -123,8 +120,9 @@ var riddle;
                         };
                     }
                 }
+                riddleMap[riddle.level] = riddle;
             });
-            return riddles;
+            this.riddles = riddles;
         };
         RiddleManager.prototype.loadGames = function () {
             var saveGames = this.storage.get(SAVE_GAME_KEY);
@@ -144,7 +142,7 @@ var riddle;
             };
             if (solved) {
                 riddle.finished = true;
-                var next = this.unlockNextRiddle(riddle.level);
+                var next = this.nextRiddle(riddle);
                 if (next) {
                     result.nextLevel = next.level;
                     this.persist([riddle, next]);
@@ -164,8 +162,7 @@ var riddle;
             angular.forEach(riddles, function (riddle) {
                 var saveGame = {
                     level: riddle.level,
-                    finished: riddle.finished,
-                    unlocked: riddle.unlocked
+                    finished: riddle.finished
                 };
                 if (riddle.functionData && riddle.functionData.code) {
                     saveGame.code = riddle.functionData.code;
@@ -183,12 +180,12 @@ var riddle;
             });
             this.storage.set(SAVE_GAME_KEY, saveGames);
         };
-        RiddleManager.prototype.unlockNextRiddle = function (level) {
+        RiddleManager.prototype.nextRiddle = function (riddle) {
+            //Get the position of the actual riddle
+            var pos = this.riddles.indexOf(riddle);
             //If more riddles are available --> return the next one.
-            if (this.riddles.length > level + 1) {
-                var next = this.riddles[level + 1];
-                next.unlocked = true;
-                return next;
+            if (this.riddles.length > pos + 1) {
+                return this.riddles[pos + 1];
             }
         };
         RiddleManager.prototype.parseCode = function (riddle) {
@@ -199,19 +196,14 @@ var riddle;
             var factory = new Function('return ' + riddle.engine);
             return factory();
         };
-        RiddleManager.prototype.lastUnlockedRiddle = function () {
+        RiddleManager.prototype.lastPlayedRiddle = function () {
+            var riddleManager = this;
             return this.asyncHelper.call(function (riddleManager) {
-                var index, last;
-                for (index in riddleManager.riddles) {
-                    var riddle = riddleManager.riddles[index];
-                    if (!riddle.unlocked) {
-                        return last.level;
-                    }
-                    else {
-                        last = riddle;
-                    }
+                var last = riddleManager.storage.get(LAST_RIDDLE_KEY);
+                if (!last) {
+                    return 0;
                 }
-                return last.level;
+                return last;
             });
         };
         RiddleManager.$inject = ['$http', '$q', 'storage'];

@@ -1,0 +1,15 @@
+{
+  "name": "distance",
+  "params": [
+    {
+      "name": "t",
+      "type": "number",
+      "description": "The distance from your position to the tree in km"
+    },
+    {
+      "name": "s",
+      "type": "number",
+      "description": "The speed of your big dog in km/h"
+    }
+  ]
+}

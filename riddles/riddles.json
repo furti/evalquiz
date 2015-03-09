@@ -33,5 +33,12 @@
     "shortDescription": "All that glitters is not gold.",
     "solvedMessage": "You found the bag that is to light.",
     "location": "badmoney"
+  },
+  {
+    "level": 4,
+    "title": "Two dogs",
+    "shortDescription": "Bark! Bark!",
+    "solvedMessage": "Double speed means double distance.",
+    "location": "dogs"
   }
 ]

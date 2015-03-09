@@ -10,7 +10,11 @@ module attributeinfo {
         private attributes:Array<riddle.FunctionParam>;
 
         constructor($scope:ng.IScope) {
-            this.attributes = $scope['attributes'];
+            var ctrl = this;
+
+            $scope.$watch('attributes', function (attributes) {
+                ctrl.attributes = attributes;
+            });
         }
     }
 

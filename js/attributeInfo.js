@@ -7,7 +7,10 @@ var attributeinfo;
 (function (attributeinfo) {
     var AttributeInfoController = (function () {
         function AttributeInfoController($scope) {
-            this.attributes = $scope['attributes'];
+            var ctrl = this;
+            $scope.$watch('attributes', function (attributes) {
+                ctrl.attributes = attributes;
+            });
         }
         return AttributeInfoController;
     })();

@@ -1,19 +1,19 @@
 {
-  "name": "maximum",
+  "name": "maxSum",
   "params": [
     {
       "name": "data",
       "type": "object",
       "attributes": [
         {
-          "name": "getDifference(index)",
+          "name": "get(index)",
           "type": "function",
-          "description": "Returns the difference."
+          "description": "Returns the altitude difference at the specified index."
         },
         {
-          "name": "getLength()",
+          "name": "length()",
           "type": "function",
-          "description": "Returns the number of altitude difference"
+          "description": "Returns the number of available altitude difference values."
         }
       ]
     }

@@ -22,7 +22,7 @@
             samples[day] = [];
 
             for (var i = 0; i < this.COUNT[day]; i++) {
-                samples[day][i] = - 64 + Math.round(Math.random() * 128);
+                samples[day][i] = - 640 + Math.round(Math.random() * 128) * 10;
             }
         }
 

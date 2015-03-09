@@ -1,0 +1,21 @@
+{
+  "name": "maxSum",
+  "params": [
+    {
+      "name": "data",
+      "type": "object",
+      "attributes": [
+        {
+          "name": "get(index)",
+          "type": "function",
+          "description": "Returns the altitude difference at the specified index."
+        },
+        {
+          "name": "length()",
+          "type": "function",
+          "description": "Returns the number of available altitude difference values."
+        }
+      ]
+    }
+  ]
+}

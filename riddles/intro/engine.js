@@ -4,8 +4,8 @@
     }
 
     Engine.prototype.init = function () {
-        this.a = Math.random() * 1000;
-        this.b = Math.random() * 1000;
+        this.a = Math.floor(Math.random() * 1000);
+        this.b = Math.floor(Math.random() * 1000);
     };
 
     Engine.prototype.failedMessage = function () {

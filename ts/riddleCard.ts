@@ -3,7 +3,7 @@
  */
 
 ///<reference path="./definitions/angularjs/angular.d.ts" />
-    ///<reference path="./definitions/angular-material/angular-material.d.ts" />
+///<reference path="./definitions/angular-material/angular-material.d.ts" />
 ///<reference path="./riddleManager.ts" />
 
 module  riddle {
@@ -22,10 +22,6 @@ module  riddle {
         }
 
         public startRiddle(riddle:riddle.RiddleData) {
-            if (!riddle.unlocked) {
-                return;
-            }
-
             this.$mdDialog.hide();
             this.$location.path("/riddles/" + riddle.level);
         }

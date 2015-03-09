@@ -4,6 +4,8 @@
 .riddle-card {
     cursor: pointer;
     padding: 0;
+    display: block;
+    min-width: 300px;
 }
 
 .riddle-title {

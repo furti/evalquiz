@@ -3,13 +3,13 @@
 /// <reference path="./asyncHelper.ts" />
 module riddle {
     var SAVE_GAME_KEY = 'riddleQuiz.saveGames';
+    var LAST_RIDDLE_KEY = 'riddleQuiz.lastPlayedRiddle';
 
     export interface RiddleData {
         level: number;
         title: string;
         shortDescription: string;
         solvedMessage:string;
-        unlocked: boolean;
         finished: boolean;
     }
 
@@ -46,13 +46,13 @@ module riddle {
 
     interface SaveGame {
         level:number;
-        unlocked:boolean;
         finished:boolean;
         code?:string;
     }
 
     export class RiddleManager {
         private riddles:Array<FullRiddle>;
+        private riddleMap:{[key: number] : FullRiddle};
         private $http:ng.IHttpService;
         private $q:ng.IQService;
         private asyncHelper:util.AsyncHelper<RiddleManager>;
@@ -72,7 +72,7 @@ module riddle {
 
             this.$http.get('riddles/riddles.json')
                 .success(function (riddles:Array<FullRiddle>) {
-                    riddleManager.riddles = riddleManager.prepareRiddles(riddles);
+                    riddleManager.prepareRiddles(riddles);
                     riddleManager.asyncHelper.init();
                 });
         }
@@ -89,24 +89,23 @@ module riddle {
         }
 
         public startRiddle(riddleId:number):ng.IPromise<Riddle> {
-            return this.initializeRiddle(riddleId);
+            var riddle = this.initializeRiddle(riddleId);
+
+            if (riddle) {
+                //Save the last started riddle so we can restart it when the page is opened again
+                this.storage.set(LAST_RIDDLE_KEY, riddleId);
+            }
+
+            return riddle;
         }
 
         private getRiddle(riddleId:number):ng.IPromise<Riddle> {
             return this.asyncHelper.call(function (riddleManager) {
-                if (!riddleManager.riddles) {
+                if (!riddleManager.riddleMap || !riddleManager.riddleMap[riddleId]) {
                     return;
                 }
 
-                var riddle:FullRiddle;
-
-                for (var index in riddleManager.riddles) {
-                    riddle = riddleManager.riddles[index];
-
-                    if (riddle.level === riddleId) {
-                        return riddle;
-                    }
-                }
+                return riddleManager.riddleMap[riddleId];
             });
         }
 
@@ -115,7 +114,7 @@ module riddle {
             var riddleManager = this;
 
             this.getRiddle(riddleId).then(function (riddle:FullRiddle) {
-                if (!riddle || riddle.initialized || !riddle.unlocked) {
+                if (!riddle || riddle.initialized) {
                     defered.resolve(riddle);
                     return;
                 }
@@ -183,24 +182,20 @@ module riddle {
             }
         }
 
-        private prepareRiddles(riddles:Array<FullRiddle>):Array<FullRiddle> {
+        private prepareRiddles(riddles:Array<FullRiddle>):void {
             if (!riddles) {
                 return;
             }
 
             var saveGames = this.loadGames(),
                 saveGame:SaveGame;
+            this.riddleMap = {};
+            var riddleMap  = this.riddleMap;
 
             riddles.forEach(function (riddle) {
-                //The intro must be unlocked
-                if (riddle.level === 0) {
-                    riddle.unlocked = true;
-                }
-
                 if (saveGames[riddle.level]) {
                     saveGame = saveGames[riddle.level];
 
-                    riddle.unlocked = saveGame.unlocked;
                     riddle.finished = saveGame.finished;
 
                     if (saveGame.code) {
@@ -209,10 +204,12 @@ module riddle {
                         };
                     }
                 }
+
+                riddleMap[riddle.level] = riddle;
             });
 
 
-            return riddles;
+            this.riddles = riddles;
         }
 
         private loadGames():{[level:number]: SaveGame} {
@@ -241,7 +238,7 @@ module riddle {
             if (solved) {
                 riddle.finished = true;
 
-                var next = this.unlockNextRiddle(riddle.level);
+                var next = this.nextRiddle(<FullRiddle>riddle);
 
                 if (next) {
                     result.nextLevel = next.level;
@@ -267,8 +264,7 @@ module riddle {
             angular.forEach(riddles, function (riddle) {
                 var saveGame:SaveGame = {
                     level: riddle.level,
-                    finished: riddle.finished,
-                    unlocked: riddle.unlocked
+                    finished: riddle.finished
                 };
 
                 if (riddle.functionData && riddle.functionData.code) {
@@ -291,14 +287,13 @@ module riddle {
             this.storage.set(SAVE_GAME_KEY, saveGames);
         }
 
-        private unlockNextRiddle(level:number):FullRiddle {
+        private nextRiddle(riddle:FullRiddle):FullRiddle {
+            //Get the position of the actual riddle
+            var pos = this.riddles.indexOf(riddle);
+
             //If more riddles are available --> return the next one.
-            if (this.riddles.length > level + 1) {
-                var next = this.riddles[level + 1];
-
-                next.unlocked = true;
-
-                return next;
+            if (this.riddles.length > pos + 1) {
+                return this.riddles[pos + 1];
             }
         }
 
@@ -314,22 +309,17 @@ module riddle {
             return factory();
         }
 
-        public lastUnlockedRiddle():ng.IPromise<number> {
+        public lastPlayedRiddle():ng.IPromise<number> {
+            var riddleManager = this;
+
             return this.asyncHelper.call(function (riddleManager) {
-                var index:any, last:FullRiddle;
+                var last = riddleManager.storage.get(LAST_RIDDLE_KEY);
 
-                for (index in riddleManager.riddles) {
-                    var riddle = riddleManager.riddles[index];
-
-                    if (!riddle.unlocked) {
-                        return last.level;
-                    }
-                    else {
-                        last = riddle;
-                    }
+                if (!last) {
+                    return 0;
                 }
 
-                return last.level;
+                return last;
             });
         }
     }

@@ -1,9 +1,9 @@
-<md-card ng-click="riddleCtrl.startRiddle(riddle)" class="riddle-card" ng-class="{'grow': riddle.unlocked}">
-    <md-toolbar class="md-accent" ng-class="{'md-hue-1': !riddle.unlocked}">
+<md-card ng-click="riddleCtrl.startRiddle(riddle)" class="riddle-card grow">
+    <md-toolbar class="md-accent" ng-class="{'md-hue-1': !riddle.finished}">
         <div class="md-toolbar-tools" layout="row">
-            <span flex="" class="riddle-title">{{riddle.level}}. {{riddle.title}}</span>
+            <span flex="" class="riddle-title">{{riddle.title}}</span>
             <i class="fa"
-               ng-class="{'fa-lock': !riddle.unlocked, 'fa-unlock': riddle.unlocked && !riddle.finished, 'fa-check-square': riddle.finished}"></i>
+               ng-class="{'fa-square-o': !riddle.finished, 'fa-check-square-o': riddle.finished}"></i>
         </div>
     </md-toolbar>
     <md-card-content>

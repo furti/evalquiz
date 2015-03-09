@@ -13,9 +13,6 @@ var riddle;
             this.$location = $location;
         }
         RiddleCardController.prototype.startRiddle = function (riddle) {
-            if (!riddle.unlocked) {
-                return;
-            }
             this.$mdDialog.hide();
             this.$location.path("/riddles/" + riddle.level);
         };

@@ -3,8 +3,8 @@
         <div class="md-toolbar-tools">Riddles</div>
     </md-toolbar>
     <md-content>
-        <riddle-card riddle="riddle" ng-repeat="riddle in ctrl.riddles"></riddle-card>
         <md-progress-linear ng-show="ctrl.loading" md-mode="indeterminate"></md-progress-linear>
+        <riddle-card riddle="riddle" ng-repeat="riddle in ctrl.riddles"></riddle-card>
     </md-content>
     <div class="md-actions" layout="row">
         <md-button ng-click="ctrl.closeDialog()">

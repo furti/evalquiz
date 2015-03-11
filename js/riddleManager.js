@@ -1,10 +1,70 @@
 /// <reference path="./definitions/angularjs/angular.d.ts" />
 /// <reference path="./definitions/angularLocalStorage/angularLocalStorage.d.ts" />
+/// <reference path="./definitions/esprima/esprima.d.ts" />
+/// <reference path="./definitions/jquery/jquery.d.ts" />
 /// <reference path="./asyncHelper.ts" />
 var riddle;
 (function (_riddle) {
     var SAVE_GAME_KEY = 'riddleQuiz.saveGames';
     var LAST_RIDDLE_KEY = 'riddleQuiz.lastPlayedRiddle';
+    var Syntax = (function () {
+        function Syntax(code) {
+            this.syntax = esprima.parse(code);
+        }
+        Syntax.prototype.countOperators = function () {
+            var operators = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                operators[_i - 0] = arguments[_i];
+            }
+            var count = 0;
+            this.crawl(this.syntax, function (node) {
+                if ((node.type == 'BinaryExpression') || (node.type == 'UpdateExpression')) {
+                    if (operators.indexOf(node.operator) >= 0) {
+                        count++;
+                    }
+                }
+            });
+            return count;
+        };
+        Syntax.prototype.crawl = function (node, callback) {
+            if (node instanceof Array) {
+                for (var i = 0; i < node.length; i++) {
+                    this.crawl(node[i], callback);
+                }
+            }
+            else {
+                callback(node);
+                if (node.body) {
+                    this.crawl(node.body, callback);
+                }
+                if (node.test) {
+                    this.crawl(node.test, callback);
+                }
+                if (node.left) {
+                    this.crawl(node.left, callback);
+                }
+                if (node.right) {
+                    this.crawl(node.right, callback);
+                }
+                if (node.consequent) {
+                    this.crawl(node.consequent, callback);
+                }
+                if (node.expression) {
+                    this.crawl(node.expression, callback);
+                }
+                if (node.argument) {
+                    this.crawl(node.argument, callback);
+                }
+                if (node.arguments) {
+                    this.crawl(node.arguments, callback);
+                }
+                if (node.declaration) {
+                    this.crawl(node.declaration, callback);
+                }
+            }
+        };
+        return Syntax;
+    })();
     var RiddleManager = (function () {
         function RiddleManager($http, $q, storage) {
             this.$http = $http;
@@ -134,9 +194,10 @@ var riddle;
         };
         RiddleManager.prototype.solveRiddle = function (riddle) {
             var solve = this.parseCode(riddle);
+            var syntax = this.analyzeCode(riddle);
             var riddleEngine = this.buildEngine(riddle);
             riddleEngine.init();
-            var solved = riddleEngine.run(solve);
+            var solved = riddleEngine.run(solve, syntax);
             var result = {
                 solved: solved
             };
@@ -191,6 +252,10 @@ var riddle;
         RiddleManager.prototype.parseCode = function (riddle) {
             var create = new Function('return ' + riddle.functionData.code);
             return create();
+        };
+        RiddleManager.prototype.analyzeCode = function (riddle) {
+            var syntax = new Syntax(riddle.functionData.code);
+            return syntax;
         };
         RiddleManager.prototype.buildEngine = function (riddle) {
             var factory = new Function('return ' + riddle.engine);

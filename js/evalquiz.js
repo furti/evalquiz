@@ -108,6 +108,7 @@ var evalquiz;
                 }
             }
             catch (e) {
+                console.log(e);
                 this.$mdDialog.show(this.$mdDialog.alert().title('Ooops! Something went wrong').content(e.message || e).ok('Got it'));
             }
         };

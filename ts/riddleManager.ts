@@ -1,5 +1,7 @@
 /// <reference path="./definitions/angularjs/angular.d.ts" />
 /// <reference path="./definitions/angularLocalStorage/angularLocalStorage.d.ts" />
+/// <reference path="./definitions/esprima/esprima.d.ts" />
+/// <reference path="./definitions/jquery/jquery.d.ts" />
 /// <reference path="./asyncHelper.ts" />
 module riddle {
     var SAVE_GAME_KEY = 'riddleQuiz.saveGames';
@@ -50,6 +52,77 @@ module riddle {
         code?:string;
     }
 
+    class Syntax {
+        // for tests see: http://esprima.org/demo/parse.html
+
+        private syntax: any;
+
+        constructor(code: string) {
+               this.syntax = esprima.parse(code);
+        }
+
+        public countOperators(...operators: string[]): number {
+            var count = 0;
+
+            this.crawl(this.syntax, function(node: any) {
+                if ((node.type == 'BinaryExpression') || (node.type == 'UpdateExpression')) {
+                    if (operators.indexOf(node.operator) >= 0) {
+                       count++; 
+                    }
+                }
+            });
+
+            return count;
+        }
+
+        private crawl(node: any, callback: any): void {
+            if (node instanceof Array) {
+                for (var i = 0; i < node.length; i++) {
+                    this.crawl(node[i], callback);
+                }
+            }
+            else {
+                callback(node);
+
+                if (node.body) {
+                    this.crawl(node.body, callback);
+                }
+                
+                if (node.test) {
+                    this.crawl(node.test, callback);
+                }
+                
+                if (node.left) {
+                    this.crawl(node.left, callback);
+                }
+                
+                if (node.right) {
+                    this.crawl(node.right, callback);
+                }
+                
+                if (node.consequent) {
+                    this.crawl(node.consequent, callback);
+                }
+                
+                if (node.expression) {
+                    this.crawl(node.expression, callback);
+                }
+                
+                if (node.argument) {
+                    this.crawl(node.argument, callback);
+                }
+                
+                if (node.arguments) {
+                    this.crawl(node.arguments, callback);
+                }
+                
+                if (node.declaration) {
+                    this.crawl(node.declaration, callback);
+                }
+            }
+        }
+    }
+    
     export class RiddleManager {
         private riddles:Array<FullRiddle>;
         private riddleMap:{[key: number] : FullRiddle};
@@ -225,11 +298,12 @@ module riddle {
 
         public solveRiddle(riddle:Riddle):Result {
             var solve = this.parseCode(riddle);
+            var syntax = this.analyzeCode(riddle);
             var riddleEngine = this.buildEngine(riddle);
 
             riddleEngine.init();
 
-            var solved = riddleEngine.run(solve);
+            var solved = riddleEngine.run(solve, syntax);
 
             var result:Result = {
                 solved: solved
@@ -301,6 +375,12 @@ module riddle {
             var create = new Function('return ' + riddle.functionData.code);
 
             return create();
+        }
+
+        private analyzeCode(riddle:Riddle):Syntax {
+            var syntax = new Syntax(riddle.functionData.code);
+
+            return syntax;
         }
 
         private buildEngine(riddle:Riddle):any {

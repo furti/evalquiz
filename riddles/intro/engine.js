@@ -12,10 +12,25 @@
         return 'The sum of ' + this.a + ' and ' + this.b + ' is not ' + this.solution;
     };
 
-    Engine.prototype.run = function (add) {
+    Engine.prototype.run = function (add, syntax) {
+        var plusCount = syntax.countOperators('+', '++', '+=');
+        var minusCount = syntax.countOperators('-', '--', '-=');
+
         this.solution = add(this.a, this.b);
 
-        return this.solution === (this.a + this.b);
+        if (this.solution !== (this.a + this.b)) {
+            return 0;
+        }
+
+        if (plusCount > 0) {
+            return 1;
+        }
+        
+        if (minusCount > 0) {
+            return 2;
+        }
+        
+        return 3;
     };
 
     return new Engine();

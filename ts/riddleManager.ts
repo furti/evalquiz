@@ -11,8 +11,10 @@ module riddle {
         level: number;
         title: string;
         shortDescription: string;
+        goals: Array<String>;
         solvedMessage:string;
         finished: boolean;
+        score: number;
     }
 
     export interface Riddle extends RiddleData {
@@ -49,6 +51,7 @@ module riddle {
     interface SaveGame {
         level:number;
         finished:boolean;
+        score?:number;
         code?:string;
     }
 
@@ -61,11 +64,23 @@ module riddle {
                this.syntax = esprima.parse(code);
         }
 
+        public countTypes(...types: string[]): number {
+            var count = 0;
+
+            this.crawl(this.syntax, function(node: any) {
+                if (types.indexOf(node.type) >= 0) {
+                    count++;
+                }
+            });
+
+            return count;
+        }
+
         public countOperators(...operators: string[]): number {
             var count = 0;
 
             this.crawl(this.syntax, function(node: any) {
-                if ((node.type == 'BinaryExpression') || (node.type == 'UpdateExpression')) {
+                if ((node.type == 'BinaryExpression') || (node.type == 'UpdateExpression') || (node.type == 'AssignmentExpression')) {
                     if (operators.indexOf(node.operator) >= 0) {
                        count++; 
                     }
@@ -277,10 +292,11 @@ module riddle {
                         };
                     }
                 }
+                
+                riddle.score = saveGame.score || (saveGame.finished ? 1 : 0);
 
                 riddleMap[riddle.level] = riddle;
             });
-
 
             this.riddles = riddles;
         }
@@ -303,14 +319,17 @@ module riddle {
 
             riddleEngine.init();
 
-            var solved = riddleEngine.run(solve, syntax);
+            var score = riddleEngine.run(solve, syntax);
+            var solved = score > 0;
 
             var result:Result = {
-                solved: solved
+                solved: solved,
+                score: score
             };
 
             if (solved) {
                 riddle.finished = true;
+                riddle.score = score;
 
                 var next = this.nextRiddle(<FullRiddle>riddle);
 
@@ -338,7 +357,8 @@ module riddle {
             angular.forEach(riddles, function (riddle) {
                 var saveGame:SaveGame = {
                     level: riddle.level,
-                    finished: riddle.finished
+                    finished: riddle.finished,
+                    score: riddle.score
                 };
 
                 if (riddle.functionData && riddle.functionData.code) {

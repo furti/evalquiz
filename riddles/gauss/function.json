@@ -2,7 +2,7 @@
   "name": "carly",
   "params": [
     {
-      "name": "r",
+      "name": "n",
       "type": "number",
       "description": "Random number"
     }

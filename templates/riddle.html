@@ -10,6 +10,26 @@
     <div btf-markdown="riddleCtrl.riddle.description"></div>
     <md-divider></md-divider>
 
+    <h3>Goals</h3>
+
+    <div ng-repeat="goal in riddleCtrl.riddle.goals track by $index" ng-if="$index <= riddleCtrl.riddle.score" layout="row" layout-padding>
+        <span flex="10">
+            <i class="fa" ng-class="{'fa-square-o': riddleCtrl.riddle.score <= $index, 'fa-check-square-o': riddleCtrl.riddle.score > $index}"></i>
+        </span>
+
+        <span flex="15">
+            <i class="fa fa-star"></i>
+            <i class="fa fa-star" ng-if="$index > 0"></i>
+            <i class="fa fa-star" ng-if="$index > 1"></i>
+        </span>
+
+        <span flex="75">
+            <div>{{goal}}</div>
+        </span>
+    </div>
+    
+    <md-divider></md-divider>
+
     <h3>Function description</h3>
 
     <div btf-markdown="riddleCtrl.riddle.functionDescription"></div>

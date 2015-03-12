@@ -60,6 +60,7 @@ module evalquiz {
 
     class RiddleController {
         public riddle:riddle.Riddle;
+        public availableGoals:Array<any>;
         public loading:boolean;
         public editorOptions:any;
 

@@ -4,17 +4,32 @@
     }
 
     Engine.prototype.init = function () {
-        this.r = 1024 + Math.floor(Math.random() * 65536);
+        this.n = 1024 + Math.floor(Math.random() * 65536);
     };
 
     Engine.prototype.failedMessage = function () {
-        return 'The sum of the numbers from 1 to ' + this.r + ' is not ' + this.solution;
+        return 'The sum of the numbers from 1 to ' + this.n + ' is not ' + this.solution;
     };
 
-    Engine.prototype.run = function (carly) {
-        this.solution = carly(this.r);
+    Engine.prototype.run = function (carly, syntax) {
+        var loopCount = syntax.countTypes('ForStatement', 'WhileStatement', 'DoWhileStatement');
+        var multCount = syntax.countOperators('*', '*=');
 
-        return this.solution === (this.r * (this.r + 1)) / 2;
+        this.solution = carly(this.n);
+
+        if (this.solution !== (this.n * (this.n + 1)) / 2) {
+            return 0;
+        }
+
+        if (loopCount > 0) {
+            return 1;
+        }
+        
+        if (multCount > 0) {
+            return 2;
+        }
+        
+        return 3;
     };
 
     return new Engine();

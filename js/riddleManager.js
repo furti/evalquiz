@@ -11,6 +11,19 @@ var riddle;
         function Syntax(code) {
             this.syntax = esprima.parse(code);
         }
+        Syntax.prototype.countTypes = function () {
+            var types = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                types[_i - 0] = arguments[_i];
+            }
+            var count = 0;
+            this.crawl(this.syntax, function (node) {
+                if (types.indexOf(node.type) >= 0) {
+                    count++;
+                }
+            });
+            return count;
+        };
         Syntax.prototype.countOperators = function () {
             var operators = [];
             for (var _i = 0; _i < arguments.length; _i++) {
@@ -18,7 +31,7 @@ var riddle;
             }
             var count = 0;
             this.crawl(this.syntax, function (node) {
-                if ((node.type == 'BinaryExpression') || (node.type == 'UpdateExpression')) {
+                if ((node.type == 'BinaryExpression') || (node.type == 'UpdateExpression') || (node.type == 'AssignmentExpression')) {
                     if (operators.indexOf(node.operator) >= 0) {
                         count++;
                     }
@@ -180,6 +193,7 @@ var riddle;
                         };
                     }
                 }
+                riddle.score = saveGame.score || (saveGame.finished ? 1 : 0);
                 riddleMap[riddle.level] = riddle;
             });
             this.riddles = riddles;
@@ -197,12 +211,15 @@ var riddle;
             var syntax = this.analyzeCode(riddle);
             var riddleEngine = this.buildEngine(riddle);
             riddleEngine.init();
-            var solved = riddleEngine.run(solve, syntax);
+            var score = riddleEngine.run(solve, syntax);
+            var solved = score > 0;
             var result = {
-                solved: solved
+                solved: solved,
+                score: score
             };
             if (solved) {
                 riddle.finished = true;
+                riddle.score = score;
                 var next = this.nextRiddle(riddle);
                 if (next) {
                     result.nextLevel = next.level;
@@ -223,7 +240,8 @@ var riddle;
             angular.forEach(riddles, function (riddle) {
                 var saveGame = {
                     level: riddle.level,
-                    finished: riddle.finished
+                    finished: riddle.finished,
+                    score: riddle.score
                 };
                 if (riddle.functionData && riddle.functionData.code) {
                     saveGame.code = riddle.functionData.code;

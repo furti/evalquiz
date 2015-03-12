@@ -81,6 +81,13 @@ var evalquiz;
                 ctrl.loading = false;
             });
         }
+        RiddleController.prototype.trash = function ($event) {
+            var self = this;
+            this.$mdDialog.show(this.$mdDialog.confirm().title('Trash').content("Are you sure that you want to clear and reset the editor?").ok('Yes').cancel('No')).then(function () {
+                self.riddle.functionData.code = '';
+                self.riddleManager.prepareCode(self.riddle);
+            });
+        };
         RiddleController.prototype.save = function ($event) {
             this.riddleManager.persist([this.riddle]);
             this.$mdDialog.show(this.$mdDialog.alert().title('Saved').content('The code was saved').ok('OK'));

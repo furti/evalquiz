@@ -115,6 +115,22 @@ module evalquiz {
             });
         }
 
+        public trash($event:any):void {
+            var self = this;
+
+            this.$mdDialog.show(
+                this.$mdDialog.confirm()
+                    .title('Trash')
+                    .content("Are you sure that you want to clear and reset the editor?")
+                    .ok('Yes')
+                    .cancel('No')
+                ).then(function () {
+                    self.riddle.functionData.code = '';
+                    self.riddleManager.prepareCode(self.riddle);
+                }
+            );
+        }
+
         public save($event:any):void {
             this.riddleManager.persist([this.riddle]);
 

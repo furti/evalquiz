@@ -246,7 +246,7 @@ module riddle {
             return defered.promise;
         }
 
-        private prepareCode(riddle:FullRiddle):void {
+        public prepareCode(riddle:Riddle):void {
             if (riddle.functionData.params) {
                 riddle.functionData.paramsString = '';
 

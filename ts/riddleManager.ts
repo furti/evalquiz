@@ -329,7 +329,10 @@ module riddle {
 
             if (solved) {
                 riddle.finished = true;
-                riddle.score = score;
+
+                if (score >= riddle.score) {
+                    riddle.score = score;
+                }
 
                 var next = this.nextRiddle(<FullRiddle>riddle);
 

@@ -219,7 +219,9 @@ var riddle;
             };
             if (solved) {
                 riddle.finished = true;
-                riddle.score = score;
+                if (score >= riddle.score) {
+                    riddle.score = score;
+                }
                 var next = this.nextRiddle(riddle);
                 if (next) {
                     result.nextLevel = next.level;

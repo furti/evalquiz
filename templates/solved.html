@@ -1,0 +1,64 @@
+<md-dialog aria-label="Success">
+    <md-toolbar>
+        <div class="md-toolbar-tools">Congratulations</div>
+    </md-toolbar>
+
+    <md-content layout="column" layout-align="center center">
+    	<p>
+    		<i class="fa fa-star fa-3x glow"></i>
+            <i class="fa fa-3x" ng-class="{'fa-star-o light': ctrl.result.score <= 1, 'fa-star glow': ctrl.result.score > 1}"></i>
+            <i class="fa fa-3x" ng-class="{'fa-star-o light': ctrl.result.score <= 2, 'fa-star glow': ctrl.result.score > 2}"></i>
+    	</p>
+
+    	<p>{{ctrl.result.riddle.solvedMessage}}</p>
+
+    	<p ng-if="ctrl.result.score < 3">
+    		Want more stars? Try the next goal of this riddle:
+    	</p>
+
+    	<table>
+    		<tbody>
+    			<tr ng-if="ctrl.result.score == 1">
+    				<td>
+		                <i class="fa fa-star"></i>
+		                <i class="fa fa-star"></i>
+		                <i class="fa fa-star-o light"></i>
+		            </td>
+		            <td>
+	                	{{ctrl.result.riddle.goals[1]}}
+	                </td>
+		        </tr>
+
+    			<tr ng-if="ctrl.result.score == 2">
+    				<td>
+		                <i class="fa fa-star"></i>
+		                <i class="fa fa-star"></i>
+		                <i class="fa fa-star"></i>
+		            </td>
+		            <td>
+	                	{{ctrl.result.riddle.goals[2]}}
+	                </td>
+		        </tr>
+		    </tbody>
+		</table>
+
+		<p ng-if="!ctrl.result.nextLevel">
+			This was the last riddle for now. If you are still enthusiastic, implement your own riddles.
+			<a href="https://github.com/furti/evalquiz">Just fork me on GitHub</a>!
+		</p>
+    </md-content>
+
+    <div class="md-actions" layout="row">
+        <md-button class="md-raised" ng-click="ctrl.sameRiddle()" ng-if="ctrl.result.score < 3">
+           	Keep Trying
+        </md-button>
+
+        <md-button class="md-raised" ng-click="ctrl.sameRiddle()" ng-if="ctrl.result.score >= 3">
+           	Enought for now
+        </md-button>
+
+        <md-button class="md-primary md-raised" ng-click="ctrl.nextRiddle()" ng-if="ctrl.result.nextLevel">
+            Next Riddle
+        </md-button>
+    </div>
+</md-dialog>

@@ -38,9 +38,11 @@ module riddle {
     }
 
     export interface Result {
-        solved:boolean;
-        nextLevel?:number;
-        failedMessage?:string;
+        solved: boolean;
+        score: number;
+        riddle: Riddle;
+        nextLevel?: number;
+        failedMessage?: string;
     }
 
     interface FullRiddle extends Riddle {
@@ -325,7 +327,8 @@ module riddle {
 
             var result:Result = {
                 solved: solved,
-                score: score
+                score: score,
+                riddle: riddle
             };
 
             if (solved) {

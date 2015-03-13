@@ -194,9 +194,7 @@ var riddle;
                         };
                     }
                 }
-                alert(riddle.score);
                 riddle.score = riddle.score || (riddle.finished ? 1 : 0);
-                alert(riddle.score);
                 riddleMap[riddle.level] = riddle;
             });
             this.riddles = riddles;
@@ -218,7 +216,8 @@ var riddle;
             var solved = score > 0;
             var result = {
                 solved: solved,
-                score: score
+                score: score,
+                riddle: riddle
             };
             if (solved) {
                 riddle.finished = true;

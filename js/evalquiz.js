@@ -96,17 +96,12 @@ var evalquiz;
             try {
                 var result = this.riddleManager.solveRiddle(this.riddle), ctrl = this;
                 if (result.solved) {
-                    var dialog;
-                    if (result.nextLevel) {
-                        dialog = this.$mdDialog.confirm().title('Congratulations').content(this.riddle.solvedMessage).ok('Next riddle').cancel('Enough for now');
-                    }
-                    else {
-                        dialog = this.$mdDialog.alert().title('Congratulations').content(this.riddle.solvedMessage + ' You solved the last level. Come back later to check if more levels are available.').ok('It\'s done');
-                    }
-                    this.$mdDialog.show(dialog).then(function () {
-                        if (result.nextLevel) {
-                            //Redirect to the next riddle
-                            ctrl.$location.path('/riddles/' + result.nextLevel);
+                    this.$mdDialog.show({
+                        templateUrl: 'templates/solved.html',
+                        targetEvent: $event,
+                        controller: 'SolvedController as ctrl',
+                        locals: {
+                            result: result
                         }
                     });
                 }
@@ -122,7 +117,24 @@ var evalquiz;
         RiddleController.$inject = ['$routeParams', 'riddleManager', '$mdDialog', '$location'];
         return RiddleController;
     })();
-    angular.module('evalquiz', ['ngRoute', 'ngMaterial', 'btford.markdown', 'ui.codemirror', 'angularLocalStorage']).controller('EvalQuizController', EvalQuizController).controller('ShowRiddlesController', ShowRiddlesController).controller('RiddleController', RiddleController).run(['riddleManager', function (riddleManager) {
+    var SolvedController = (function () {
+        function SolvedController(result, $mdDialog, $location) {
+            this.result = result;
+            this.$mdDialog = $mdDialog;
+            this.$location = $location;
+        }
+        SolvedController.prototype.sameRiddle = function () {
+            this.$mdDialog.hide();
+        };
+        SolvedController.prototype.nextRiddle = function () {
+            this.$mdDialog.hide();
+            // Redirect to the next riddle
+            this.$location.path('/riddles/' + this.result.nextLevel);
+        };
+        SolvedController.$inject = ['result', '$mdDialog', '$location'];
+        return SolvedController;
+    })();
+    angular.module('evalquiz', ['ngRoute', 'ngMaterial', 'btford.markdown', 'ui.codemirror', 'angularLocalStorage']).controller('EvalQuizController', EvalQuizController).controller('ShowRiddlesController', ShowRiddlesController).controller('RiddleController', RiddleController).controller('SolvedController', SolvedController).run(['riddleManager', function (riddleManager) {
         riddleManager.setupRiddles();
     }]).config(['$mdThemingProvider', '$routeProvider', function ($mdThemingProvider, $routeProvider) {
         console.log('Hmmm... I dont\'t think you need the console right now ;)');

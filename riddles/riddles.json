@@ -30,8 +30,8 @@
     "solvedMessage": "The dwarfs are save now and they lived happily ever after.",
     "goals": [
       "Solve the riddle.", 
-      "Meet a time complexity of O(log n) (logarithmic, lookups per dwarf).", 
-      "Each dwarf may only look at one other dwarf."],
+      "Do not exceed an average of 8 checkColor() calls per dwarf.", 
+      "Avoid any loops (for, while, do)."],
     "location": "dwarfs"
   },
   {

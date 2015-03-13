@@ -60,7 +60,6 @@ module evalquiz {
 
     class RiddleController {
         public riddle:riddle.Riddle;
-        public availableGoals:Array<any>;
         public loading:boolean;
         public editorOptions:any;
 
@@ -147,6 +146,16 @@ module evalquiz {
                     ctrl = this;
 
                 if (result.solved) {
+                    this.$mdDialog.show({
+                        templateUrl: 'templates/solved.html',
+                        targetEvent: $event,
+                        controller: 'SolvedController as ctrl',
+                        locals: {
+                            result: result
+                        }
+                    });
+
+                    /*
                     var dialog:any;
 
                     if (result.nextLevel) {
@@ -169,6 +178,7 @@ module evalquiz {
                             ctrl.$location.path('/riddles/' + result.nextLevel);
                         }
                     });
+                    */
                 }
                 else {
                     this.$mdDialog.show(
@@ -190,10 +200,37 @@ module evalquiz {
         }
     }
 
+    class SolvedController {
+        public result:riddle.Result;
+
+        private $mdDialog:ng.material.ModalService;
+        private $location:ng.ILocationService;
+
+        static $inject = ['result', '$mdDialog', '$location'];
+
+        constructor(result:riddle.Result, $mdDialog:ng.material.ModalService, $location:ng.ILocationService) {
+            this.result = result;
+            this.$mdDialog = $mdDialog;
+            this.$location = $location;
+        }
+
+        public sameRiddle():void {
+            this.$mdDialog.hide();
+        }
+
+        public nextRiddle():void {
+            this.$mdDialog.hide();
+
+            // Redirect to the next riddle
+            this.$location.path('/riddles/' + this.result.nextLevel);
+        }
+    }
+
     angular.module('evalquiz', ['ngRoute', 'ngMaterial', 'btford.markdown', 'ui.codemirror', 'angularLocalStorage'])
         .controller('EvalQuizController', EvalQuizController)
         .controller('ShowRiddlesController', ShowRiddlesController)
         .controller('RiddleController', RiddleController)
+        .controller('SolvedController', SolvedController)
         .run(['riddleManager', function (riddleManager:riddle.RiddleManager) {
             riddleManager.setupRiddles();
         }])

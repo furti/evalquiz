@@ -8,6 +8,10 @@
         this.s = 5 + Math.floor(Math.random() * 5);
     };
 
+    Engine.prototype.solvedMessage = function() {
+        return 'Double speed means double distance.';
+    };
+
     Engine.prototype.failedMessage = function () {
         return 'The distance you calculated is not right!';
     };

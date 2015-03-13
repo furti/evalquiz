@@ -220,6 +220,7 @@ var riddle;
                 riddle: riddle
             };
             if (solved) {
+                result.solvedMessage = riddleEngine.solvedMessage();
                 riddle.finished = true;
                 if (score >= riddle.score) {
                     riddle.score = score;

@@ -9,6 +9,10 @@
         this.average = 0;
     };
 
+    Engine.prototype.solvedMessage = function() {
+        return 'The dwarfs are save now and they lived happily ever after. You have used an average of ' + this.average.toFixed(1) + ' lookups per dwarf.';
+    };
+
     Engine.prototype.failedMessage = function () {
         var message = 'The dwarfs where in the following order: ',
             first = true;

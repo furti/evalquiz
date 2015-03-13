@@ -8,6 +8,10 @@
         this.b = Math.floor(Math.random() * 1000);
     };
 
+    Engine.prototype.solvedMessage = function() {
+        return 'You\'ve got it. It wasn\'t that hard to solve I guess. So let\'s start with the real riddles now.';
+    };
+
     Engine.prototype.failedMessage = function () {
         return 'The sum of ' + this.a + ' and ' + this.b + ' is not ' + this.solution;
     };

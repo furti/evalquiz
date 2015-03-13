@@ -3,7 +3,6 @@
     "level": 0,
     "title": "Intro",
     "shortDescription": "eval(Quiz) sounds like fun :)",
-    "solvedMessage": "You've got it. It wasn't that hard to solve i guess. So let's start with the real riddles now.",
     "goals": [
       "Solve the calculation.", 
       "Avoid any additions (+, ++, +=).", 
@@ -15,7 +14,6 @@
     "level": 1,
     "title": "Little Carly",
     "shortDescription": "Help litte Carly to solve his task.",
-    "solvedMessage": "The full name of little Carly is Carl Friedrich Gauss, a mathematician from the 19th century. At the age of nine he solved the task with a simple multiplication.",
     "goals": [
       "Solve Carlies task.", 
       "Avoid any loops (for, while, do).", 
@@ -27,7 +25,6 @@
     "level": 2,
     "title": "Dwarfs and dragons",
     "shortDescription": "Help the dwarfs to save their lives.",
-    "solvedMessage": "The dwarfs are save now and they lived happily ever after.",
     "goals": [
       "Solve the riddle.", 
       "Do not exceed an average of 8 checkColor() calls per dwarf.", 
@@ -38,7 +35,6 @@
     "level": 3,
     "title": "Altitude Differences",
     "shortDescription": "Know where your blisters come from.",
-    "solvedMessage": "Now Peter and Jürgen know where their blisters came from. I hope you solved the riddle in O(n)!",
     "goals": [
       "Implement a working algorithm.", 
       "Meet a time complexity of O(n) (linear).", 
@@ -50,7 +46,6 @@
     "level": 4,
     "title": "Bad Money",
     "shortDescription": "All that glitters is not gold.",
-    "solvedMessage": "You found the bag that is to light.",
     "goals": [
       "Solve the riddle."
     ],
@@ -60,7 +55,6 @@
     "level": 5,
     "title": "Two dogs",
     "shortDescription": "Bark! Bark!",
-    "solvedMessage": "Double speed means double distance.",
     "goals": [
       "Solve the riddle."
     ],

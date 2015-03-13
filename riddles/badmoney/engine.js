@@ -8,6 +8,10 @@
         this.alreadyWeighed = false;
     };
 
+    Engine.prototype.solvedMessage = function() {
+        return 'You found the bag that is to light.';
+    };
+
     Engine.prototype.failedMessage = function () {
         return 'You selected bag ' + this.selectedBag + '. But the bad one was ' + this.bags.badBag + '.';
     };

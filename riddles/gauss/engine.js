@@ -7,6 +7,11 @@
         this.n = 1024 + Math.floor(Math.random() * 65536);
     };
 
+    Engine.prototype.solvedMessage = function() {
+        return 'The full name of little Carly is Carl Friedrich Gauss, a mathematician from the 19th century. ' + 
+            'At the age of nine he solved the task with a simple multiplication.';
+    };
+
     Engine.prototype.failedMessage = function () {
         return 'The sum of the numbers from 1 to ' + this.n + ' is not ' + this.solution;
     };

@@ -42,6 +42,7 @@ module riddle {
         score: number;
         riddle: Riddle;
         nextLevel?: number;
+        solvedMessage?: string;
         failedMessage?: string;
     }
 
@@ -332,6 +333,7 @@ module riddle {
             };
 
             if (solved) {
+                result.solvedMessage = riddleEngine.solvedMessage();
                 riddle.finished = true;
 
                 if (score >= riddle.score) {

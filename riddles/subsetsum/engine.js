@@ -101,6 +101,10 @@
         return maximum;
     };
 
+    Engine.prototype.solvedMessage = function() {
+        return 'Now Peter and Jürgen know where their blisters came from.';
+    };
+
     Engine.prototype.failedMessage = function() {
         var message = 'The result for day ' + (this.invalidDay + 1) + ' is wrong';
 

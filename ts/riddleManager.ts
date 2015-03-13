@@ -285,6 +285,7 @@ module riddle {
                     saveGame = saveGames[riddle.level];
 
                     riddle.finished = saveGame.finished;
+                    riddle.score = saveGame.score;
 
                     if (saveGame.code) {
                         riddle.functionData = {
@@ -293,7 +294,9 @@ module riddle {
                     }
                 }
                 
-                riddle.score = saveGame.score || (saveGame.finished ? 1 : 0);
+                alert(riddle.score);
+                riddle.score = riddle.score || (riddle.finished ? 1 : 0);
+                alert(riddle.score);
 
                 riddleMap[riddle.level] = riddle;
             });

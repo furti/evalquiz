@@ -187,13 +187,16 @@ var riddle;
                 if (saveGames[riddle.level]) {
                     saveGame = saveGames[riddle.level];
                     riddle.finished = saveGame.finished;
+                    riddle.score = saveGame.score;
                     if (saveGame.code) {
                         riddle.functionData = {
                             code: saveGame.code
                         };
                     }
                 }
-                riddle.score = saveGame.score || (saveGame.finished ? 1 : 0);
+                alert(riddle.score);
+                riddle.score = riddle.score || (riddle.finished ? 1 : 0);
+                alert(riddle.score);
                 riddleMap[riddle.level] = riddle;
             });
             this.riddles = riddles;

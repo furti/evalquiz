@@ -294,9 +294,7 @@ module riddle {
                     }
                 }
                 
-                alert(riddle.score);
                 riddle.score = riddle.score || (riddle.finished ? 1 : 0);
-                alert(riddle.score);
 
                 riddleMap[riddle.level] = riddle;
             });

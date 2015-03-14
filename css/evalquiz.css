@@ -67,7 +67,7 @@ table td {
 }
 
 .light {
-    color: lavender;
+    opacity: 0.25;
 }
 
 .glow {

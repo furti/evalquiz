@@ -4,7 +4,14 @@
 </md-content>
 <!--Riddle Description-->
 <md-content class="md-padding" flex="50">
-    <h2>{{riddleCtrl.riddle.title}}</h2>
+
+    <h2>
+        <i class="fa" ng-class="{'fa-star-o light': riddleCtrl.riddle.score <= 0, 'fa-star': riddleCtrl.riddle.score > 0}"></i>
+        <i class="fa" ng-class="{'fa-star-o light': riddleCtrl.riddle.score <= 1, 'fa-star': riddleCtrl.riddle.score > 1}"></i>
+        <i class="fa" ng-class="{'fa-star-o light': riddleCtrl.riddle.score <= 2, 'fa-star': riddleCtrl.riddle.score > 2}"></i>
+        &nbsp;
+        {{riddleCtrl.riddle.title}}
+    </h2>
     <md-divider></md-divider>
 
     <div btf-markdown="riddleCtrl.riddle.description"></div>

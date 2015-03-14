@@ -4,6 +4,10 @@
             <span flex="" class="riddle-title">{{riddle.title}}</span>
             <i class="fa"
                ng-class="{'fa-square-o': !riddle.finished, 'fa-check-square-o': riddle.finished}"></i>
+            &nbsp;
+            <i class="fa" ng-class="{'fa-star-o light': riddle.score <= 0, 'fa-star': riddle.score > 0}"></i>
+            <i class="fa" ng-class="{'fa-star-o light': riddle.score <= 1, 'fa-star': riddle.score > 1}"></i>
+            <i class="fa" ng-class="{'fa-star-o light': riddle.score <= 2, 'fa-star': riddle.score > 2}"></i>
         </div>
     </md-toolbar>
     <md-card-content>

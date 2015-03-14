@@ -24,6 +24,18 @@ var riddle;
             });
             return count;
         };
+        Syntax.prototype.countLoops = function () {
+            return this.countTypes('ForStatement', 'WhileStatement', 'DoWhileStatement');
+        };
+        Syntax.prototype.countConditions = function () {
+            return this.countTypes('IfStatement', 'SwitchStatement', 'ConditionalExpression');
+        };
+        Syntax.prototype.countCalculations = function () {
+            return this.countTypes('BinaryExpression', 'AssignmentExpression');
+        };
+        Syntax.prototype.countLogicals = function () {
+            return this.countTypes('LogicalExpression');
+        };
         Syntax.prototype.countOperators = function () {
             var operators = [];
             for (var _i = 0; _i < arguments.length; _i++) {
@@ -220,7 +232,7 @@ var riddle;
                 riddle: riddle
             };
             if (solved) {
-                result.solvedMessage = riddleEngine.solvedMessage();
+                result.solvedMessage = riddleEngine.solvedMessage(result.score);
                 riddle.finished = true;
                 if (score >= riddle.score) {
                     riddle.score = score;
@@ -273,7 +285,7 @@ var riddle;
             }
         };
         RiddleManager.prototype.parseCode = function (riddle) {
-            var create = new Function('return ' + riddle.functionData.code);
+            var create = new Function('return ' + riddle.functionData.code.trim());
             return create();
         };
         RiddleManager.prototype.analyzeCode = function (riddle) {

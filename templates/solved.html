@@ -12,11 +12,11 @@
 
     	<p>{{ctrl.result.solvedMessage}}</p>
 
-    	<p ng-if="ctrl.result.score < 3">
+    	<p ng-if="ctrl.result.score < ctrl.result.riddle.goals.length">
     		Want more stars? Try the next goal of this riddle:
     	</p>
 
-    	<table>
+    	<table ng-if="ctrl.result.score < ctrl.result.riddle.goals.length">
     		<tbody>
     			<tr ng-if="ctrl.result.score == 1">
     				<td>

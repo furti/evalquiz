@@ -16,7 +16,7 @@
         return 'You selected bag ' + this.selectedBag + '. But the bad one was ' + this.bags.badBag + '.';
     };
 
-    Engine.prototype.run = function (find) {
+    Engine.prototype.run = function (find, syntax) {
         var engine = this;
 
         function scale(coins) {
@@ -41,7 +41,11 @@
 
         engine.selectedBag = find(scale, engine.bags.bags);
 
-        return engine.selectedBag === engine.bags.badBag;
+        if (engine.selectedBag !== engine.bags.badBag) {
+            return 0;
+        }
+
+        return 1;
     };
 
     Engine.prototype.setupBags = function () {

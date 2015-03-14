@@ -28,7 +28,8 @@
     "goals": [
       "Solve the riddle.", 
       "Do not exceed an average of 8 checkColor() calls per dwarf.", 
-      "Avoid any loops (for, while, do)."],
+      "Avoid any loops (for, while, do)."
+    ],
     "location": "dwarfs"
   },
   {
@@ -37,8 +38,8 @@
     "shortDescription": "Know where your blisters come from.",
     "goals": [
       "Implement a working algorithm.", 
-      "Meet a time complexity of O(n) (linear).", 
-      "Avoid any conditional statements (if, while)"
+      "Meet a linear time complexity [O(n)].", 
+      "Avoid any conditional statements (if, switch, ?)"
     ],
     "location": "subsetsum"
   },
@@ -56,7 +57,9 @@
     "title": "Two dogs",
     "shortDescription": "Bark! Bark!",
     "goals": [
-      "Solve the riddle."
+      "Solve the riddle.",
+      "Avoid any loops (for, while, do).",
+      "Avoid any caluclations (+, &, ||, ...)"
     ],
     "location": "dogs"
   }

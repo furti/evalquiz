@@ -79,6 +79,22 @@ module riddle {
             return count;
         }
 
+        public countLoops(): number {
+            return this.countTypes('ForStatement', 'WhileStatement', 'DoWhileStatement');
+        }
+
+        public countConditions(): number {
+            return this.countTypes('IfStatement', 'SwitchStatement', 'ConditionalExpression');
+        }
+
+        public countCalculations(): number {
+            return this.countTypes('BinaryExpression', 'AssignmentExpression');
+        }
+
+        public countLogicals(): number {
+            return this.countTypes('LogicalExpression');
+        }
+
         public countOperators(...operators: string[]): number {
             var count = 0;
 
@@ -333,7 +349,7 @@ module riddle {
             };
 
             if (solved) {
-                result.solvedMessage = riddleEngine.solvedMessage();
+                result.solvedMessage = riddleEngine.solvedMessage(result.score);
                 riddle.finished = true;
 
                 if (score >= riddle.score) {
@@ -401,7 +417,7 @@ module riddle {
         }
 
         private parseCode(riddle:Riddle):any {
-            var create = new Function('return ' + riddle.functionData.code);
+            var create = new Function('return ' + riddle.functionData.code.trim());
 
             return create();
         }

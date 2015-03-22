@@ -5,7 +5,8 @@
     cursor: pointer;
     padding: 0;
     display: block;
-    min-width: 300px;
+    min-width: 480px;
+    max-width: 480px;
 }
 
 .riddle-title {

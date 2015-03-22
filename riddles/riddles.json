@@ -8,6 +8,7 @@
       "Avoid any additions (+, ++, +=).", 
       "Avoid any subtractions (-, --, -=)."
     ],
+    "minScoreToSolve": 1,
     "location": "intro"
   },
   {
@@ -19,6 +20,7 @@
       "Avoid any loops (for, while, do).", 
       "Avoid any multiplications (*, *=)."
     ],
+    "minScoreToSolve": 2,
     "location": "gauss"
   },
   {
@@ -30,6 +32,7 @@
       "Do not exceed an average of 8 checkColor() calls per dwarf.", 
       "Avoid any loops (for, while, do)."
     ],
+    "minScoreToSolve": 1,
     "location": "dwarfs"
   },
   {
@@ -41,6 +44,7 @@
       "Meet a linear time complexity [O(n)].", 
       "Avoid any conditional statements (if, switch, ?)"
     ],
+    "minScoreToSolve": 2,
     "location": "subsetsum"
   },
   {
@@ -50,6 +54,7 @@
     "goals": [
       "Solve the riddle."
     ],
+    "minScoreToSolve": 1,
     "location": "badmoney"
   },
   {
@@ -61,6 +66,7 @@
       "Avoid any loops (for, while, do).",
       "Avoid any caluclations (+, &, ||, ...)"
     ],
+    "minScoreToSolve": 2,
     "location": "dogs"
   }
 ]

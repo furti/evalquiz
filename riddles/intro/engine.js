@@ -9,7 +9,7 @@
     };
 
     Engine.prototype.solvedMessage = function() {
-        return 'You\'ve got it. It wasn\'t that hard to solve I guess. So let\'s start with the real riddles now.';
+        return 'It wasn\'t that hard to solve I guess. So let\'s start with the real riddles now.';
     };
 
     Engine.prototype.failedMessage = function () {

@@ -12,9 +12,10 @@ module riddle {
         title: string;
         shortDescription: string;
         goals: Array<String>;
-        solvedMessage:string;
+        minScoreToSolve: number;
         finished: boolean;
         score: number;
+
     }
 
     export interface Riddle extends RiddleData {

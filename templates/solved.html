@@ -1,6 +1,9 @@
-<md-dialog aria-label="Success">
+<md-dialog aria-label="Success" style="max-width: 560px;">
     <md-toolbar>
-        <div class="md-toolbar-tools">Congratulations</div>
+        <div class="md-toolbar-tools">
+            <span flex="">Congratulations</span>
+            <i class="fa" ng-class="{'fa-square-o': ctrl.result.score < ctrl.result.riddle.minScoreToSolve, 'fa-check-square-o': ctrl.result.score >= ctrl.result.riddle.minScoreToSolve}"></i>&nbsp;
+        </div>
     </md-toolbar>
 
     <md-content layout="column" layout-align="center center">
@@ -10,32 +13,46 @@
             <i class="fa fa-3x" ng-class="{'fa-star-o light': ctrl.result.score <= 2, 'fa-star glow': ctrl.result.score > 2}"></i>
     	</p>
 
+        <p ng-if="ctrl.result.score >= ctrl.result.riddle.minScoreToSolve">
+            <b>Congratulations, you've sovled the riddle!</b>
+        </p>
+
     	<p>{{ctrl.result.solvedMessage}}</p>
 
-    	<p ng-if="ctrl.result.score < ctrl.result.riddle.goals.length">
+        <p ng-if="(ctrl.result.score < ctrl.result.riddle.minScoreToSolve) &amp;&amp; (ctrl.result.riddle.minScoreToSolve == 2)">
+            Congratulations, you have found the correct answer. But you need at least two stars (<i class="fa fa-star"></i>&nbsp;<i class="fa fa-star"></i>&nbsp;<i class="fa fa-star-o light"></i>) in order to solve the riddle. Keep trying! Can you achieve the next goal?
+        </p>
+
+        <p ng-if="(ctrl.result.score < ctrl.result.riddle.minScoreToSolve) &amp;&amp; (ctrl.result.riddle.minScoreToSolve == 3)">
+            Congratulations, you have found the correct answer. But you need all three stars (<i class="fa fa-star">&nbsp;</i><i class="fa fa-star"></i>&nbsp;<i class="fa fa-star"></i>) in order to solve the riddle. Keep trying! Can you achieve the next goal?
+        </p>
+
+    	<p ng-if="(ctrl.result.score >= ctrl.result.riddle.minScoreToSolve) &amp;&amp; (ctrl.result.score < ctrl.result.riddle.goals.length)">
     		Want more stars? Try the next goal of this riddle:
     	</p>
 
     	<table ng-if="ctrl.result.score < ctrl.result.riddle.goals.length">
     		<tbody>
     			<tr ng-if="ctrl.result.score == 1">
-    				<td>
+    				<td style="min-width: 5em;">
 		                <i class="fa fa-star"></i>
 		                <i class="fa fa-star"></i>
 		                <i class="fa fa-star-o light"></i>
 		            </td>
 		            <td>
+                        <i ng-if="ctrl.result.riddle.minScoreToSolve < 2">Bonus Goal:</i>
 	                	{{ctrl.result.riddle.goals[1]}}
 	                </td>
 		        </tr>
 
     			<tr ng-if="ctrl.result.score == 2">
-    				<td>
+    				<td style="min-width: 5em;">
 		                <i class="fa fa-star"></i>
 		                <i class="fa fa-star"></i>
 		                <i class="fa fa-star"></i>
 		            </td>
 		            <td>
+                        <i ng-if="ctrl.result.riddle.minScoreToSolve < 3">Bonus Goal:</i>
 	                	{{ctrl.result.riddle.goals[2]}}
 	                </td>
 		        </tr>

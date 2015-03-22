@@ -25,6 +25,18 @@
   },
   {
     "level": 2,
+    "title": "Nobbys List",
+    "shortDescription": "Help Nobby to write his list.",
+    "goals": [
+      "Solve the task.",
+      "As single statement.",
+      "Avoid any conditions (if, switch, ?)."
+    ],
+    "minScoreToSolve": 3,
+    "location": "defaultvalue"
+  },
+  {
+    "level": 3,
     "title": "Dwarfs and dragons",
     "shortDescription": "Help the dwarfs to save their lives.",
     "goals": [
@@ -36,7 +48,7 @@
     "location": "dwarfs"
   },
   {
-    "level": 3,
+    "level": 4,
     "title": "Altitude Differences",
     "shortDescription": "Know where your blisters come from.",
     "goals": [
@@ -48,7 +60,7 @@
     "location": "subsetsum"
   },
   {
-    "level": 4,
+    "level": 5,
     "title": "Bad Money",
     "shortDescription": "All that glitters is not gold.",
     "goals": [
@@ -58,7 +70,7 @@
     "location": "badmoney"
   },
   {
-    "level": 5,
+    "level": 6,
     "title": "Two dogs",
     "shortDescription": "Bark! Bark!",
     "goals": [

@@ -96,6 +96,10 @@ module riddle {
             return this.countTypes('LogicalExpression');
         }
 
+        public countStatements(): number {
+            return this.countTypes('ForStatement', 'WhileStatement', 'DoWhileStatement', 'IfStatement', 'SwitchStatement', 'ExpressionStatement', 'ReturnStatement');
+        }
+
         public countOperators(...operators: string[]): number {
             var count = 0;
 

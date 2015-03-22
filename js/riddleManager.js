@@ -36,6 +36,9 @@ var riddle;
         Syntax.prototype.countLogicals = function () {
             return this.countTypes('LogicalExpression');
         };
+        Syntax.prototype.countStatements = function () {
+            return this.countTypes('ForStatement', 'WhileStatement', 'DoWhileStatement', 'IfStatement', 'SwitchStatement', 'ExpressionStatement', 'ReturnStatement');
+        };
         Syntax.prototype.countOperators = function () {
             var operators = [];
             for (var _i = 0; _i < arguments.length; _i++) {

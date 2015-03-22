@@ -1,0 +1,10 @@
+{
+  "name": "dictate",
+  "params": [
+    {
+      "name": "s",
+      "type": "string",
+      "description": "The contents. May be null or undefined."
+    }
+  ]
+}

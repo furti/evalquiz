@@ -14,17 +14,17 @@
     	</p>
 
         <p ng-if="ctrl.result.score >= ctrl.result.riddle.minScoreToSolve">
-            <b>Congratulations, you've sovled the riddle!</b>
+            <b>Congratulations, you've sovled this riddle!</b>
         </p>
 
-    	<p>{{ctrl.result.solvedMessage}}</p>
+    	<p ng-if="ctrl.result.solvedMessage">{{ctrl.result.solvedMessage}}</p>
 
         <p ng-if="(ctrl.result.score < ctrl.result.riddle.minScoreToSolve) &amp;&amp; (ctrl.result.riddle.minScoreToSolve == 2)">
-            Congratulations, you have found the correct answer. But you need at least two stars (<i class="fa fa-star"></i>&nbsp;<i class="fa fa-star"></i>&nbsp;<i class="fa fa-star-o light"></i>) in order to solve the riddle. Keep trying! Can you achieve the next goal?
+            Congratulations, you've found the correct answer. But you need at least two stars (<i class="fa fa-star"></i>&nbsp;<i class="fa fa-star"></i>&nbsp;<i class="fa fa-star-o light"></i>) in order to solve the riddle. Keep trying! Can you achieve the next goal?
         </p>
 
         <p ng-if="(ctrl.result.score < ctrl.result.riddle.minScoreToSolve) &amp;&amp; (ctrl.result.riddle.minScoreToSolve == 3)">
-            Congratulations, you have found the correct answer. But you need all three stars (<i class="fa fa-star">&nbsp;</i><i class="fa fa-star"></i>&nbsp;<i class="fa fa-star"></i>) in order to solve the riddle. Keep trying! Can you achieve the next goal?
+            Congratulations, you've found the correct answer. But you need all three stars (<i class="fa fa-star">&nbsp;</i><i class="fa fa-star"></i>&nbsp;<i class="fa fa-star"></i>) in order to solve the riddle. Keep trying! Can you achieve the next goal?
         </p>
 
     	<p ng-if="(ctrl.result.score >= ctrl.result.riddle.minScoreToSolve) &amp;&amp; (ctrl.result.score < ctrl.result.riddle.goals.length)">

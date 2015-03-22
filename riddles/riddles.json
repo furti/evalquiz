@@ -17,7 +17,7 @@
     "shortDescription": "Help litte Carly to solve his task.",
     "goals": [
       "Solve Carlies task.", 
-      "Avoid any loops (for, while, do).", 
+      "Avoid any loops (for, while, do) to solve the riddle.", 
       "Avoid any multiplications (*, *=)."
     ],
     "minScoreToSolve": 2,
@@ -30,7 +30,7 @@
     "goals": [
       "Solve the task.",
       "As single statement.",
-      "Avoid any conditions (if, switch, ?)."
+      "Avoid any conditions (if, switch, ?) to solve the riddle."
     ],
     "minScoreToSolve": 3,
     "location": "defaultvalue"
@@ -53,7 +53,7 @@
     "shortDescription": "Know where your blisters come from.",
     "goals": [
       "Implement a working algorithm.", 
-      "Meet a linear time complexity [O(n)].", 
+      "Meet a linear time complexity [O(n)] to solve the riddle.", 
       "Avoid any conditional statements (if, switch, ?)"
     ],
     "minScoreToSolve": 2,
@@ -71,6 +71,18 @@
   },
   {
     "level": 6,
+    "title": "Bad Money 2",
+    "shortDescription": "All that glitters is still not gold.",
+    "goals": [
+      "Solve the task.",
+      "Perform only the minimal amount of weightings to solve the riddle.",
+      "Avoid any loops (for, while, do)."
+    ],
+    "minScoreToSolve": 2,
+    "location": "badmoney2"
+  },
+  {
+    "level": 7,
     "title": "Two dogs",
     "shortDescription": "Bark! Bark!",
     "goals": [

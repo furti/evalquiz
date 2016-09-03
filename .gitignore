@@ -9,3 +9,6 @@ js/.baseDir.js
 node_modules
 test.json
 evalquiz.sublime-workspace
+typings/
+node_modules/
+dist/

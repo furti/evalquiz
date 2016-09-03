@@ -1,59 +1,58 @@
 /**
  * Created by Daniel on 20.01.2015.
  */
-/// <reference path="./definitions/angularjs/angular.d.ts" />
 
-module util {
-    interface  Callback<R, D> {
-        deferred: ng.IDeferred<D>;
-        dataCallback: (root: R)=>D;
+/// <reference path="./index.d.ts" />
+
+interface Callback<R, D> {
+    deferred: ng.IDeferred<D>;
+    dataCallback: (root: R) => D;
+}
+
+export class AsyncHelper<R> {
+    private root: R;
+    private $q: ng.IQService;
+    private initialized: boolean;
+    private callbacks: Array<Callback<R, any>>;
+
+    constructor(root: R, $q: ng.IQService) {
+        this.root = root;
+        this.$q = $q;
+        this.initialized = false;
+        this.callbacks = new Array();
     }
 
-    export class AsyncHelper<R> {
-        private root: R;
-        private $q: ng.IQService;
-        private initialized: boolean;
-        private callbacks: Array<Callback<R, any>>;
+    public init(): void {
+        var index: any;
+        this.initialized = true;
 
-        constructor(root: R, $q: ng.IQService) {
-            this.root = root;
-            this.$q = $q;
-            this.initialized = false;
-            this.callbacks = new Array();
+        //Resolve all waiting callbacks on init
+        for (index in this.callbacks) {
+            this.resolve(this.callbacks[index]);
         }
 
-        public init(): void {
-            var index: any;
-            this.initialized = true;
+        this.callbacks.length = 0;
+    }
 
-            //Resolve all waiting callbacks on init
-            for (index in this.callbacks) {
-                this.resolve(this.callbacks[index]);
-            }
+    public call<D>(dataCallback: (root: R) => D): ng.IPromise<D> {
+        var callback = {
+            deferred: this.$q.defer(),
+            dataCallback: dataCallback
+        };
 
-            this.callbacks.length = 0;
+        if (this.initialized) {
+            //If initialized call the callback immediately
+            this.resolve(callback);
+        }
+        else {
+            //save it for later processing otherwise
+            this.callbacks.push(callback);
         }
 
-        public call<D>(dataCallback: (root: R)=>D): ng.IPromise<D> {
-            var callback = {
-                deferred: this.$q.defer(),
-                dataCallback: dataCallback
-            };
+        return callback.deferred.promise;
+    }
 
-            if (this.initialized) {
-                //If initialized call the callback immediately
-                this.resolve(callback);
-            }
-            else {
-                //save it for later processing otherwise
-                this.callbacks.push(callback);
-            }
-
-            return callback.deferred.promise;
-        }
-
-        private resolve<D>(callback: Callback<R, D>): void {
-            callback.deferred.resolve(callback.dataCallback(this.root));
-        }
+    private resolve<D>(callback: Callback<R, D>): void {
+        callback.deferred.resolve(callback.dataCallback(this.root));
     }
 }

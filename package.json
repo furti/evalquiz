@@ -1,0 +1,56 @@
+{
+  "name": "evalquiz",
+  "version": "1.0.0",
+  "description": "A game for solving riddles with JavaScript.",
+  "main": "index.js",
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-browserify": "^5.0.0",
+    "grunt-contrib-connect": "^1.0.2",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-open": "^0.2.3",
+    "grunt-typedoc": "^0.2.4",
+    "tsify": "^1.0.5",
+    "typescript": "^1.8.10"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/furti/evalquiz.git"
+  },
+  "keywords": [
+    "javascript",
+    "programming",
+    "game",
+    "riddle"
+  ],
+  "author": "Daniel Furtlehner, Manfred Hantschel",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/furti/evalquiz/issues"
+  },
+  "homepage": "https://github.com/furti/evalquiz#readme",
+  "dependencies": {
+    "angular": "^1.5.8",
+    "angular-animate": "^1.5.8",
+    "angular-aria": "^1.5.8",
+    "angular-cookies": "^1.5.8",
+    "angular-local-storage": "^0.5.0",
+    "angular-markdown-directive": "^0.3.1",
+    "angular-material": "^1.1.1",
+    "angular-route": "^1.5.8",
+    "angular-sanitize": "^1.5.8",
+    "angular-ui-bootstrap": "^2.1.3",
+    "angular-ui-codemirror": "^0.3.0",
+    "codemirror": "^5.18.2",
+    "esprima": "^2.7.3",
+    "font-awesome": "^4.6.3",
+    "hammerjs": "^2.0.8",
+    "jquery": "^3.1.0",
+    "jshint": "^2.9.3",
+    "showdown": "^0.5.4"
+  }
+}

@@ -2,35 +2,34 @@
  * Created by Daniel on 26.01.2015.
  */
 
-    ///<reference path="./definitions/angularjs/angular.d.ts" />
-    ///<reference path="./riddleManager.ts" />
-module attributeinfo {
+/// <reference path="./index.d.ts" />
 
-    class AttributeInfoController {
-        private attributes:Array<riddle.FunctionParam>;
+import {FunctionParam} from "./riddleManager";
 
-        constructor($scope:ng.IScope) {
-            var ctrl = this;
+class AttributeInfoController {
+    private attributes: Array<FunctionParam>;
 
-            $scope.$watch('attributes', function (attributes) {
-                ctrl.attributes = attributes;
-            });
-        }
+    constructor($scope: ng.IScope) {
+        var ctrl = this;
+
+        $scope.$watch('attributes', function (attributes: FunctionParam[]) {
+            ctrl.attributes = attributes;
+        });
     }
-
-    angular.module('evalquiz')
-        .directive('attributeInfo', [function () {
-            return {
-                restrict: 'E',
-                scope: {
-                    attributes: '=attributes'
-                },
-                controller: 'AttributeInfoController as infoCtrl',
-                templateUrl: 'templates/attributeInfo.html',
-                link: function ($scope:ng.IScope, element:ng.IAugmentedJQuery) {
-                    element.attr('layout', 'column');
-                }
-            }
-        }])
-        .controller('AttributeInfoController', AttributeInfoController);
 }
+
+angular.module('evalquiz')
+    .directive('attributeInfo', [function () {
+        return {
+            restrict: 'E',
+            scope: {
+                attributes: '=attributes'
+            },
+            controller: 'AttributeInfoController as infoCtrl',
+            templateUrl: 'templates/attributeInfo.html',
+            link: function ($scope: ng.IScope, element: ng.IAugmentedJQuery) {
+                element.attr('layout', 'column');
+            }
+        }
+    }])
+    .controller('AttributeInfoController', AttributeInfoController);

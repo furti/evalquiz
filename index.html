@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html ng-app="evalquiz">
+
 <head lang="en">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,54 +10,51 @@
 
     <!--<link href="css/bootstrap.min.css" rel="stylesheet">-->
     <!--<link href="css/material.css" rel="stylesheet">-->
-    <link href="css/angular-material.css" rel="stylesheet">
-    <link href="css/font-awesome.min.css" rel="stylesheet">
-    <link href="css/codemirror.css" rel="stylesheet">
-    <link href="css/lint.css" rel="stylesheet">
-    <link href="css/elegant.css" rel="stylesheet">
+    <link href="dist/angular-material.min.css" rel="stylesheet">
+    <link href="dist/font-awesome.min.css" rel="stylesheet">
+    <link href="dist/codemirror.css" rel="stylesheet">
+    <link href="dist/lint.css" rel="stylesheet">
+    <link href="dist/elegant.css" rel="stylesheet">
     <link href="css/evalquiz.css" rel="stylesheet">
 </head>
+
 <body ng-controller="EvalQuizController as quiz" layout="column">
-<md-toolbar class="md-default-theme">
-    <div class="md-toolbar-tools" layout="row">
-        <div class="md-toolbar-item"><span>eval(Quiz)</span></div>
+    <md-toolbar class="md-default-theme">
+        <div class="md-toolbar-tools" layout="row">
+            <div class="md-toolbar-item"><span>eval(Quiz)</span></div>
 
-        <div class="md-toolbar-item">
-            <md-button ng-click="quiz.showRiddles($event)">Riddles</md-button>
+            <div class="md-toolbar-item">
+                <md-button ng-click="quiz.showRiddles($event)">Riddles</md-button>
+            </div>
+
+            <div flex=""></div>
+            <div class="md-toolbar-item">
+                <md-button ng-click="quiz.showCredits($event)">Credits</md-button>
+            </div>
         </div>
+    </md-toolbar>
 
-        <div flex=""></div>
-        <div class="md-toolbar-item">
-            <md-button ng-click="quiz.showCredits($event)">Credits</md-button>
-        </div>
-    </div>
-</md-toolbar>
+    <ng-view layout="row" flex=""></ng-view>
 
-<ng-view layout="row" flex=""></ng-view>
-
-<script type="text/javascript" src="js/lib/hammer.js"></script>
-<script type="text/javascript" src="js/lib/angular.js"></script>
-<script type="text/javascript" src="js/lib/angular-route.js"></script>
-<script type="text/javascript" src="js/lib/angular-animate.js"></script>
-<script type="text/javascript" src="js/lib/angular-aria.js"></script>
-<script type="text/javascript" src="js/lib/angular-sanitize.js"></script>
-<script type="text/javascript" src="js/lib/angular-material.js"></script>
-<script type="text/javascript" src="js/lib/showdown.js"></script>
-<script type="text/javascript" src="js/lib/markdown.js"></script>
-<script type="text/javascript" src="js/lib/codemirror.js"></script>
-<script type="text/javascript" src="js/lib/javascript.js"></script>
-<script type="text/javascript" src="js/lib/jshint.js"></script>
-<script type="text/javascript" src="js/lib/lint.js"></script>
-<script type="text/javascript" src="js/lib/javascript-lint.js"></script>
-<script type="text/javascript" src="js/lib/ui-codemirror.min.js"></script>
-<script type="text/javascript" src="js/lib/angular-cookies.js"></script>
-<script type="text/javascript" src="js/lib/angularLocalStorage.js"></script>
-<script type="text/javascript" src="js/lib/esprima.js"></script>
-
-<script type="text/javascript" src="js/evalquiz.js"></script>
-<script type="text/javascript" src="js/asyncHelper.js"></script>
-<script type="text/javascript" src="js/riddleManager.js"></script>
-<script type="text/javascript" src="js/riddleCard.js"></script>
-<script type="text/javascript" src="js/attributeInfo.js"></script>
+    <script type="text/javascript" src="dist/hammer.min.js"></script>
+    <script type="text/javascript" src="dist/angular.js"></script>
+    <script type="text/javascript" src="dist/angular-route.min.js"></script>
+    <script type="text/javascript" src="dist/angular-animate.min.js"></script>
+    <script type="text/javascript" src="dist/angular-aria.min.js"></script>
+    <script type="text/javascript" src="dist/angular-sanitize.min.js"></script>
+    <script type="text/javascript" src="dist/angular-material.min.js"></script>
+    <script type="text/javascript" src="dist/showdown.min.js"></script>
+    <script type="text/javascript" src="dist/markdown.js"></script>
+    <script type="text/javascript" src="dist/codemirror.js"></script>
+    <script type="text/javascript" src="dist/javascript.js"></script>
+    <script type="text/javascript" src="dist/jshint.js"></script>
+    <script type="text/javascript" src="dist/lint.js"></script>
+    <script type="text/javascript" src="dist/javascript-lint.js"></script>
+    <script type="text/javascript" src="dist/ui-codemirror.js"></script>
+    <script type="text/javascript" src="dist/angular-cookies.min.js"></script>
+    <script type="text/javascript" src="dist/angular-local-storage.min.js"></script>
+    <script type="text/javascript" src="dist/esprima.js"></script>
+    <script type="text/javascript" src="dist/evalquiz.js"></script>
 </body>
+
 </html>

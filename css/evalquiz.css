@@ -5,7 +5,8 @@
     cursor: pointer;
     padding: 0;
     display: block;
-    min-width: 300px;
+    min-width: 480px;
+    max-width: 480px;
 }
 
 .riddle-title {
@@ -49,15 +50,27 @@ code {
     color: #4285F4;
 }
 
-.md-actions {
+.md-dialog-actions {
     border-top: 1px solid rgba(0, 0, 0, 0.12);
     padding: 5px 10px;
 }
 
-.md-actions .md-button {
+.md-dialog-actions .md-button {
     margin-left: 10px;
 }
 
 ng-view {
     overflow: hidden;
+}
+
+table td {
+    padding: 8px 12px;
+}
+
+.light {
+    opacity: 0.25;
+}
+
+.glow {
+    text-shadow: 0px 0px 16px goldenRod;   
 }

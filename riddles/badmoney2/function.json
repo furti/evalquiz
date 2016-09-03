@@ -1,0 +1,21 @@
+{
+  "name": "find",
+  "params": [
+    {
+      "name": "scale",
+      "type": "function",
+      "description": "A function that takes two coins or arrays of coins as parameters and returns a value < 0 if the left array is heavier, a value > 0 if the right array is heavier or 0 if the weight of both arrays is the same."
+    },
+    {
+      "name": "coins",
+      "type": "array",
+      "attributes": [
+        {
+          "name": "id",
+          "type": "number",
+          "description": "The number you wrote on the coin to identify it."
+        }
+      ]
+    }
+  ]
+}

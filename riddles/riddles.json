@@ -3,42 +3,94 @@
     "level": 0,
     "title": "Intro",
     "shortDescription": "eval(Quiz) sounds like fun :)",
-    "solvedMessage": "You've got it. It wasn't that hard to solve i guess. So let's start with the real riddles now.",
+    "goals": [
+      "Solve the calculation.", 
+      "Avoid any additions (+, ++, +=).", 
+      "Avoid any subtractions (-, --, -=)."
+    ],
+    "minScoreToSolve": 1,
     "location": "intro"
   },
   {
     "level": 1,
     "title": "Little Carly",
     "shortDescription": "Help litte Carly to solve his task.",
-    "solvedMessage": "The full name of little Carly is Carl Friedrich Gauss, a mathematician from the 19th century. At the age of nine he solved the task with a simple multiplication.",
+    "goals": [
+      "Solve Carlies task.", 
+      "Avoid any loops (for, while, do) to solve the riddle.", 
+      "Avoid any multiplications (*, *=)."
+    ],
+    "minScoreToSolve": 2,
     "location": "gauss"
   },
   {
     "level": 2,
-    "title": "Dwarfs and dragons",
-    "shortDescription": "Help the dwarfs to save their lives.",
-    "solvedMessage": "The dwarfs are save now and they lived happily ever after.",
-    "location": "dwarfs"
+    "title": "Nobbys List",
+    "shortDescription": "Help Nobby to write his list.",
+    "goals": [
+      "Solve the task.",
+      "As single statement.",
+      "Avoid any conditions (if, switch, ?) to solve the riddle."
+    ],
+    "minScoreToSolve": 3,
+    "location": "defaultvalue"
   },
   {
     "level": 3,
-    "title": "Altitude Differences",
-    "shortDescription": "Know where your blisters come from.",
-    "solvedMessage": "Now Peter and Jürgen know where their blisters came from. I hope you solved the riddle in O(n)!",
-    "location": "subsetsum"
+    "title": "Dwarfs and dragons",
+    "shortDescription": "Help the dwarfs to save their lives.",
+    "goals": [
+      "Solve the riddle.", 
+      "Do not exceed an average of 8 checkColor() calls per dwarf.", 
+      "Avoid any loops (for, while, do)."
+    ],
+    "minScoreToSolve": 1,
+    "location": "dwarfs"
   },
   {
     "level": 4,
-    "title": "Bad Money",
-    "shortDescription": "All that glitters is not gold.",
-    "solvedMessage": "You found the bag that is to light.",
-    "location": "badmoney"
+    "title": "Altitude Differences",
+    "shortDescription": "Know where your blisters come from.",
+    "goals": [
+      "Implement a working algorithm.", 
+      "Meet a linear time complexity [O(n)] to solve the riddle.", 
+      "Avoid any conditional statements (if, switch, ?)"
+    ],
+    "minScoreToSolve": 2,
+    "location": "subsetsum"
   },
   {
     "level": 5,
+    "title": "Bad Money",
+    "shortDescription": "All that glitters is not gold.",
+    "goals": [
+      "Solve the riddle."
+    ],
+    "minScoreToSolve": 1,
+    "location": "badmoney"
+  },
+  {
+    "level": 6,
+    "title": "Bad Money 2",
+    "shortDescription": "All that glitters is still not gold.",
+    "goals": [
+      "Solve the task.",
+      "Perform only the minimal amount of weightings to solve the riddle.",
+      "Avoid any loops (for, while, do)."
+    ],
+    "minScoreToSolve": 2,
+    "location": "badmoney2"
+  },
+  {
+    "level": 7,
     "title": "Two dogs",
     "shortDescription": "Bark! Bark!",
-    "solvedMessage": "Double speed means double distance.",
+    "goals": [
+      "Solve the riddle.",
+      "Avoid any loops (for, while, do).",
+      "Avoid any caluclations (+, &, ||, ...)"
+    ],
+    "minScoreToSolve": 2,
     "location": "dogs"
   }
 ]

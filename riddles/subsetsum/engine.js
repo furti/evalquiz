@@ -29,7 +29,7 @@
         return samples;
     };
 
-    Engine.prototype.run = function(implementation) {
+    Engine.prototype.run = function(implementation, syntax) {
         var maximum = 0;
         var results = [];
 
@@ -38,7 +38,24 @@
             maximum = Math.max(maximum, results[day]);
         }
 
-        return this.check(maximum, results);
+        if (!this.check(maximum, results)) {
+            return 0;
+        }
+
+        var loopCount = syntax.countLoops();
+
+        // this goal should be checked by instrumenting the code
+        if (loopCount > 1) {
+            return 1;
+        }
+
+        var conditionsCount = syntax.countConditions();
+
+        if (conditionsCount > 0) {
+            return 2;
+        }
+
+        return 3;
     };
 
     Engine.prototype.runSample = function(day, implementation) {
@@ -101,7 +118,16 @@
         return maximum;
     };
 
+    Engine.prototype.solvedMessage = function() {
+        return 'Now Peter and Jürgen know where their blisters come from.';
+    };
+
     Engine.prototype.failedMessage = function() {
+        if (this.invalidDay < 0) {
+            // hm, this should not happen, but did
+            return 'The result is simply wrong.';
+        }
+
         var message = 'The result for day ' + (this.invalidDay + 1) + ' is wrong';
 
         if (this.samples[this.invalidDay].length <= 16) {

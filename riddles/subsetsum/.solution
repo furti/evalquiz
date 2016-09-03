@@ -1,0 +1,150 @@
+SPOILER
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*
+function maxSum(data) {
+  "use strict";
+
+  var maximum = 0;
+  
+  for (var i=0; i<data.length(); i++) {
+    var sum = 0;
+    
+    for (var j=i; j<data.length(); j++) {
+      sum += data.get(j);
+      
+      if (sum > maximum) {
+        maximum = sum;
+      }
+    }
+  }
+  
+  return maximum;
+}
+
+**
+function maxSum(data) {
+  "use strict";
+  
+  var maximum = 0;
+  var current = 0;
+
+  for (var i = 0; i < data.length(); i++) {
+    if (current + data.get(i) > 0) {
+      current = current + data.get(i);
+    }
+    
+    if (current > maximum) {
+      maximum = current;
+    }
+  }            
+}
+
+***
+function maxSum(data) {
+  "use strict";
+  
+  var maximum = 0;
+  var current = 0;
+
+  for (var i = 0; i < data.length(); i++) {
+    current = Math.max(current + data.get(i), 0);
+    maximum = Math.max(maximum, current);
+  }            
+}

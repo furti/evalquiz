@@ -46,7 +46,7 @@ module.exports = function (grunt) {
         browserify: {
             default: {
                 files: {
-                    "dist/evalquiz.js": ["./ts/evalquiz.ts", "./ts/riddleCard.ts", "./ts/riddleManager.ts"]
+                    "dist/evalquiz.js": ["./ts/evalquiz.ts", "./ts/attributeInfo.ts", "./ts/riddleCard.ts", "./ts/riddleManager.ts"]
                 },
                 options: {
                     plugin: ["tsify"]
@@ -68,47 +68,6 @@ module.exports = function (grunt) {
                 outdir: "./dist"
             }
         },
-
-        // typescript: {
-        //     base: {
-        //         src: ["./ts/**/*.ts"],
-        //         dest: "./js",
-        //         options: {
-        //             module: "commonjs",
-        //             target: "es5",
-        //             sourceMap: true,
-        //             declaration: true
-        //         }
-        //     }
-
-        //     // basic: {
-        //     //     options: {
-        //     //         rootDir: "./",
-        //     //         defaultTsConfig: {
-        //     //             "compilerOptions": {
-        //     //                 "target": "es5",
-        //     //                 "module": "commonjs",
-        //     //                 "moduleResolution": "node",
-        //     //                 "isolatedModules": false,
-        //     //                 "jsx": "react",
-        //     //                 "experimentalDecorators": true,
-        //     //                 "emitDecoratorMetadata": true,
-        //     //                 "declaration": false,
-        //     //                 "noImplicitAny": false,
-        //     //                 "removeComments": true,
-        //     //                 "noLib": false,
-        //     //                 "preserveConstEnums": true,
-        //     //                 "suppressImplicitAnyIndexErrors": true,
-        //     //                 "out": "./js/evalquiz.js"
-        //     //             },
-        //     //             "filesGlob": [
-        //     //                 "ts/**/*.ts",
-        //     //                 "ts/**/*.tsx"
-        //     //             ],
-        //     //         }
-        //     //     }
-        //     // }
-        // },
 
         typedoc: {
             build: {

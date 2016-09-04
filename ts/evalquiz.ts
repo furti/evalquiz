@@ -25,7 +25,8 @@ class EvalQuizController {
     public showCredits($event: any): void {
         this.$mdDialog.show({
             templateUrl: 'templates/credits.html',
-            targetEvent: $event
+            targetEvent: $event,
+            controller: 'CreditsController as ctrl'
         });
     }
 }
@@ -49,6 +50,22 @@ class ShowRiddlesController {
             ctrl.riddles = riddles;
             ctrl.loading = false;
         });
+    }
+
+    public closeDialog(): void {
+        this.$mdDialog.hide();
+    }
+}
+
+class CreditsController {
+    private $mdDialog: ng.material.IDialogService;
+
+    static $inject = ['$mdDialog'];
+
+    constructor($mdDialog: ng.material.IDialogService) {
+        this.$mdDialog = $mdDialog;
+
+        var ctrl = this;
     }
 
     public closeDialog(): void {
@@ -227,6 +244,7 @@ class SolvedController {
 angular.module('evalquiz', ['ngRoute', 'ngMaterial', 'ui.codemirror', 'LocalStorageModule', 'btford.markdown'])
     .controller('EvalQuizController', EvalQuizController)
     .controller('ShowRiddlesController', ShowRiddlesController)
+    .controller('CreditsController', CreditsController)
     .controller('RiddleController', RiddleController)
     .controller('SolvedController', SolvedController)
     .run(['riddleManager', function (riddleManager: RiddleManager) {

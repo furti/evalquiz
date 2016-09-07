@@ -19,12 +19,13 @@
     "ts/**/*.ts",
     "ts/**/*.tsx"
   ],
-  "files": [
-    "ts/index.d.ts",
-    "ts/asyncHelper.ts",
-    "ts/attributeInfo.ts",
-    "ts/evalquiz.ts",
-    "ts/riddleCard.ts",
-    "ts/riddleManager.ts"
+  "exclude": [
+      "./css",
+      "./dist",
+      "./fonts",
+      "./node_modules",
+      "./riddles", 
+      "./templates",
+      "./typings"
   ]
 }

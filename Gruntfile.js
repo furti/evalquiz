@@ -46,26 +46,11 @@ module.exports = function (grunt) {
         browserify: {
             default: {
                 files: {
-                    "dist/evalquiz.js": ["./ts/evalquiz.ts", "./ts/attributeInfo.ts", "./ts/riddleCard.ts", "./ts/riddleManager.ts"]
+                    "dist/evalquiz.js": ["./ts/evalquiz.ts", "./ts/attributeInfo.ts", "./ts/Credits.ts", "./ts/Riddle.ts", "./ts/RiddleList.ts", "./ts/riddleCard.ts", "./ts/riddleManager.ts"]
                 },
                 options: {
                     plugin: ["tsify"]
                 }
-            }
-        },
-
-        ts: {
-            options: {
-                target: "es6",
-                module: "commonjs",
-                sourceMap: true,
-                sourceRoot: "./js",
-                noImplicitAny: true,
-                fast: "watch"
-            },
-            default: {
-                src: "./ts/**/*.ts",
-                outdir: "./dist"
             }
         },
 

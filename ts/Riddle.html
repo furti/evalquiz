@@ -1,15 +1,10 @@
-<!--Show progress while loading -->
 <md-content class="md-padding" flex="50" ng-if="riddleCtrl.loading">
     <md-progress-linear md-mode="indeterminate"></md-progress-linear>
 </md-content>
-<!--Riddle Description-->
-<md-content class="md-padding" flex="50">
 
+<md-content class="md-padding" flex="50">
     <h2>
-        <i class="fa" ng-class="{'fa-square-o': riddleCtrl.riddle.score < riddleCtrl.riddle.minScoreToSolve, 'fa-check-square-o': riddleCtrl.riddle.score >= riddleCtrl.riddle.minScoreToSolve}"></i>
-        &nbsp;
-        {{riddleCtrl.riddle.title}}
-        &nbsp;
+        <i class="fa" ng-class="{'fa-square-o': riddleCtrl.riddle.score < riddleCtrl.riddle.minScoreToSolve, 'fa-check-square-o': riddleCtrl.riddle.score >= riddleCtrl.riddle.minScoreToSolve}"></i>        &nbsp; {{riddleCtrl.riddle.title}} &nbsp;
         <i class="fa" ng-class="{'fa-star-o light': riddleCtrl.riddle.score <= 0, 'fa-star': riddleCtrl.riddle.score > 0}"></i>
         <i class="fa" ng-class="{'fa-star-o light': riddleCtrl.riddle.score <= 1, 'fa-star': riddleCtrl.riddle.score > 1}"></i>
         <i class="fa" ng-class="{'fa-star-o light': riddleCtrl.riddle.score <= 2, 'fa-star': riddleCtrl.riddle.score > 2}"></i>
@@ -33,19 +28,20 @@
                     <i class="fa" ng-class="{'fa-star-o light': $index <= 1, 'fa-star': $index > 1}"></i>
                 </td>
                 <td>
-                    <i ng-if="$index >= riddleCtrl.riddle.minScoreToSolve">Bonus Goal:</i>
-                    {{goal}}
+                    <i ng-if="$index >= riddleCtrl.riddle.minScoreToSolve">Bonus Goal:</i> {{goal}}
                 </td>
             </tr>
         </tbody>
     </table>
-    
+
     <p ng-if="riddleCtrl.riddle.minScoreToSolve == 2">
-        You need at least two stars (<i class="fa fa-star"></i>&nbsp;<i class="fa fa-star"></i>&nbsp;<i class="fa fa-star-o light"></i>) in order to solve the riddle.
+        You need at least two stars (<i class="fa fa-star"></i>&nbsp;<i class="fa fa-star"></i>&nbsp;<i class="fa fa-star-o light"></i>)
+        in order to solve the riddle.
     </p>
 
     <p ng-if="riddleCtrl.riddle.minScoreToSolve == 3">
-        You need all three stars (<i class="fa fa-star">&nbsp;</i><i class="fa fa-star"></i>&nbsp;<i class="fa fa-star"></i>) in order to solve the riddle.
+        You need all three stars (<i class="fa fa-star">&nbsp;</i><i class="fa fa-star"></i>&nbsp;<i class="fa fa-star"></i>)
+        in order to solve the riddle.
     </p>
 
     <md-divider></md-divider>
@@ -55,7 +51,7 @@
     <div btf-markdown="riddleCtrl.riddle.functionDescription"></div>
     <attribute-info attributes="riddleCtrl.riddle.functionData.params"></attribute-info>
 </md-content>
-<!--Editor-->
+
 <md-content flex="50" layout="column">
     <div flex="">
         <textarea ng-model="riddleCtrl.riddle.functionData.code" ui-codemirror="riddleCtrl.editorOptions"></textarea>
@@ -67,6 +63,3 @@
         <md-button class="md-primary md-raised" ng-click="riddleCtrl.solve($event)">Solve</md-button>
     </div>
 </md-content>
-
-
-

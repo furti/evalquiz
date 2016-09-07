@@ -1,29 +1,22 @@
-/**
- * Created by Daniel on 20.01.2015.
- */
-
 /// <reference path="./index.d.ts" />
 
 interface Callback<R, D> {
-    deferred: ng.IDeferred<D>;
+    deferred: angular.IDeferred<D>;
     dataCallback: (root: R) => D;
 }
 
-export class AsyncHelper<R> {
-    private root: R;
-    private $q: ng.IQService;
+export class Helper<R> {
     private initialized: boolean;
-    private callbacks: Array<Callback<R, any>>;
+    private callbacks: Callback<R, any>[];
 
-    constructor(root: R, $q: ng.IQService) {
-        this.root = root;
-        this.$q = $q;
+    constructor(private root: R, private $q: angular.IQService) {
         this.initialized = false;
-        this.callbacks = new Array();
+        this.callbacks = [];
     }
 
     public init(): void {
-        var index: any;
+        let index: any;
+        
         this.initialized = true;
 
         //Resolve all waiting callbacks on init
@@ -34,8 +27,8 @@ export class AsyncHelper<R> {
         this.callbacks.length = 0;
     }
 
-    public call<D>(dataCallback: (root: R) => D): ng.IPromise<D> {
-        var callback = {
+    public call<D>(dataCallback: (root: R) => D): angular.IPromise<D> {
+        let callback = {
             deferred: this.$q.defer(),
             dataCallback: dataCallback
         };

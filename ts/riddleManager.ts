@@ -1,6 +1,6 @@
 /// <reference path="./index.d.ts" />
 
-import {AsyncHelper} from "./asyncHelper";
+import * as Async from "./Async";
 
 var SAVE_GAME_KEY = 'riddleQuiz.saveGames';
 var LAST_RIDDLE_KEY = 'riddleQuiz.lastPlayedRiddle';
@@ -165,14 +165,14 @@ export class RiddleManager {
     private riddleMap: { [key: number]: FullRiddle };
     private $http: ng.IHttpService;
     private $q: ng.IQService;
-    private asyncHelper: AsyncHelper<RiddleManager>;
+    private asyncHelper: Async.Helper<RiddleManager>;
     private storage: angular.local.storage.ILocalStorageService;
 
     static $inject = ['$http', '$q', 'localStorageService'];
 
     constructor($http: ng.IHttpService, $q: ng.IQService, storage: angular.local.storage.ILocalStorageService) {
         this.$http = $http;
-        this.asyncHelper = new AsyncHelper(this, $q);
+        this.asyncHelper = new Async.Helper(this, $q);
         this.$q = $q;
         this.storage = storage;
     }
@@ -192,7 +192,7 @@ export class RiddleManager {
      *
      * @returns {ng.IPromise<Array<riddle.FullRiddle>>}
      */
-    public getRiddleData(): ng.IPromise<Array<RiddleData>> {
+    public getRiddleData(): ng.IPromise<RiddleData[]> {
         return this.asyncHelper.call(function (riddleManager) {
             return riddleManager.riddles;
         });

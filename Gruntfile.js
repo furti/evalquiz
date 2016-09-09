@@ -6,11 +6,13 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-contrib-connect");
     grunt.loadNpmTasks("grunt-open");
 
+    var port = 8080;
+
     grunt.initConfig({
         connect: {
             server: {
                 options: {
-                    port: 80,
+                    port: port,
                     base: "./"
                 }
             }
@@ -74,7 +76,7 @@ module.exports = function (grunt) {
 
         open: {
             dev: {
-                path: "http://localhost/index.html"
+                path: "http://localhost:" + port + "/index.html"
             }
         }
     });

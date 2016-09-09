@@ -3,8 +3,8 @@
 let module = angular.module('evalquiz');
 
 import './RiddleCardComponent';
-import {RiddleManager, RiddleData} from "./riddleManager";
-import {Component} from "./Utils";
+import {RiddleManager, RiddleData} from './riddleManager';
+import {Component} from './Utils';
 
 @Component(module, 'riddleList', {
     templateUrl: 'ts/RiddleListComponent.html'

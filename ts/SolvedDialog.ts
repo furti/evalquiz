@@ -2,8 +2,8 @@
 
 let module = angular.module('evalquiz');
 
-import {Result} from "./riddleManager";
-import {Dialog} from "./Utils";
+import {Result} from './riddleManager';
+import {Dialog} from './Utils';
 
 @Dialog(module, 'SolvedDialog', {
     clickOutsideToClose: false,

@@ -1,9 +1,9 @@
 /// <reference path="./index.d.ts" />
 
-import "./AttributeInfoComponent";
-import {RiddleManager, RiddleData, Riddle, Result} from "./riddleManager";
-import "./SolvedDialog";
-import {Component, Service, DialogService, Dialog} from "./Utils";
+import './AttributeInfoComponent';
+import {RiddleManager, RiddleData, Riddle, Result} from './riddleManager';
+import './SolvedDialog';
+import {Component, Service, DialogService, Dialog} from './Utils';
 
 let module = angular.module('evalquiz');
 
@@ -35,7 +35,7 @@ class RiddleController {
         this.editorOptions = {
             lineNumbers: true,
             mode: 'javascript',
-            gutters: ["CodeMirror-lint-markers"],
+            gutters: ['CodeMirror-lint-markers'],
             lint: true,
             onLoad: (cm: any) => {
                 cm.on('change', cmChange);
@@ -59,7 +59,7 @@ class RiddleController {
         this.$mdDialog.show(
             this.$mdDialog.confirm()
                 .title('Trash')
-                .textContent("Are you sure that you want to clear and reset the editor?")
+                .textContent('Are you sure that you want to clear and reset the editor?')
                 .ok('Yes')
                 .cancel('No')
         ).then(() => {

@@ -1,6 +1,6 @@
 /// <reference path="./index.d.ts" />
 
-import * as Async from "./Async";
+import * as Async from './Async';
 
 var SAVE_GAME_KEY = 'riddleQuiz.saveGames';
 var LAST_RIDDLE_KEY = 'riddleQuiz.lastPlayedRiddle';
@@ -230,10 +230,10 @@ export class RiddleManager {
             }
 
             //Load the description
-            var descriptionPromise = riddleManager.$http.get('riddles/' + riddle.location + "/description.md");
-            var functionPromise = riddleManager.$http.get('riddles/' + riddle.location + "/function.json");
-            var functionDescriptionPromise = riddleManager.$http.get('riddles/' + riddle.location + "/functionDescription.md");
-            var functionEnginePromise = riddleManager.$http.get('riddles/' + riddle.location + "/engine.js");
+            var descriptionPromise = riddleManager.$http.get('riddles/' + riddle.location + '/description.md');
+            var functionPromise = riddleManager.$http.get('riddles/' + riddle.location + '/function.json');
+            var functionDescriptionPromise = riddleManager.$http.get('riddles/' + riddle.location + '/functionDescription.md');
+            var functionEnginePromise = riddleManager.$http.get('riddles/' + riddle.location + '/engine.js');
 
             //Wait until all data is available
             riddleManager.$q.all({

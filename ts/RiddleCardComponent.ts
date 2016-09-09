@@ -2,8 +2,8 @@
 
 let module = angular.module('evalquiz');
 
-import {RiddleManager, RiddleData} from "./riddleManager";
-import {Component} from "./Utils";
+import {RiddleManager, RiddleData} from './riddleManager';
+import {Component} from './Utils';
 
 @Component(module, 'riddleCard', {
     templateUrl: 'ts/RiddleCardComponent.html',
@@ -21,7 +21,7 @@ class Controller {
 
     public startRiddle(riddle: RiddleData) {
         this.$mdDialog.hide();
-        this.$location.path("/riddles/" + riddle.level);
+        this.$location.path('/riddles/' + riddle.level);
     }
 }
 

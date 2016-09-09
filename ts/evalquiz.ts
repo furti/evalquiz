@@ -6,10 +6,10 @@
 
 let module = angular.module('evalquiz', ['ngRoute', 'ngMaterial', 'ui.codemirror', 'LocalStorageModule', 'btford.markdown']);
 
-import "./CreditsDialog";
+import './CreditsDialog';
 import './RiddleListDialog';
-import {RiddleManager, RiddleData, Riddle, Result} from "./riddleManager";
-import {Component, Service, DialogService, Dialog} from "./Utils";
+import {RiddleManager, RiddleData, Riddle, Result} from './riddleManager';
+import {Component, Service, DialogService, Dialog} from './Utils';
 
 
 class EvalQuizController {

@@ -1,6 +1,6 @@
 /// <reference path="./index.d.ts" />
 
-import {Dialog} from "./Utils";
+import {Dialog} from './Utils';
 
 let module = angular.module('evalquiz');
 

@@ -3,8 +3,8 @@
 let module = angular.module('evalquiz');
 
 import './RiddleListComponent';
-import {RiddleManager, RiddleData} from "./riddleManager";
-import {Dialog} from "./Utils";
+import {RiddleManager, RiddleData} from './riddleManager';
+import {Dialog} from './Utils';
 
 @Dialog(module, 'riddleListDialog', {
     clickOutsideToClose: true,

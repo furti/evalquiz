@@ -3,7 +3,7 @@
 let module = angular.module('evalquiz');
 
 import './RiddleListComponent';
-import {RiddleManager, RiddleData} from './riddleManager';
+import {RiddleManager, RiddleData} from './RiddleManager';
 import {Dialog} from './Utils';
 
 @Dialog(module, 'riddleListDialog', {

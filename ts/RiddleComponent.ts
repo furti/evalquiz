@@ -1,7 +1,7 @@
 /// <reference path="./index.d.ts" />
 
 import './AttributeInfoComponent';
-import {RiddleManager, RiddleData, Riddle, Result} from './riddleManager';
+import {RiddleManager, RiddleData, Riddle, Result} from './RiddleManager';
 import './SolvedDialog';
 import {Component, Service, DialogService, Dialog} from './Utils';
 
@@ -70,7 +70,7 @@ class RiddleController {
     }
 
     public save($event: any): void {
-        this.riddleManager.persist([this.riddle]);
+        this.riddleManager.saveRiddle(this.riddle);
 
         this.$mdDialog.show(
             this.$mdDialog.alert()
@@ -144,8 +144,8 @@ module.config(['$mdThemingProvider', '$routeProvider', ($mdThemingProvider: ng.m
         .accentPalette('lime');
 
     $routeProvider.when('/riddles/:riddleId', {
-        templateUrl: 'ts/Riddle.html',
+        templateUrl: 'ts/RiddleComponent.html',
         controller: 'RiddleController',
-        controllerAs: 'riddleCtrl'
+        controllerAs: '$ctrl'
     });
 }]);

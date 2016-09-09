@@ -108,3 +108,5 @@ export function Dialog(nameOrModule: string | angular.IModule, selector: string,
 export function isPromise(obj: any): boolean {
     return obj && angular.isFunction(obj.then);
 }
+
+

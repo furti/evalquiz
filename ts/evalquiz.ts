@@ -7,8 +7,10 @@
 let module = angular.module('evalquiz', ['ngRoute', 'ngMaterial', 'ui.codemirror', 'LocalStorageModule', 'btford.markdown']);
 
 import './CreditsDialog';
+import './RiddleComponent';
 import './RiddleListDialog';
-import {RiddleManager, RiddleData, Riddle, Result} from './riddleManager';
+import {RiddleManager, RiddleData, Riddle, Result} from './RiddleManager';
+import {StorageService} from './StorageService';
 import {Component, Service, DialogService, Dialog} from './Utils';
 
 
@@ -29,11 +31,11 @@ class EvalQuizController {
 
 module.controller('EvalQuizController', EvalQuizController);
 
-module.run(['riddleManager', function (riddleManager: RiddleManager) {
-    riddleManager.setupRiddles();
-}]).run(['$location', 'riddleManager', function ($location: ng.ILocationService, riddleManager: RiddleManager) {
-    riddleManager.lastPlayedRiddle().then(function (level) {
+module.run(['$location', 'riddleManager', 'storageService', function ($location: ng.ILocationService, riddleManager: RiddleManager, storageService: StorageService) {
+    riddleManager.setupRiddles().then(() => {
+        let level = storageService.loadLastPlayedRiddle();
+
         $location.path('/riddles/' + level);
-    });
+    });;
 }]);
 

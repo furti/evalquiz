@@ -2,7 +2,7 @@
 
 let module = angular.module('evalquiz');
 
-import {Result} from './riddleManager';
+import {Result} from './RiddleManager';
 import {Dialog} from './Utils';
 
 @Dialog(module, 'SolvedDialog', {

@@ -2,7 +2,7 @@
 
 let module = angular.module('evalquiz');
 
-import {FunctionParam} from './riddleManager';
+import {FunctionParam} from './RiddleManager';
 import {Component} from './Utils';
 
 @Component(module, 'attributeInfo', {

@@ -4,6 +4,7 @@
   "description": "A game for solving riddles with JavaScript.",
   "main": "index.js",
   "devDependencies": {
+    "browsify": "0.0.4",
     "grunt": "^1.0.1",
     "grunt-browserify": "^5.0.0",
     "grunt-contrib-connect": "^1.0.2",
@@ -12,13 +13,13 @@
     "grunt-open": "^0.2.3",
     "grunt-typedoc": "^0.2.4",
     "tsify": "^1.0.5",
-    "typescript": "^1.8.10"
+    "typescript": "^1.8.10",
+    "typings": "^1.3.3"
   },
   "scripts": {
     "start": "grunt",
     "typings": "typings install",
-    "grunt": "grunt",
-    "postinstall": "typings"
+    "postinstall": "typings install"
   },
   "repository": {
     "type": "git",

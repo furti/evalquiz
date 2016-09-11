@@ -1,8 +1,11 @@
-<md-content class="md-padding" flex="100" ng-if="$ctrl.loading">
-    <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+<md-content class="md-padding" flex="100" ng-if="!$ctrl.available">
+    <div class="loader">
+        <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+        <p>Loading ...</p>
+    </div>
 </md-content>
 
-<md-content class="md-padding" flex="50" ng-if="!$ctrl.loading">
+<md-content class="md-padding" flex="50" ng-if="$ctrl.available">
     <h2>
         <i class="fa" ng-class="{'fa-square-o': $ctrl.riddle.score < $ctrl.riddle.minScoreToSolve, 'fa-check-square-o': $ctrl.riddle.score >= $ctrl.riddle.minScoreToSolve}"></i>        &nbsp; {{$ctrl.riddle.title}} &nbsp;
         <i class="fa" ng-class="{'fa-star-o light': $ctrl.riddle.score <= 0, 'fa-star': $ctrl.riddle.score > 0}"></i>
@@ -52,7 +55,7 @@
     <attribute-info attributes="$ctrl.riddle.functionData.params"></attribute-info>
 </md-content>
 
-<md-content flex="50" layout="column" ng-if="!$ctrl.loading">
+<md-content flex="50" layout="column" ng-if="$ctrl.available">
     <div flex="">
         <textarea ng-model="$ctrl.riddle.functionData.code" ui-codemirror="$ctrl.editorOptions"></textarea>
     </div>

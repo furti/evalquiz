@@ -18,21 +18,8 @@
     <link href="css/evalquiz.css" rel="stylesheet">
 </head>
 
-<body ng-controller="EvalQuizController as quiz" layout="column">
-    <md-toolbar class="md-default-theme">
-        <div class="md-toolbar-tools" layout="row">
-            <div class="md-toolbar-item"><span>eval(Quiz)</span></div>
-
-            <div class="md-toolbar-item">
-                <md-button ng-click="quiz.showRiddles($event)">Riddles</md-button>
-            </div>
-
-            <div flex=""></div>
-            <div class="md-toolbar-item">
-                <md-button ng-click="quiz.showCredits($event)">Credits</md-button>
-            </div>
-        </div>
-    </md-toolbar>
+<body layout="column">
+    <toolbar></toolbar>
 
     <ng-view layout="row" flex=""></ng-view>
 

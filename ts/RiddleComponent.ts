@@ -11,7 +11,7 @@ class RiddleController {
     static $inject = ['$routeParams', 'riddleManager', '$mdDialog', '$location', 'SolvedDialog'];
 
     public riddle: Riddle;
-    public loading: boolean;
+    protected loading: boolean;
     public editorOptions: any;
 
     constructor(protected $routeParams: ng.route.IRouteParamsService, protected riddleManager: RiddleManager, protected $mdDialog: ng.material.IDialogService,
@@ -53,6 +53,9 @@ class RiddleController {
         });
     }
 
+    protected get available(): boolean {
+        return this.riddleManager.initialized && !this.loading;
+    }
     public trash($event: any): void {
         var self = this;
 

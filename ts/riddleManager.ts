@@ -19,7 +19,6 @@ export interface RiddleData {
     minScoreToSolve: number;
     finished: boolean;
     score: number;
-
 }
 
 export interface Riddle extends RiddleData {
@@ -58,13 +57,15 @@ export interface Result {
 
 @Service(module, 'riddleManager')
 export class RiddleManager {
-    private riddles: FullRiddle[];
-    private riddleMap: { [level: number]: FullRiddle };
-    private asyncHelper: Async.Helper<RiddleManager>;
+    public initialized: boolean = false;
+
+    protected riddles: FullRiddle[];
+    protected riddleMap: { [level: number]: FullRiddle };
+    protected asyncHelper: Async.Helper<RiddleManager>;
 
     static $inject = ['$http', '$q', 'storageService', 'uiService'];
 
-    constructor(private $http: ng.IHttpService, private $q: ng.IQService, private storageService: StorageService, private uiService: UIService) {
+    constructor(protected $http: ng.IHttpService, protected $q: ng.IQService, protected storageService: StorageService, protected uiService: UIService) {
         this.asyncHelper = new Async.Helper(this, $q);
     }
 
@@ -75,6 +76,8 @@ export class RiddleManager {
      */
     public setupRiddles(): angular.IPromise<any> {
         let deferred = this.$q.defer();
+
+        this.initialized = false;
 
         this.uiService.alert('Loading', 'Doing the load now').then(() => {
             this.$http.get('riddles/riddles.json').then(response => {
@@ -113,7 +116,7 @@ export class RiddleManager {
         let saveGame: SaveGame;
 
         this.riddleMap = {};
-        console.log(riddles);
+
         riddles.forEach((riddle) => {
             if (saveGames[riddle.level]) {
                 saveGame = saveGames[riddle.level];
@@ -133,6 +136,7 @@ export class RiddleManager {
         });
 
         this.riddles = riddles;
+        this.initialized = true;
     }
 
     /**

@@ -79,20 +79,18 @@ export class RiddleManager {
 
         this.initialized = false;
 
-        this.uiService.alert('Loading', 'Doing the load now').then(() => {
-            this.$http.get('riddles/riddles.json').then(response => {
-                let riddles: FullRiddle[] = response.data as FullRiddle[];
+        this.$http.get('riddles/riddles.json').then(response => {
+            let riddles: FullRiddle[] = response.data as FullRiddle[];
 
-                this.prepareRiddles(riddles);
-                this.asyncHelper.init();
+            this.prepareRiddles(riddles);
+            this.asyncHelper.init();
 
-                deferred.resolve();
-            }, (error: any) => {
-                this.uiService.alert('Loading Riddles', 'Unfortunately, the index file of the riddles could not be loaded. This is a show stopper. Sorry.');
+            deferred.resolve();
+        }, (error: any) => {
+            this.uiService.alert('Loading Riddles', 'Unfortunately, the index file of the riddles could not be loaded. This is a show stopper. Sorry.');
 
-                deferred.reject();
-            });
-        })
+            deferred.reject();
+        });
 
         return deferred.promise;
     }

@@ -1,31 +1,30 @@
 {
-  "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "isolatedModules": false,
-    "jsx": "react",
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "declaration": false,
-    "noImplicitAny": false,
-    "removeComments": true,
-    "noLib": false,
-    "preserveConstEnums": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "out": "dist/evalquiz.js"
-  },
-  "filesGlob": [
-    "ts/**/*.ts",
-    "ts/**/*.tsx"
-  ],
-  "exclude": [
-      "./css",
-      "./dist",
-      "./fonts",
-      "./node_modules",
-      "./riddles", 
-      "./templates",
-      "./typings"
-  ]
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "isolatedModules": false,
+        "jsx": "react",
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "declaration": false,
+        "noImplicitAny": false,
+        "removeComments": true,
+        "noLib": false,
+        "preserveConstEnums": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "out": "dist/script/evalquiz.js"
+    },
+    "filesGlob": [
+        "./src/script/**/*.ts",
+        "./src/script/**/*.tsx"
+    ],
+    "exclude": [
+        "./dist",
+        "./docs",
+        "./node_modules",
+        "./src/riddles",
+        "./src/style",
+        "./typings"
+    ]
 }

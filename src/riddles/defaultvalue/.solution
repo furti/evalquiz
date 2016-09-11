@@ -1,0 +1,123 @@
+SPOILER
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*
+function dictate(s) {
+  "use strict";
+  
+  if (s == null) {
+    return 'Nothing';
+  }
+  
+  return s;
+}
+
+**
+function dictate(s) {
+  "use strict";
+  
+  return s ? s : 'Nothing';
+}
+
+***
+function dictate(s) {
+  "use strict";
+  
+  return s || 'Nothing';
+}

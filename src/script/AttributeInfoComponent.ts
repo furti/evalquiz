@@ -6,7 +6,7 @@ import {FunctionParam} from './RiddleManager';
 import {Component} from './Utils';
 
 @Component(module, 'attributeInfo', {
-    templateUrl: 'ts/AttributeInfoComponent.html',
+    templateUrl: 'script/AttributeInfoComponent.html',
     bindings: {
         attributes: '<'
     }

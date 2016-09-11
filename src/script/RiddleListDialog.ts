@@ -11,7 +11,7 @@ import {Dialog} from './Utils';
     escapeToClose: true,
     focusOnOpen: true,
     hasBackdrop: true,
-    templateUrl: 'ts/RiddleListDialog.html'
+    templateUrl: 'script/RiddleListDialog.html'
 })
 class Controller {
     static $inject = ['$mdDialog'];

@@ -147,7 +147,7 @@ module.config(['$mdThemingProvider', '$routeProvider', ($mdThemingProvider: ng.m
         .accentPalette('lime');
 
     $routeProvider.when('/riddles/:riddleId', {
-        templateUrl: 'ts/RiddleComponent.html',
+        templateUrl: 'script/RiddleComponent.html',
         controller: 'RiddleController',
         controllerAs: '$ctrl'
     });

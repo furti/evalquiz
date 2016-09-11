@@ -6,7 +6,7 @@ import {RiddleManager, RiddleData} from './RiddleManager';
 import {Component} from './Utils';
 
 @Component(module, 'riddleCard', {
-    templateUrl: 'ts/RiddleCardComponent.html',
+    templateUrl: 'script/RiddleCardComponent.html',
     bindings: {
         riddle: '<'
     }

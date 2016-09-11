@@ -7,7 +7,7 @@ import {RiddleManager, RiddleData} from './RiddleManager';
 import {Component} from './Utils';
 
 @Component(module, 'riddleList', {
-    templateUrl: 'ts/RiddleListComponent.html'
+    templateUrl: 'script/RiddleListComponent.html'
 })
 class Controller {
     static $inject = ['riddleManager', '$mdDialog'];

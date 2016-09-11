@@ -8,7 +8,7 @@ import {RiddleManager} from './RiddleManager';
 import {Component, DialogService} from './Utils';
 
 @Component(module, 'toolbar', {
-    templateUrl: 'ts/ToolbarComponent.html'
+    templateUrl: 'script/ToolbarComponent.html'
 })
 class Controller {
     static $inject = ['riddleManager', 'creditsDialog', 'riddleListDialog'];

@@ -9,7 +9,7 @@ let module = angular.module('evalquiz');
     escapeToClose: true,
     focusOnOpen: true,
     hasBackdrop: true,
-    templateUrl: 'ts/CreditsDialog.html'
+    templateUrl: 'script/CreditsDialog.html'
 })
 class Controller {
     static $inject = ['$mdDialog'];
@@ -20,6 +20,5 @@ class Controller {
     protected close(): void {
         this.$mdDialog.hide();
     }
-
 }
 

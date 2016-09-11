@@ -10,7 +10,7 @@ import {Dialog} from './Utils';
     escapeToClose: false,
     focusOnOpen: true,
     hasBackdrop: true,
-    templateUrl: 'ts/SolvedDialog.html'
+    templateUrl: 'script/SolvedDialog.html'
 })
 export class Controller {
     static $inject = ['result', '$mdDialog', '$location'];

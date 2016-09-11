@@ -12,6 +12,7 @@ var SAVE_GAME_KEY = 'riddleQuiz.saveGames';
 var LAST_RIDDLE_KEY = 'riddleQuiz.lastPlayedRiddle';
 
 export interface RiddleData {
+    id: string;
     level: number;
     title: string;
     shortDescription: string;
@@ -50,7 +51,7 @@ export interface Result {
     solved: boolean;
     score: number;
     riddle: Riddle;
-    nextLevel?: number;
+    nextRiddleId?: string;
     solvedMessage?: string;
     failedMessage?: string;
 }
@@ -59,8 +60,8 @@ export interface Result {
 export class RiddleManager {
     public initialized: boolean = false;
 
-    protected riddles: FullRiddle[];
-    protected riddleMap: { [level: number]: FullRiddle };
+    protected riddleList: FullRiddle[];
+    protected riddleMap: { [id: string]: FullRiddle };
     protected asyncHelper: Async.Helper<RiddleManager>;
 
     static $inject = ['$http', '$q', 'storageService', 'uiService'];
@@ -82,6 +83,10 @@ export class RiddleManager {
         this.$http.get('riddles/riddles.json').then(response => {
             let riddles: FullRiddle[] = response.data as FullRiddle[];
 
+            for (let i = 0; i < riddles.length; i++) {
+                riddles[i].level = i + 1;
+            }
+
             this.prepareRiddles(riddles);
             this.asyncHelper.init();
 
@@ -97,7 +102,7 @@ export class RiddleManager {
 
     /**
      * Load the saved games and add the data to the riddle index. Additionally it initilized the local riddle map
-     * that holds all the riddles with the level as key.
+     * that holds all the riddles with the id as key.
      * 
      * @private
      * @param {FullRiddle[]} riddles the riddle index
@@ -111,54 +116,51 @@ export class RiddleManager {
         }
 
         let saveGames = this.storageService.loadSaveGames();
-        let saveGame: SaveGame;
 
         this.riddleMap = {};
 
         riddles.forEach((riddle) => {
-            if (saveGames[riddle.level]) {
-                saveGame = saveGames[riddle.level];
+            this.riddleMap[riddle.id] = riddle;
 
-                riddle.finished = saveGame.finished;
-                riddle.score = saveGame.score;
+            riddle.score = riddle.score || (riddle.finished ? 1 : 0);
+        });
 
-                if (saveGame.code) {
+        for (let id in saveGames) {
+            let riddle = this.riddleMap[id];
+
+            if (riddle) {
+                riddle.finished = saveGames[id].finished;
+                riddle.score = saveGames[id].score;
+
+                if (saveGames[id].code) {
                     riddle.functionData = {
-                        code: saveGame.code
+                        code: saveGames[id].code
                     };
                 }
             }
+        }
 
-            riddle.score = riddle.score || (riddle.finished ? 1 : 0);
-            this.riddleMap[riddle.level] = riddle;
-        });
-
-        this.riddles = riddles;
+        this.riddleList = riddles;
         this.initialized = true;
     }
 
-    /**
-     * Returns the name and id of all available riddles
-     *
-     * @returns {ng.IPromise<Array<riddle.FullRiddle>>}
-     */
-    public getRiddleData(): ng.IPromise<RiddleData[]> {
+    public getRiddleList(): ng.IPromise<RiddleData[]> {
         return this.asyncHelper.call(function (riddleManager) {
-            return riddleManager.riddles;
+            return riddleManager.riddleList;
         });
     }
 
-    public startRiddle(level: number): angular.IPromise<Riddle> {
-        var riddle = this.initializeRiddle(level);
+    public startRiddle(riddleId: string): angular.IPromise<Riddle> {
+        var riddle = this.initializeRiddle(riddleId);
 
         if (riddle) {
-            this.storageService.storeLastPlayedRiddle(level);
+            this.storageService.storeLastPlayedRiddleId(riddleId);
         }
 
         return riddle;
     }
 
-    private getRiddle(riddleId: number): ng.IPromise<Riddle> {
+    private getRiddle(riddleId: string): ng.IPromise<Riddle> {
         return this.asyncHelper.call(function (riddleManager) {
             if (!riddleManager.riddleMap || !riddleManager.riddleMap[riddleId]) {
                 return;
@@ -172,15 +174,15 @@ export class RiddleManager {
      * Loads the riddle data from the site. Initialized all the necessary information for playing this level.
      * 
      * @private
-     * @param {number} level the level
+     * @param {string} riddleId the id of the riddle
      * @returns {angular.IPromise<FullRiddle>} a promise delivering the riddle
      * 
      * @memberOf RiddleManager
      */
-    private initializeRiddle(level: number): angular.IPromise<FullRiddle> {
+    private initializeRiddle(riddleId: string): angular.IPromise<FullRiddle> {
         var defered = this.$q.defer();
 
-        this.getRiddle(level).then((riddle: FullRiddle) => {
+        this.getRiddle(riddleId).then((riddle: FullRiddle) => {
             if (!riddle || riddle.initialized) {
                 defered.resolve(riddle);
                 return;
@@ -280,7 +282,7 @@ export class RiddleManager {
             var next = this.nextRiddle(<FullRiddle>riddle);
 
             if (next) {
-                result.nextLevel = next.level;
+                result.nextRiddleId = next.id;
 
                 this.storageService.storeSaveGames(riddle, next);
             }
@@ -299,11 +301,11 @@ export class RiddleManager {
 
     private nextRiddle(riddle: FullRiddle): FullRiddle {
         //Get the position of the actual riddle
-        var pos = this.riddles.indexOf(riddle);
+        var pos = this.riddleList.indexOf(riddle);
 
         //If more riddles are available --> return the next one.
-        if (this.riddles.length > pos + 1) {
-            return this.riddles[pos + 1];
+        if (this.riddleList.length > pos + 1) {
+            return this.riddleList[pos + 1];
         }
     }
 

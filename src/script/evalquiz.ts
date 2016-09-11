@@ -13,9 +13,9 @@ import './ToolbarComponent';
 
 module.run(['$location', 'riddleManager', 'storageService', function ($location: ng.ILocationService, riddleManager: RiddleManager, storageService: StorageService) {
     riddleManager.setupRiddles().then(() => {
-        let level = storageService.loadLastPlayedRiddle();
+        let id = storageService.loadLastPlayedRiddleId();
 
-        $location.path('/riddles/' + level);
+        $location.path('/riddles/' + id);
     });;
 }]);
 

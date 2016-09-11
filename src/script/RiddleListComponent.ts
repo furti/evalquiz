@@ -18,7 +18,7 @@ class Controller {
     constructor(protected riddleManager: RiddleManager, protected $mdDialog: ng.material.IDialogService) {
         this.loading = true;
 
-        this.riddleManager.getRiddleData().then((riddles) => {
+        this.riddleManager.getRiddleList().then((riddles) => {
             this.riddles = riddles;
             this.loading = false;
         });

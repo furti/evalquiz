@@ -1,15 +1,15 @@
-<md-card ng-click="$ctrl.startRiddle($ctrl.riddle)" class="riddle-card grow">
-    <md-toolbar class="md-accent" ng-class="{'md-hue-1': !$ctrl.riddle.finished}">
+<md-card ng-click="$ctrl.startRiddle($ctrl.riddle)" class="riddle-card grow max-width-480">
+    <md-toolbar ng-class="{'md-hue-1': !$ctrl.riddle.finished}">
         <div class="md-toolbar-tools" layout="row">
             <i class="fa" ng-class="{'fa-square-o': $ctrl.riddle.score < $ctrl.riddle.minScoreToSolve, 'fa-check-square-o': $ctrl.riddle.score >= $ctrl.riddle.minScoreToSolve}"></i>&nbsp;
-            <span flex="" class="riddle-title">{{$ctrl.riddle.title}}</span> &nbsp;
+            <span flex="" class="riddle-title"><span class="light">Level {{$ctrl.riddle.level}}:</span> {{$ctrl.riddle.title}}</span> &nbsp;
             <i class="fa" ng-class="{'fa-star-o light': $ctrl.riddle.score <= 0, 'fa-star': $ctrl.riddle.score > 0}"></i>&nbsp;
             <i class="fa" ng-class="{'fa-star-o light': $ctrl.riddle.score <= 1, 'fa-star': $ctrl.riddle.score > 1}"></i>&nbsp;
             <i class="fa" ng-class="{'fa-star-o light': $ctrl.riddle.score <= 2, 'fa-star': $ctrl.riddle.score > 2}"></i>
         </div>
     </md-toolbar>
 
-    <md-card-content>
+    <md-card-content layout-padding>
         <p>{{$ctrl.riddle.shortDescription}}</p>
     </md-card-content>
 </md-card>

@@ -59,7 +59,7 @@
 		    </tbody>
 		</table>
 
-		<p ng-if="!$ctrl.result.nextLevel">
+		<p ng-if="!$ctrl.result.nextRiddleId">
 			This was the last riddle for now. If you are still enthusiastic, implement your own riddles.
 			<a href="https://github.com/furti/evalquiz">Just fork me on GitHub</a>!
 		</p>
@@ -74,7 +74,7 @@
            	Enought for now
         </md-button>
 
-        <md-button class="md-primary md-raised" ng-click="$ctrl.nextRiddle()" ng-if="$ctrl.result.nextLevel">
+        <md-button class="md-primary md-raised" ng-click="$ctrl.nextRiddle()" ng-if="$ctrl.result.nextRiddleId">
             Next Riddle
         </md-button>
     </md-dialog-actions>

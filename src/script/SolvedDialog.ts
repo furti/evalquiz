@@ -26,6 +26,6 @@ export class Controller {
         this.$mdDialog.hide();
 
         // Redirect to the next riddle
-        this.$location.path('/riddles/' + this.result.nextLevel);
+        this.$location.path('/riddles/' + this.result.nextRiddleId);
     }
 }

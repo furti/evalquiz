@@ -47,7 +47,7 @@ class RiddleController {
             }
         };
 
-        riddleManager.startRiddle(parseInt($routeParams['riddleId'])).then((riddle) => {
+        riddleManager.startRiddle($routeParams['riddleId']).then((riddle) => {
             this.riddle = riddle;
             this.loading = false;
         });
@@ -91,31 +91,6 @@ class RiddleController {
                 this.solvedDialog.show({
                     result: result
                 });
-
-                /*
-                var dialog:any;
-
-                if (result.nextLevel) {
-                    dialog = this.$mdDialog.confirm()
-                        .title('Congratulations')
-                        .content(this.riddle.solvedMessage)
-                        .ok('Next riddle')
-                        .cancel('Enough for now');
-                }
-                else {
-                    dialog = this.$mdDialog.alert()
-                        .title('Congratulations')
-                        .content(this.riddle.solvedMessage + ' You solved the last level. Come back later to check if more levels are available.')
-                        .ok('It\'s done');
-                }
-
-                this.$mdDialog.show(dialog).then(function () {
-                    if (result.nextLevel) {
-                        //Redirect to the next riddle
-                        ctrl.$location.path('/riddles/' + result.nextLevel);
-                    }
-                });
-                */
             }
             else {
                 this.$mdDialog.show(

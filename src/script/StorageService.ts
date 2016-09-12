@@ -61,6 +61,15 @@ export class StorageService {
     }
 
     /**
+     * Clears all saved data.
+     * 
+     * @memberOf StorageService
+     */
+    public clearSaveGames(): void {
+        this.storage.clearAll();
+    }
+
+    /**
      * Save the id of the last started riddle so we can restart it when the page is opened again.
      * 
      * @param {string} riddleId the id of the riddle

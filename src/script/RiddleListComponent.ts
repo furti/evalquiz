@@ -12,19 +12,10 @@ import {Component} from './Utils';
 class Controller {
     static $inject = ['riddleManager', '$mdDialog'];
 
-    riddles: RiddleData[];
-    loading: boolean;
-
     constructor(protected riddleManager: RiddleManager, protected $mdDialog: ng.material.IDialogService) {
-        this.loading = true;
-
-        this.riddleManager.getRiddleList().then((riddles) => {
-            this.riddles = riddles;
-            this.loading = false;
-        });
     }
 
-    closeDialog(): void {
+    protected closeDialog(): void {
         this.$mdDialog.hide();
     }
 }

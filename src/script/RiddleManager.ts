@@ -2,7 +2,6 @@
 
 let module = angular.module('evalquiz');
 
-import * as Async from './Async';
 import {Program} from './Program';
 import {SaveGame, StorageService} from './StorageService';
 import UIService from './UIService';
@@ -58,15 +57,12 @@ export interface Result {
 @Service(module, 'riddleManager')
 export class RiddleManager {
     public initialized: boolean = false;
-
-    protected riddleList: FullRiddle[];
+    public riddleList: FullRiddle[];
     protected riddleMap: { [id: string]: FullRiddle };
-    protected asyncHelper: Async.Helper<RiddleManager>;
 
     static $inject = ['$http', '$q', 'storageService', 'uiService'];
 
     constructor(protected $http: ng.IHttpService, protected $q: ng.IQService, protected storageService: StorageService, protected uiService: UIService) {
-        this.asyncHelper = new Async.Helper(this, $q);
     }
 
     /**
@@ -78,6 +74,8 @@ export class RiddleManager {
         let deferred = this.$q.defer();
 
         this.initialized = false;
+        this.riddleList = null;
+        this.riddleMap = null;
 
         this.$http.get('riddles/riddles.json').then(response => {
             let riddles: FullRiddle[] = response.data as FullRiddle[];
@@ -87,7 +85,6 @@ export class RiddleManager {
             }
 
             this.prepareRiddles(riddles);
-            this.asyncHelper.init();
 
             deferred.resolve();
         }, (error: any) => {
@@ -141,15 +138,7 @@ export class RiddleManager {
         this.initialized = true;
     }
 
-    public getRiddleList(): ng.IPromise<RiddleData[]> {
-        return this.asyncHelper.call(function (riddleManager) {
-            return riddleManager.riddleList;
-        });
-    }
-
     public startRiddle(riddleId: string): angular.IPromise<Riddle> {
-        console.log("Starting riddle: " + riddleId);
-
         var promise = this.initializeRiddle(riddleId);
 
         promise.then(() => {
@@ -157,16 +146,6 @@ export class RiddleManager {
         });
 
         return promise;
-    }
-
-    private getRiddle(riddleId: string): ng.IPromise<Riddle> {
-        return this.asyncHelper.call(function (riddleManager) {
-            if (!riddleManager.riddleMap || !riddleManager.riddleMap[riddleId]) {
-                return;
-            }
-
-            return riddleManager.riddleMap[riddleId];
-        });
     }
 
     /**
@@ -181,35 +160,36 @@ export class RiddleManager {
     private initializeRiddle(riddleId: string): angular.IPromise<FullRiddle> {
         var defered = this.$q.defer();
 
-        this.getRiddle(riddleId).then((riddle: FullRiddle) => {
-            if (!riddle || riddle.initialized) {
-                defered.resolve(riddle);
-                return;
+        let riddle = this.riddleMap[riddleId];
+
+        if (!riddle || riddle.initialized) {
+            defered.resolve(riddle);
+
+            return defered.promise;
+        }
+
+        //Load the description
+        let descriptionPromise = this.$http.get('riddles/' + riddle.location + '/description.md');
+        let functionPromise = this.$http.get('riddles/' + riddle.location + '/function.json');
+        let functionEnginePromise = this.$http.get('riddles/' + riddle.location + '/engine.js');
+
+        //Wait until all data is available
+        this.$q.all({
+            'description': descriptionPromise,
+            'member': functionPromise,
+            'functionEngine': functionEnginePromise
+        }).then((data: any) => {
+            riddle.description = data.description.data;
+            riddle.engine = data.functionEngine.data;
+            riddle.member = this.processMember(riddle, data.member.data);
+
+            if (!riddle.code) {
+                riddle.code = riddle.member.stub;
             }
 
-            //Load the description
-            let descriptionPromise = this.$http.get('riddles/' + riddle.location + '/description.md');
-            let functionPromise = this.$http.get('riddles/' + riddle.location + '/function.json');
-            let functionEnginePromise = this.$http.get('riddles/' + riddle.location + '/engine.js');
+            riddle.initialized = true;
 
-            //Wait until all data is available
-            this.$q.all({
-                'description': descriptionPromise,
-                'member': functionPromise,
-                'functionEngine': functionEnginePromise
-            }).then((data: any) => {
-                riddle.description = data.description.data;
-                riddle.engine = data.functionEngine.data;
-                riddle.member = this.processMember(riddle, data.member.data);
-
-                if (!riddle.code) {
-                    riddle.code = riddle.member.stub;
-                }
-
-                riddle.initialized = true;
-
-                defered.resolve(riddle);
-            });
+            defered.resolve(riddle);
         });
 
         return defered.promise;
@@ -231,7 +211,7 @@ export class RiddleManager {
             let paramsString = member.params.map(param => param.name).join(', ');
 
             member.signature += `(${paramsString})`;
-            member.stub = `function ${member.name}(${paramsString}) {\n\t"use strict";\n\t\n\t// your code goes here\n}`;
+            member.stub = `function ${member.name}(${paramsString}) {\n\t"use strict";\n\t\n\t\n}`;
         }
 
         if (member.properties) {

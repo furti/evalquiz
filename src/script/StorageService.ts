@@ -50,8 +50,8 @@ export class StorageService {
                 score: riddle.score
             };
 
-            if (riddle.functionData && riddle.functionData.code) {
-                saveGame.code = riddle.functionData.code;
+            if (riddle.code) {
+                saveGame.code = riddle.code;
             }
 
             saveGames[riddle.id] = saveGame;

@@ -1,1 +1,0 @@
-Use the scale to find the faked coin and return it.

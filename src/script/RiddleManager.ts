@@ -24,8 +24,9 @@ export interface RiddleData {
 
 export interface Riddle extends RiddleData {
     description: string;
-    functionDescription: string;
-    functionData: FunctionData;
+    // xxx functionDescription: string;
+    member: Member;
+    code: string;
     engine: string;
 }
 
@@ -34,17 +35,16 @@ interface FullRiddle extends Riddle {
     initialized: boolean;
 }
 
-export interface FunctionData {
+export interface Member {
     name?: string;
-    paramsString?: string;
-    code?: string;
-    params?: FunctionParam[];
-}
-
-export interface FunctionParam {
-    name: string;
-    type: string;
-    description: string;
+    type?: string;
+    description?: string;
+    explanation?: string;
+    params?: Member[];
+    properties?: Member[];
+    signature?: string;
+    signatureDescription?: string;
+    stub?: string;
 }
 
 export interface Result {
@@ -133,9 +133,7 @@ export class RiddleManager {
                 riddle.score = saveGames[id].score;
 
                 if (saveGames[id].code) {
-                    riddle.functionData = {
-                        code: saveGames[id].code
-                    };
+                    riddle.code = saveGames[id].code;
                 }
             }
         }
@@ -191,34 +189,39 @@ export class RiddleManager {
             //Load the description
             let descriptionPromise = this.$http.get('riddles/' + riddle.location + '/description.md');
             let functionPromise = this.$http.get('riddles/' + riddle.location + '/function.json');
-            let functionDescriptionPromise = this.$http.get('riddles/' + riddle.location + '/functionDescription.md');
+            // xxx let functionDescriptionPromise = this.$http.get('riddles/' + riddle.location + '/functionDescription.md');
             let functionEnginePromise = this.$http.get('riddles/' + riddle.location + '/engine.js');
 
             //Wait until all data is available
             this.$q.all({
                 'description': descriptionPromise,
-                'functionData': functionPromise,
-                'functionDescription': functionDescriptionPromise,
+                'member': functionPromise,
+                // xxx 'functionDescription': functionDescriptionPromise,
                 'functionEngine': functionEnginePromise
             }).then((data: any) => {
                 riddle.description = data.description.data;
-                riddle.functionDescription = data.functionDescription.data;
+                // xxx riddle.functionDescription = data.functionDescription.data;
                 riddle.engine = data.functionEngine.data;
+                riddle.member = this.processMember(riddle, data.member.data);
 
                 /*
                  * If the riddle was saved before the code is already set.
-                 * so we only create the functionData if it is not there already
+                 * so we only create the member if it is not there already
                  */
-                let functionData = data.functionData.data;
+                let member = data.member.data;
 
-                if (!riddle.functionData) {
-                    riddle.functionData = {};
-                }
+                this.processMember(riddle, member);
 
-                riddle.functionData.name = functionData.name;
-                riddle.functionData.params = functionData.params;
+                riddle.member = member;
 
-                this.prepareCode(riddle);
+                // if (!riddle.member) {
+                //     riddle.member = {};
+                // }
+
+                // riddle.member.name = member.name;
+                // riddle.member.params = member.params;
+
+                // this.prepareCode(riddle);
 
                 riddle.initialized = true;
                 defered.resolve(riddle);
@@ -228,26 +231,50 @@ export class RiddleManager {
         return defered.promise;
     }
 
-    /**
-     * Prepares the code of the riddle by settings the function header and the curly braces.
-     * 
-     * @param {Riddle} riddle the riddle
-     * 
-     * @memberOf RiddleManager
-     */
-    public prepareCode(riddle: Riddle): void {
-        if (riddle.functionData.params) {
-            riddle.functionData.paramsString = riddle.functionData.params.map(param => param.name).join(', ');
+    private processMember(riddle: FullRiddle, member: Member): Member {
+        member.signature = member.name;
+
+        this.processMemberReference(riddle, member, 'description');
+        this.processMemberReference(riddle, member, 'explanation');
+
+        if (member.params) {
+            member.params.forEach(param => {
+                this.processMember(riddle, param);
+
+                param.signatureDescription = `Parameter \`${param.signature}\` - ${param.description}`;
+            });
+
+            let paramsString = member.params.map(param => param.name).join(', ');
+
+            member.signature += `(${paramsString})`;
+            member.stub = `function ${member.name}(${paramsString}) {
+                "use strict";
+
+                // enter cool code here    
+            }`;
         }
 
-        if (!riddle.functionData.code) {
-            riddle.functionData.code = 'function ' + riddle.functionData.name + '(';
+        if (member.properties) {
+            member.properties.forEach(property => {
+                this.processMember(riddle, property);
 
-            if (riddle.functionData.paramsString) {
-                riddle.functionData.code += riddle.functionData.paramsString;
-            }
+                property.signatureDescription = `Property \`${property.signature}\` - ${property.description}`;
+            });
+        }
 
-            riddle.functionData.code += ') {\n  "use strict";\n  \n}';
+        if (member.type) {
+            member.signature += `: ${member.type}`;
+        }
+
+        return member;
+    }
+
+    private processMemberReference(riddle: FullRiddle, member: Member, key: string): void {
+        let text = member[key];
+
+        if (text && text.startsWith('file:')) {
+            this.$http.get(`riddles/${riddle.location}/${text.substring(5).trim()}`).then(response => member[key] = response.data);
+            member[key] = '';
         }
     }
 
@@ -310,13 +337,13 @@ export class RiddleManager {
     }
 
     private parseCode(riddle: Riddle): any {
-        var create = new Function('return ' + riddle.functionData.code.trim());
+        var create = new Function('return ' + riddle.code.trim());
 
         return create();
     }
 
     private analyzeCode(riddle: Riddle): Program {
-        var syntax = new Program(riddle.functionData.code);
+        var syntax = new Program(riddle.code);
 
         return syntax;
     }

@@ -1,1 +1,0 @@
-Either return the contents s or "Nothing" in case s is null or undefined.

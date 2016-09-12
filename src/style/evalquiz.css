@@ -4,8 +4,58 @@
     text-align: center;
 }
 
+.editor {
+    padding: 0;
+}
+
+.scrolls {
+    overflow: auto;
+}
+
+.markdown > :first-child  {
+    margin-top: 0;
+}
+
+.markdown > :last-child  {
+    margin-bottom: 0;
+}
+
+.lined-top {
+    border-top: 1px solid rgba(0,0,0,0.12);
+}
+
+.lined-bottom {
+    border-bottom: 1px solid rgba(0,0,0,0.12);
+}
+
 .max-width-480 {
     max-width: 480px;
+}
+
+.layout-no-shrink {
+    flex-shrink: 0;
+}
+
+.layout-no-grow {
+    flex-grow: 0;
+}
+
+.layout-no-resize {
+    flex-shrink: 0;
+    flex-grow: 0;
+}
+
+.layout-stretch {
+    align-items: stretch;
+}
+
+.no-wrap {
+    white-space: nowrap;
+}
+
+.member-info {
+    padding: 0 0 0 16px;
+    margin: 16px 0;
 }
 
 /**

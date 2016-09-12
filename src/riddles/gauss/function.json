@@ -1,10 +1,12 @@
 {
   "name": "carly",
+  "type": "number",
+  "description": "Returns the sum of all numbers, from 1 to `n`.",
   "params": [
     {
       "name": "n",
       "type": "number",
-      "description": "Random number"
+      "description": "A number."
     }
   ]
 }

@@ -1,1 +1,0 @@
-Return the sum of all numbers from 1 to the specified random value 'n'.

@@ -1,15 +1,17 @@
 {
   "name": "distance",
+  "type": "number",
+  "description": "Returns the distance the small dog has traveled.",
   "params": [
     {
-      "name": "t",
+      "name": "d",
       "type": "number",
-      "description": "The distance from your position to the tree in km"
+      "description": "The distance from your position to the tree in meters."
     },
     {
       "name": "s",
       "type": "number",
-      "description": "The speed of your big dog in km/h"
+      "description": "The speed of the slow dog in meters per second."
     }
   ]
 }

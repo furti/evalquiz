@@ -1,6 +1,6 @@
 /// <reference path="./index.d.ts" />
 
-import './AttributeInfoComponent';
+import './MemberInfoComponent';
 import {RiddleManager, RiddleData, Riddle, Result} from './RiddleManager';
 import './SolvedDialog';
 import {Component, Service, DialogService, Dialog} from './Utils';
@@ -66,10 +66,8 @@ class RiddleController {
                 .ok('Yes')
                 .cancel('No')
         ).then(() => {
-            self.riddle.functionData.code = '';
-            self.riddleManager.prepareCode(self.riddle);
-        }
-            );
+            self.riddle.code = self.riddle.member.stub;
+        });
     }
 
     public save($event: any): void {

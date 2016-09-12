@@ -1,5 +1,7 @@
 {
   "name": "dictate",
+  "type": "string",
+  "description": "Returns the string `\"Nothing\"`, if `s` is null or undefined, `s` otherwise.",
   "params": [
     {
       "name": "s",

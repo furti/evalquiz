@@ -39,11 +39,6 @@ class RiddleController {
             lint: true,
             onLoad: (cm: any) => {
                 cm.on('change', cmChange);
-
-                window.setTimeout(() => {
-                    //TOOD: A litte bit hacky. Find a better way to set the height
-                    cm.getWrapperElement().style.height = (cm.getWrapperElement().parentNode.clientHeight - 20) + 'px';
-                }, 10);
             }
         };
 

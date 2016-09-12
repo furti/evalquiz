@@ -24,7 +24,6 @@ export interface RiddleData {
 
 export interface Riddle extends RiddleData {
     description: string;
-    // xxx functionDescription: string;
     member: Member;
     code: string;
     engine: string;
@@ -149,13 +148,15 @@ export class RiddleManager {
     }
 
     public startRiddle(riddleId: string): angular.IPromise<Riddle> {
-        var riddle = this.initializeRiddle(riddleId);
+        console.log("Starting riddle: " + riddleId);
 
-        if (riddle) {
+        var promise = this.initializeRiddle(riddleId);
+
+        promise.then(() => {
             this.storageService.storeLastPlayedRiddleId(riddleId);
-        }
+        });
 
-        return riddle;
+        return promise;
     }
 
     private getRiddle(riddleId: string): ng.IPromise<Riddle> {
@@ -189,41 +190,24 @@ export class RiddleManager {
             //Load the description
             let descriptionPromise = this.$http.get('riddles/' + riddle.location + '/description.md');
             let functionPromise = this.$http.get('riddles/' + riddle.location + '/function.json');
-            // xxx let functionDescriptionPromise = this.$http.get('riddles/' + riddle.location + '/functionDescription.md');
             let functionEnginePromise = this.$http.get('riddles/' + riddle.location + '/engine.js');
 
             //Wait until all data is available
             this.$q.all({
                 'description': descriptionPromise,
                 'member': functionPromise,
-                // xxx 'functionDescription': functionDescriptionPromise,
                 'functionEngine': functionEnginePromise
             }).then((data: any) => {
                 riddle.description = data.description.data;
-                // xxx riddle.functionDescription = data.functionDescription.data;
                 riddle.engine = data.functionEngine.data;
                 riddle.member = this.processMember(riddle, data.member.data);
 
-                /*
-                 * If the riddle was saved before the code is already set.
-                 * so we only create the member if it is not there already
-                 */
-                let member = data.member.data;
-
-                this.processMember(riddle, member);
-
-                riddle.member = member;
-
-                // if (!riddle.member) {
-                //     riddle.member = {};
-                // }
-
-                // riddle.member.name = member.name;
-                // riddle.member.params = member.params;
-
-                // this.prepareCode(riddle);
+                if (!riddle.code) {
+                    riddle.code = riddle.member.stub;
+                }
 
                 riddle.initialized = true;
+
                 defered.resolve(riddle);
             });
         });
@@ -247,11 +231,7 @@ export class RiddleManager {
             let paramsString = member.params.map(param => param.name).join(', ');
 
             member.signature += `(${paramsString})`;
-            member.stub = `function ${member.name}(${paramsString}) {
-                "use strict";
-
-                // enter cool code here    
-            }`;
+            member.stub = `function ${member.name}(${paramsString}) {\n\t"use strict";\n\t\n\t// your code goes here\n}`;
         }
 
         if (member.properties) {
@@ -272,7 +252,7 @@ export class RiddleManager {
     private processMemberReference(riddle: FullRiddle, member: Member, key: string): void {
         let text = member[key];
 
-        if (text && text.startsWith('file:')) {
+        if (text && text.indexOf('file:') === 0) {
             this.$http.get(`riddles/${riddle.location}/${text.substring(5).trim()}`).then(response => member[key] = response.data);
             member[key] = '';
         }

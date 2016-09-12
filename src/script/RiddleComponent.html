@@ -6,7 +6,7 @@
 </md-content>
 
 <md-content class="text" flex="50" layout="column" class="layout-stretch" ng-if="$ctrl.available">
-    <md-card>
+    <md-card flex class="no-scrolls">
         <md-card-title class="layout-no-resize">
             <md-card-title-text>
                 <div class="md-headline">
@@ -21,7 +21,7 @@
             </md-card-title-text>
         </md-card-title>
 
-        <md-card-content flex="100" class="lined-top scrolls">
+        <md-card-content flex class="lined-top scrolls">
             <div btf-markdown="$ctrl.riddle.description"></div>
         </md-card-content>
 
@@ -66,7 +66,7 @@
 </md-content>
 
 <md-content flex="50" layout="column" ng-if="$ctrl.available">
-    <md-card class="editor-card">
+    <md-card flex class="editor-card no-scrolls">
         <md-card-title class="layout-no-resize">
             <md-card-title-text>
                 <div class="md-headline">
@@ -83,13 +83,14 @@
             <member-info member="$ctrl.riddle.member"></member-info>
         </md-card-content>
 
-        <md-card-content class="editor lined-top lined-bottom">
+        <md-card-content flex layout="column" class="editor lined-top lined-bottom">
             <textarea ng-model="$ctrl.riddle.code" ui-codemirror="$ctrl.editorOptions"></textarea>
         </md-card-content>
 
         <md-card-actions layout="row" layout-align="end center">
             <md-button class="md-raised" ng-click="$ctrl.trash()">Trash</md-button>
             <md-button class="md-raised" ng-click="$ctrl.save()">Save</md-button>
+            <span flex="" class="flex"></span>
             <md-button class="md-primary md-raised" ng-click="$ctrl.solve($event)">Solve</md-button>
         </md-card-actions>
     </md-card>

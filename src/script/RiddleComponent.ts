@@ -26,6 +26,7 @@ class RiddleController {
                     line: editor.lastLine(),
                     ch: 2
                 }, { readOnly: true });
+                editor.setCursor(3, 1);
 
                 //Remove the change listener as we do not need it anymore
                 editor.off('change', cmChange);
@@ -37,6 +38,12 @@ class RiddleController {
             mode: 'javascript',
             gutters: ['CodeMirror-lint-markers'],
             lint: true,
+            autofocus: true,
+            extraKeys: {
+                "Ctrl-Enter": () => {
+                    this.solve();
+                }
+            },
             onLoad: (cm: any) => {
                 cm.on('change', cmChange);
             }
@@ -65,7 +72,7 @@ class RiddleController {
         });
     }
 
-    public save($event: any): void {
+    public save(): void {
         this.riddleManager.saveRiddle(this.riddle);
 
         this.$mdDialog.show(
@@ -75,7 +82,7 @@ class RiddleController {
                 .ok('OK'));
     }
 
-    public solve($event: any): void {
+    public solve(): void {
         try {
             var result = this.riddleManager.solveRiddle(this.riddle),
                 ctrl = this;

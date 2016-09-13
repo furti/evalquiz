@@ -14,6 +14,8 @@
     flex: 1 1 auto;
 }
 
+/* Left Riddle Card */
+
 .riddle-left-card {
     overflow: hidden;
 }
@@ -42,11 +44,40 @@
     overflow: hidden;
 }
 
+/* Console */
+
 .console {
     overflow: auto;
     background-color: midnightblue;
     color: white;
 }
+
+.console > div.block {
+    margin: 0.2em 0.4em;
+    display: flex;
+}
+
+.console > div.block div.icon {
+    width: 24px;
+    margin: 0.2em 0;
+    flex: 0 0 auto;
+}
+
+.console > div.block div.content {
+    flex: 1 1 auto;
+}
+
+.console p, .console pre {
+    margin: 0.2em 0;
+}
+
+.console .code {
+    font-family: Courier New, Courier, monospace;
+}
+
+.console .error {
+    color: LightSalmon;
+} 
 
 .scrolls {
     overflow: auto;

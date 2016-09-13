@@ -6,6 +6,7 @@
 
 let module = angular.module('evalquiz', ['ngRoute', 'ngMaterial', 'ui.codemirror', 'LocalStorageModule', 'btford.markdown']);
 
+import './console.service';
 import './RiddleComponent';
 import {RiddleManager} from './RiddleManager';
 import {StorageService} from './StorageService';

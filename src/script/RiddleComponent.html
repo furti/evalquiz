@@ -21,7 +21,7 @@
             </md-card-title-text>
         </md-card-title>
 
-        <md-tabs flex class="lined-top">
+        <md-tabs flex md-selected="$ctrl.selectedTab" class="lined-top">
             <md-tab label="Info" class="info-tab">
                 <div flex layout="column" class="lined-top">
                     <div flex class="scrolls md-padding">
@@ -66,7 +66,7 @@
 
             <md-tab label="Console">
                 <div flex layout="column" class="no-scroll">
-                    <div flex class="console">
+                    <div flex id="console" class="console">
                     </div>
                 </div>
             </md-tab>

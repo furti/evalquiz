@@ -2,9 +2,10 @@
 
 let module = angular.module('evalquiz');
 
+import {ConsoleService, ConsoleBlock} from './console.service';
 import {Program} from './Program';
 import {SaveGame, StorageService} from './StorageService';
-import UIService from './UIService';
+import {UIService} from './UIService';
 import {Service} from './Utils';
 
 var SAVE_GAME_KEY = 'riddleQuiz.saveGames';
@@ -60,9 +61,9 @@ export class RiddleManager {
     public riddleList: FullRiddle[];
     protected riddleMap: { [id: string]: FullRiddle };
 
-    static $inject = ['$http', '$q', 'storageService', 'uiService'];
+    static $inject = ['$http', '$q', 'storageService', 'consoleService', 'uiService'];
 
-    constructor(protected $http: ng.IHttpService, protected $q: ng.IQService, protected storageService: StorageService, protected uiService: UIService) {
+    constructor(protected $http: ng.IHttpService, protected $q: ng.IQService, protected storageService: StorageService, protected consoleService: ConsoleService, protected uiService: UIService) {
     }
 
     /**
@@ -247,7 +248,11 @@ export class RiddleManager {
         var syntax = this.analyzeCode(riddle);
         var riddleEngine = this.buildEngine(riddle);
 
+        this.consoleService.block().markdown('Initializing engine ...');
+
         riddleEngine.init();
+
+        this.consoleService.block().markdown('Starting tests ...');
 
         var score = riddleEngine.run(solve, syntax);
         var solved = score > 0;

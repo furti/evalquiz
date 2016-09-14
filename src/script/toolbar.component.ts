@@ -2,13 +2,13 @@
 
 let module = angular.module('evalquiz');
 
-import './CreditsDialog';
-import './RiddleListDialog';
-import {RiddleManager} from './RiddleManager';
-import {Component, DialogService} from './Utils';
+import './credits.dialog';
+import './riddle-list.dialog';
+import {RiddleManager} from './riddle.manager';
+import {Component, DialogService} from './utils';
 
 @Component(module, 'toolbar', {
-    templateUrl: 'script/ToolbarComponent.html'
+    templateUrl: 'script/toolbar.component.html'
 })
 class Controller {
     static $inject = ['riddleManager', 'creditsDialog', 'riddleListDialog'];

@@ -2,7 +2,7 @@
 
 let module = angular.module('evalquiz');
 
-import {Service} from './Utils';
+import {Service} from './utils';
 
 @Service(module, 'uiService')
 export class UIService {

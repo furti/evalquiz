@@ -2,15 +2,15 @@
 
 let module = angular.module('evalquiz');
 
-import {Result} from './RiddleManager';
-import {Dialog} from './Utils';
+import {Result} from './riddle.manager';
+import {Dialog} from './utils';
 
 @Dialog(module, 'SolvedDialog', {
     clickOutsideToClose: false,
     escapeToClose: false,
     focusOnOpen: true,
     hasBackdrop: true,
-    templateUrl: 'script/SolvedDialog.html'
+    templateUrl: 'script/solved.dialog.html'
 })
 export class Controller {
     static $inject = ['result', '$mdDialog', '$location'];

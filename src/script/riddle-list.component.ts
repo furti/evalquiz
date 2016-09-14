@@ -2,11 +2,11 @@
 
 let module = angular.module('evalquiz');
 
-import {RiddleManager, RiddleData} from './RiddleManager';
-import {Component} from './Utils';
+import {RiddleManager, RiddleData} from './riddle.manager';
+import {Component} from './utils';
 
 @Component(module, 'riddleList', {
-    templateUrl: 'script/RiddleListComponent.html'
+    templateUrl: 'script/riddle-list.component.html'
 })
 class Controller {
     static $inject = ['riddleManager', '$mdDialog', '$location', '$timeout'];

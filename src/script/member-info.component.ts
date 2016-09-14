@@ -2,11 +2,11 @@
 
 let module = angular.module('evalquiz');
 
-import {Member} from './RiddleManager';
-import {Component} from './Utils';
+import {Member} from './riddle.manager';
+import {Component} from './utils';
 
 @Component(module, 'memberInfo', {
-    templateUrl: 'script/MemberInfoComponent.html',
+    templateUrl: 'script/member-info.component.html',
     bindings: {
         member: '<'
     }

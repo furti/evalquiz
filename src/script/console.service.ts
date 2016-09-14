@@ -2,8 +2,8 @@
 
 let module = angular.module('evalquiz');
 
-import {UIService} from './UIService';
-import {Service} from './Utils';
+import {UIService} from './ui.service';
+import {Service} from './utils';
 
 @Service(module, 'consoleService')
 export class ConsoleService {

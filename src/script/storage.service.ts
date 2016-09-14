@@ -2,8 +2,8 @@
 
 let module = angular.module('evalquiz');
 
-import {Riddle} from './RiddleManager';
-import {Service} from './Utils';
+import {Riddle} from './riddle.manager';
+import {Service} from './utils';
 
 export interface SaveGame {
     finished: boolean;

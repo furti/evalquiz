@@ -7,10 +7,10 @@
 let module = angular.module('evalquiz', ['ngRoute', 'ngMaterial', 'ui.codemirror', 'LocalStorageModule', 'btford.markdown']);
 
 import './console.service';
-import './RiddleComponent';
-import {RiddleManager} from './RiddleManager';
-import {StorageService} from './StorageService';
-import './ToolbarComponent';
+import './riddle.component';
+import {RiddleManager} from './riddle.manager';
+import {StorageService} from './storage.service';
+import './toolbar.component';
 
 module.config(function ($mdThemingProvider) {
     $mdThemingProvider

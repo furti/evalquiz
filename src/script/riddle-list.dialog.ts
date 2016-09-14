@@ -2,18 +2,18 @@
 
 let module = angular.module('evalquiz');
 
-import './RiddleListComponent';
-import {RiddleManager, RiddleData} from './RiddleManager';
-import {StorageService} from './StorageService';
-import {UIService} from './UIService';
-import {Dialog} from './Utils';
+import './riddle-list.component';
+import {RiddleManager, RiddleData} from './riddle.manager';
+import {StorageService} from './storage.service';
+import {UIService} from './ui.service';
+import {Dialog} from './utils';
 
 @Dialog(module, 'riddleListDialog', {
     clickOutsideToClose: true,
     escapeToClose: true,
     focusOnOpen: true,
     hasBackdrop: true,
-    templateUrl: 'script/RiddleListDialog.html'
+    templateUrl: 'script/riddle-list.dialog.html'
 })
 class Controller {
     static $inject = ['$mdDialog', '$location', 'riddleManager', 'storageService', 'uiService'];

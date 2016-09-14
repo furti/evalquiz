@@ -3,10 +3,10 @@
 let module = angular.module('evalquiz');
 
 import {ConsoleService, ConsoleBlock} from './console.service';
-import {Program} from './Program';
-import {SaveGame, StorageService} from './StorageService';
-import {UIService} from './UIService';
-import {Service} from './Utils';
+import {Program} from './program';
+import {SaveGame, StorageService} from './storage.service';
+import {UIService} from './ui.service';
+import {Service} from './utils';
 
 var SAVE_GAME_KEY = 'riddleQuiz.saveGames';
 var LAST_RIDDLE_KEY = 'riddleQuiz.lastPlayedRiddle';

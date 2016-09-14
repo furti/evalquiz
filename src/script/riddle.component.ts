@@ -1,11 +1,11 @@
 /// <reference path="./index.d.ts" />
 
 import {ConsoleService, ConsoleBlock} from './console.service';
-import './MemberInfoComponent';
-import {RiddleManager, RiddleData, Riddle, Result} from './RiddleManager';
-import './SolvedDialog';
-import {UIService} from './UIService';
-import {Component, Service, DialogService, Dialog} from './Utils';
+import './member-info.component';
+import {RiddleManager, RiddleData, Riddle, Result} from './riddle.manager';
+import './solved.dialog';
+import {UIService} from './ui.service';
+import {Component, Service, DialogService, Dialog} from './utils';
 
 let module = angular.module('evalquiz');
 
@@ -119,7 +119,7 @@ module.config(['$mdThemingProvider', '$routeProvider', ($mdThemingProvider: ng.m
         .accentPalette('lime');
 
     $routeProvider.when('/riddles/:riddleId', {
-        templateUrl: 'script/RiddleComponent.html',
+        templateUrl: 'script/riddle.component.html',
         controller: 'RiddleController',
         controllerAs: '$ctrl'
     });

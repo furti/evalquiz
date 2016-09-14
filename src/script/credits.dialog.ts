@@ -1,6 +1,6 @@
 /// <reference path="./index.d.ts" />
 
-import {Dialog} from './Utils';
+import {Dialog} from './utils';
 
 let module = angular.module('evalquiz');
 
@@ -9,7 +9,7 @@ let module = angular.module('evalquiz');
     escapeToClose: true,
     focusOnOpen: true,
     hasBackdrop: true,
-    templateUrl: 'script/CreditsDialog.html'
+    templateUrl: 'script/credits.dialog.html'
 })
 class Controller {
     static $inject = ['$mdDialog'];

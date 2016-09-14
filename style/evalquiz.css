@@ -1,0 +1,250 @@
+@keyframes fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Loader */
+
+.loader {
+    width: 240px;
+    margin: 3em auto 0;
+    text-align: center;
+    animation: fade-in 1s;
+}
+
+/* Left Riddle Card */
+
+.riddle-left-card {
+    overflow: hidden;
+    animation: fade-in 1s;
+}
+
+.riddle-left-card > md-card-title {
+    flex: 0 0 auto;
+}
+
+.riddle-left-card > md-tabs {
+    flex: 1 1 auto;
+}
+
+.riddle-left-card > md-tabs > md-tabs-content-wrapper > md-tab-content {
+    display: flex;
+    flex: 1 1 auto;
+}
+
+.riddle-left-card > md-tabs > md-tabs-content-wrapper > md-tab-content > div {
+    flex: 1 1 auto;
+    display: flex;
+}
+
+.riddle-left-card > md-tabs > md-tabs-content-wrapper > md-tab-content > div > div {
+    flex: 1 1 auto;
+    display: flex;
+    overflow: hidden;
+}
+
+/* Right Riddle Card */
+
+.riddle-right-card {
+    overflow: hidden;
+    animation: fade-in 1s;
+}
+
+.riddle-right-card .members {
+    padding: 0 16px;
+}
+
+/* RiddleList */
+
+.riddle-list md-headline {
+    align-items: baseline;
+    font-size: 20px;    
+}
+
+/* Editor */
+
+.editor {
+    padding: 0;
+    overflow: hidden;
+    align-items: stretch;
+}
+
+.editor > .CodeMirror {
+    flex: 1 1 auto;
+}
+
+/* Console */
+
+.console {
+    overflow: auto;
+    background-color: midnightblue;
+    color: white;
+}
+
+.console h1, .console h2, .console h3, .console h4, .console h5, .console h6 {
+    color: skyblue;
+} 
+
+.console > div.block {
+    margin: 0.2em 0.4em;
+    display: flex;
+}
+
+.console > div.block div.icon {
+    width: 24px;
+    margin: 0.2em 0;
+    flex: 0 0 auto;
+}
+
+.console > div.block div.content {
+    flex: 1 1 auto;
+}
+
+.console p, .console pre {
+    margin: 0.2em 0;
+}
+
+.console .code {
+    font-family: Courier New, Courier, monospace;
+}
+
+.console .error {
+    color: LightSalmon;
+} 
+
+/* Layout Helpers */
+
+.layout-no-shrink {
+    flex-shrink: 0;
+}
+
+.layout-no-grow {
+    flex-grow: 0;
+}
+ 
+.layout-no-resize {
+    flex-shrink: 0;
+    flex-grow: 0;
+}
+
+.layout-stretch {
+    align-items: stretch;
+}
+
+.layout-baseline {
+    align-items: baseline;
+}
+
+
+
+
+
+.scrolls {
+    overflow: auto;
+}
+
+.no-scrolls {
+    overflow: hidden;
+}
+
+.markdown > :first-child  {
+    margin-top: 0;
+}
+
+.markdown > :last-child  {
+    margin-bottom: 0;
+}
+
+.lined-top {
+    border-top: 1px solid rgba(0,0,0,0.12);
+}
+
+.lined-bottom {
+    border-bottom: 1px solid rgba(0,0,0,0.12);
+}
+
+.max-width-480 {
+    max-width: 480px;
+}
+
+.max-width-640 {
+    max-width: 640px;
+}
+
+.no-wrap {
+    white-space: nowrap;
+}
+
+.member-info {
+    padding: 0 0 0 16px;
+    margin: 16px 0;
+}
+
+/**
+ * Toolbar
+ */
+.md-toolbar-item {
+    margin-right: 10px;
+}
+
+.md-toolbar-item .md-button {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/**
+ * Transitions
+ */
+.grow {
+    transition: all .2s ease-in-out;
+}
+
+.grow:hover {
+    transform: scale(1.05);
+}
+
+/**
+ * Code
+ */
+code {
+    background: #F6F6F6;
+    padding: 2px 5px;
+    color: #4285F4;
+}
+
+.md-dialog-actions {
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+    padding: 5px 10px;
+}
+
+.md-dialog-actions .md-button {
+    margin-left: 10px;
+}
+
+ng-view {
+    overflow: hidden;
+}
+
+table td {
+    padding: 8px 12px;
+}
+
+.align-right {
+    text-align: right;
+}
+
+.light {
+    opacity: 0.75;
+}
+
+.lighter {
+    opacity: 0.5;
+}
+
+.lightest {
+    opacity: 0.25;
+}
+
+.glow {
+    text-shadow: 0px 0px 16px goldenRod;   
+}

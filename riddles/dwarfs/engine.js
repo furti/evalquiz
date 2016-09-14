@@ -5,6 +5,12 @@
     Engine.prototype.init = function () {
         this.colors = this.initDwarfs();
         this.rowArray = [];
+        this.count = 0;
+        this.average = 0;
+    };
+
+    Engine.prototype.solvedMessage = function() {
+        return 'The dwarfs are save now and they lived happily ever after. You performed an average of ' + this.average.toFixed(1) + ' lookups per dwarf.';
     };
 
     Engine.prototype.failedMessage = function () {
@@ -26,7 +32,7 @@
         return message;
     };
 
-    Engine.prototype.run = function (join) {
+    Engine.prototype.run = function (join, syntax) {
         var engine = this;
 
         var row = {
@@ -42,9 +48,13 @@
                     throw 'There are only ' + engine.rowArray.length + 'dwarfs in the row. You can not get the color for position ' + position + '. Remember position is zero based';
                 }
 
+                engine.count++;
+
                 return engine.rowArray[position];
             }
         };
+
+        this.count = 0;
 
         for (var i = 0; i < engine.colors.length; i++) {
             var position = join(row);
@@ -57,7 +67,23 @@
             engine.rowArray.splice(position, 0, color);
         }
 
-        return this.checkColors();
+        this.average = this.count / engine.colors.length;
+
+        if (!this.checkColors()) {
+            return 0;
+        }
+
+        if (this.average > 8) {
+            return 1;
+        }
+
+        var loopCount = syntax.countTypes('ForStatement', 'WhileStatement', 'DoWhileStatement');
+
+        if (loopCount > 0) {
+            return 2;
+        }
+
+        return 3;
     };
 
     /**

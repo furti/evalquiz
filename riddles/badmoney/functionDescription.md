@@ -1,1 +1,0 @@
-Use the scale to find the weight and return the number of the wrong bag.

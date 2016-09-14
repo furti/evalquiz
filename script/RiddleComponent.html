@@ -1,0 +1,107 @@
+<md-content flex ng-if="!$ctrl.available">
+    <div class="loader">
+        <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+        <p>Loading ...</p>
+    </div>
+</md-content>
+
+<md-content class="text" flex="50" layout="column" class="layout-stretch" ng-if="$ctrl.available">
+    <md-card flex class="riddle-left-card">
+        <md-card-title>
+            <md-card-title-text>
+                <div class="md-headline">
+                    <i class="fa" ng-class="{'fa-square-o': $ctrl.riddle.score < $ctrl.riddle.minScoreToSolve, 'fa-check-square-o': $ctrl.riddle.score >= $ctrl.riddle.minScoreToSolve}"></i>&nbsp;{{$ctrl.riddle.title}}&nbsp;
+                    <i class="fa" ng-class="{'fa-star-o lightest': $ctrl.riddle.score <= 0, 'fa-star': $ctrl.riddle.score > 0}"></i>
+                    <i class="fa" ng-class="{'fa-star-o lightest': $ctrl.riddle.score <= 1, 'fa-star': $ctrl.riddle.score > 1}"></i>
+                    <i class="fa" ng-class="{'fa-star-o lightest': $ctrl.riddle.score <= 2, 'fa-star': $ctrl.riddle.score > 2}"></i>
+                </div>
+                <div class="md-subhead">
+                    {{$ctrl.riddle.shortDescription}}
+                </div>
+            </md-card-title-text>
+        </md-card-title>
+
+        <md-tabs flex md-selected="$ctrl.selectedTab" class="lined-top">
+            <md-tab label="Info" class="info-tab">
+                <div flex layout="column" class="lined-top">
+                    <div flex class="scrolls md-padding">
+                        <div btf-markdown="$ctrl.riddle.description"></div>
+                    </div>
+
+                    <div class="md-headline md-padding layout-no-resize lined-top">
+                        <i class="fa fa-bullseye"></i>&nbsp;Goals
+                    </div>
+
+                    <div class="md-padding layout-no-resize">
+                        <table>
+                            <tbody>
+                                <tr ng-repeat="goal in $ctrl.riddle.goals track by $index" ng-if="$index <= $ctrl.riddle.score">
+                                    <td>
+                                        <i class="fa" ng-class="{'fa-square-o': $ctrl.riddle.score <= $index, 'fa-check-square-o': $ctrl.riddle.score > $index}"></i>
+                                    </td>
+                                    <td style="min-width: 5em; text-align: center;">
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa" ng-class="{'fa-star-o lightest': $index <= 0, 'fa-star': $index > 0}"></i>
+                                        <i class="fa" ng-class="{'fa-star-o lightest': $index <= 1, 'fa-star': $index > 1}"></i>
+                                    </td>
+                                    <td>
+                                        <i ng-if="$index >= $ctrl.riddle.minScoreToSolve">Bonus Goal:</i> {{goal}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <p ng-if="$ctrl.riddle.minScoreToSolve == 2">
+                            You need at least two stars (<i class="fa fa-star"></i>&nbsp;<i class="fa fa-star"></i>&nbsp;
+                            <i class="fa fa-star-o lightest"></i>) in order to solve the riddle.
+                        </p>
+
+                        <p ng-if="$ctrl.riddle.minScoreToSolve == 3">
+                            You need all three stars (<i class="fa fa-star">&nbsp;</i><i class="fa fa-star"></i>&nbsp;
+                            <i class="fa fa-star"></i>) in order to solve the riddle.
+                        </p>
+                    </div>
+                </div>
+            </md-tab>
+
+            <md-tab label="Console">
+                <div flex layout="column" class="no-scroll">
+                    <div flex id="console" class="console">
+                    </div>
+                </div>
+            </md-tab>
+        </md-tabs>
+
+    </md-card>
+</md-content>
+
+<md-content flex="50" layout="column" ng-if="$ctrl.available">
+    <md-card flex class="riddle-right-card no-scrolls">
+        <md-card-title class="layout-no-resize">
+            <md-card-title-text>
+                <div class="md-headline">
+                    <i class="fa fa-code"></i>&nbsp;Function
+                    <code>{{$ctrl.riddle.member.signature}}</code>
+                </div>
+
+                <div class="md-subhead markdown" btf-markdown="$ctrl.riddle.member.description"></div>
+            </md-card-title-text>
+        </md-card-title>
+
+        <md-card-content class="members lined-top layout-no-resize">
+            <div btf-markdown="$ctrl.riddle.member.explanation"></div>
+            <member-info member="$ctrl.riddle.member"></member-info>
+        </md-card-content>
+
+        <md-card-content flex layout="column" class="editor lined-top lined-bottom">
+            <textarea ng-model="$ctrl.riddle.code" ui-codemirror="$ctrl.editorOptions"></textarea>
+        </md-card-content>
+
+        <md-card-actions layout="row" layout-align="end center">
+            <md-button ng-click="$ctrl.trash()">Trash</md-button>
+            <md-button ng-click="$ctrl.save()">Save</md-button>
+            <span flex="" class="flex"></span>
+            <md-button class="md-primary md-raised" ng-click="$ctrl.solve($event)">Solve</md-button>
+        </md-card-actions>
+    </md-card>
+</md-content>

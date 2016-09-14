@@ -1,1 +1,0 @@
-Simply return the sum of both numbers.

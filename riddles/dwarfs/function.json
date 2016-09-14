@@ -1,21 +1,32 @@
 {
-  "name": "join",
-  "params": [
-    {
-      "name": "row",
-      "type": "object",
-      "attributes": [
+    "name": "join",
+    "type": "number",
+    "description": "Returns the index where to place the next dwarf.",
+    "explanation": "file:explanation.md",
+    "params": [
         {
-          "name": "checkColor(position)",
-          "type": "function",
-          "description": "Returns the color ('red', 'blue') of the dwarfs hat at the position as a string. The position is zero based. So the first dwarf is at position 0 and the last one at size - 1."
-        },
-        {
-          "name": "getLength()",
-          "type": "function",
-          "description": "Returns the number of dwarfs currently in the row"
+            "name": "row",
+            "type": "object",
+            "description": "The row of dwarfs, offering two functions.",
+            "properties": [
+                {
+                    "name": "checkColor",
+                    "type": "string",
+                    "description": "Returns the color ('red' or 'blue') of the dwarfs hat at the position as a string.",
+                    "params": [
+                        {
+                            "name": "position",
+                            "type": "number",
+                            "description": "The position, zero-based."
+                        }
+                    ]
+                },
+                {
+                    "name": "getLength",
+                    "type": "number",
+                    "description": "Returns the number of dwarfs in the row."
+                }
+            ]
         }
-      ]
-    }
-  ]
+    ]
 }

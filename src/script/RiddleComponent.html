@@ -11,9 +11,9 @@
             <md-card-title-text>
                 <div class="md-headline">
                     <i class="fa" ng-class="{'fa-square-o': $ctrl.riddle.score < $ctrl.riddle.minScoreToSolve, 'fa-check-square-o': $ctrl.riddle.score >= $ctrl.riddle.minScoreToSolve}"></i>&nbsp;{{$ctrl.riddle.title}}&nbsp;
-                    <i class="fa" ng-class="{'fa-star-o light': $ctrl.riddle.score <= 0, 'fa-star': $ctrl.riddle.score > 0}"></i>
-                    <i class="fa" ng-class="{'fa-star-o light': $ctrl.riddle.score <= 1, 'fa-star': $ctrl.riddle.score > 1}"></i>
-                    <i class="fa" ng-class="{'fa-star-o light': $ctrl.riddle.score <= 2, 'fa-star': $ctrl.riddle.score > 2}"></i>
+                    <i class="fa" ng-class="{'fa-star-o lightest': $ctrl.riddle.score <= 0, 'fa-star': $ctrl.riddle.score > 0}"></i>
+                    <i class="fa" ng-class="{'fa-star-o lightest': $ctrl.riddle.score <= 1, 'fa-star': $ctrl.riddle.score > 1}"></i>
+                    <i class="fa" ng-class="{'fa-star-o lightest': $ctrl.riddle.score <= 2, 'fa-star': $ctrl.riddle.score > 2}"></i>
                 </div>
                 <div class="md-subhead">
                     {{$ctrl.riddle.shortDescription}}
@@ -41,8 +41,8 @@
                                     </td>
                                     <td style="min-width: 5em; text-align: center;">
                                         <i class="fa fa-star"></i>
-                                        <i class="fa" ng-class="{'fa-star-o light': $index <= 0, 'fa-star': $index > 0}"></i>
-                                        <i class="fa" ng-class="{'fa-star-o light': $index <= 1, 'fa-star': $index > 1}"></i>
+                                        <i class="fa" ng-class="{'fa-star-o lightest': $index <= 0, 'fa-star': $index > 0}"></i>
+                                        <i class="fa" ng-class="{'fa-star-o lightest': $index <= 1, 'fa-star': $index > 1}"></i>
                                     </td>
                                     <td>
                                         <i ng-if="$index >= $ctrl.riddle.minScoreToSolve">Bonus Goal:</i> {{goal}}
@@ -53,7 +53,7 @@
 
                         <p ng-if="$ctrl.riddle.minScoreToSolve == 2">
                             You need at least two stars (<i class="fa fa-star"></i>&nbsp;<i class="fa fa-star"></i>&nbsp;
-                            <i class="fa fa-star-o light"></i>) in order to solve the riddle.
+                            <i class="fa fa-star-o lightest"></i>) in order to solve the riddle.
                         </p>
 
                         <p ng-if="$ctrl.riddle.minScoreToSolve == 3">
@@ -76,7 +76,7 @@
 </md-content>
 
 <md-content flex="50" layout="column" ng-if="$ctrl.available">
-    <md-card flex class="editor-card no-scrolls">
+    <md-card flex class="riddle-right-card no-scrolls">
         <md-card-title class="layout-no-resize">
             <md-card-title-text>
                 <div class="md-headline">
@@ -88,7 +88,7 @@
             </md-card-title-text>
         </md-card-title>
 
-        <md-card-content class="lined-top layout-no-resize">
+        <md-card-content class="members lined-top layout-no-resize">
             <div btf-markdown="$ctrl.riddle.member.explanation"></div>
             <member-info member="$ctrl.riddle.member"></member-info>
         </md-card-content>

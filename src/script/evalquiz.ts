@@ -12,6 +12,15 @@ import {RiddleManager} from './RiddleManager';
 import {StorageService} from './StorageService';
 import './ToolbarComponent';
 
+module.config(function ($mdThemingProvider) {
+    $mdThemingProvider
+        .theme('default')
+        .primaryPalette('indigo')
+        .accentPalette('orange')
+        .warnPalette('deep-orange')
+        .backgroundPalette('grey');
+});
+
 module.run(['$location', 'riddleManager', 'storageService', function ($location: ng.ILocationService, riddleManager: RiddleManager, storageService: StorageService) {
     riddleManager.setupRiddles().then(() => {
         let id = storageService.loadLastPlayedRiddleId();

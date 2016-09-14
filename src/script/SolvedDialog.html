@@ -9,8 +9,8 @@
     <md-dialog-content class="md-dialog-content" layout="column" layout-align="center center">
     	<p>
     		<i class="fa fa-star fa-3x glow"></i>
-            <i class="fa fa-3x" ng-class="{'fa-star-o light': $ctrl.result.score <= 1, 'fa-star glow': $ctrl.result.score > 1}"></i>
-            <i class="fa fa-3x" ng-class="{'fa-star-o light': $ctrl.result.score <= 2, 'fa-star glow': $ctrl.result.score > 2}"></i>
+            <i class="fa fa-3x" ng-class="{'fa-star-o lightest': $ctrl.result.score <= 1, 'fa-star glow': $ctrl.result.score > 1}"></i>
+            <i class="fa fa-3x" ng-class="{'fa-star-o lightest': $ctrl.result.score <= 2, 'fa-star glow': $ctrl.result.score > 2}"></i>
     	</p>
 
         <p ng-if="$ctrl.result.score >= $ctrl.result.riddle.minScoreToSolve">
@@ -20,7 +20,7 @@
     	<p ng-if="$ctrl.result.solvedMessage">{{$ctrl.result.solvedMessage}}</p>
 
         <p ng-if="($ctrl.result.score < $ctrl.result.riddle.minScoreToSolve) &amp;&amp; ($ctrl.result.riddle.minScoreToSolve == 2)">
-            Congratulations, you've found the correct answer. But you need at least two stars (<i class="fa fa-star"></i>&nbsp;<i class="fa fa-star"></i>&nbsp;<i class="fa fa-star-o light"></i>) in order to solve the riddle. Keep trying! Can you achieve the next goal?
+            Congratulations, you've found the correct answer. But you need at least two stars (<i class="fa fa-star"></i>&nbsp;<i class="fa fa-star"></i>&nbsp;<i class="fa fa-star-o lightest"></i>) in order to solve the riddle. Keep trying! Can you achieve the next goal?
         </p>
 
         <p ng-if="($ctrl.result.score < $ctrl.result.riddle.minScoreToSolve) &amp;&amp; ($ctrl.result.riddle.minScoreToSolve == 3)">
@@ -37,7 +37,7 @@
     				<td style="min-width: 5em;">
 		                <i class="fa fa-star"></i>
 		                <i class="fa fa-star"></i>
-		                <i class="fa fa-star-o light"></i>
+		                <i class="fa fa-star-o lightest"></i>
 		            </td>
 		            <td>
                         <i ng-if="$ctrl.result.riddle.minScoreToSolve < 2">Bonus Goal:</i>

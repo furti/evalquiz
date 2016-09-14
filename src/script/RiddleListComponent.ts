@@ -2,7 +2,6 @@
 
 let module = angular.module('evalquiz');
 
-import './RiddleCardComponent';
 import {RiddleManager, RiddleData} from './RiddleManager';
 import {Component} from './Utils';
 
@@ -10,12 +9,19 @@ import {Component} from './Utils';
     templateUrl: 'script/RiddleListComponent.html'
 })
 class Controller {
-    static $inject = ['riddleManager', '$mdDialog'];
+    static $inject = ['riddleManager', '$mdDialog', '$location', '$timeout'];
 
-    constructor(protected riddleManager: RiddleManager, protected $mdDialog: ng.material.IDialogService) {
+    constructor(protected riddleManager: RiddleManager, protected $mdDialog: ng.material.IDialogService, protected $location: ng.ILocationService, protected $timeout: ng.ITimeoutService) {
     }
 
-    protected closeDialog(): void {
+    startRiddle(riddle: RiddleData) {
+        this.$timeout(() => {
+            this.$mdDialog.hide();
+            this.$location.path('/riddles/' + riddle.id);
+        }, 200);
+    }
+
+    closeDialog(): void {
         this.$mdDialog.hide();
     }
 }

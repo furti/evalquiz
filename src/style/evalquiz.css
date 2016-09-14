@@ -1,23 +1,22 @@
+@keyframes fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Loader */
+
 .loader {
     width: 240px;
     margin: 3em auto 0;
     text-align: center;
-}
-
-.editor {
-    padding: 0;
-    overflow: hidden;
-    align-items: stretch;
-}
-
-.editor > .CodeMirror {
-    flex: 1 1 auto;
+    animation: fade-in 1s;
 }
 
 /* Left Riddle Card */
 
 .riddle-left-card {
     overflow: hidden;
+    animation: fade-in 1s;
 }
 
 .riddle-left-card > md-card-title {
@@ -42,6 +41,36 @@
     flex: 1 1 auto;
     display: flex;
     overflow: hidden;
+}
+
+/* Right Riddle Card */
+
+.riddle-right-card {
+    overflow: hidden;
+    animation: fade-in 1s;
+}
+
+.riddle-right-card .members {
+    padding: 0 16px;
+}
+
+/* RiddleList */
+
+.riddle-list md-headline {
+    align-items: baseline;
+    font-size: 20px;    
+}
+
+/* Editor */
+
+.editor {
+    padding: 0;
+    overflow: hidden;
+    align-items: stretch;
+}
+
+.editor > .CodeMirror {
+    flex: 1 1 auto;
 }
 
 /* Console */
@@ -83,6 +112,33 @@
     color: LightSalmon;
 } 
 
+/* Layout Helpers */
+
+.layout-no-shrink {
+    flex-shrink: 0;
+}
+
+.layout-no-grow {
+    flex-grow: 0;
+}
+ 
+.layout-no-resize {
+    flex-shrink: 0;
+    flex-grow: 0;
+}
+
+.layout-stretch {
+    align-items: stretch;
+}
+
+.layout-baseline {
+    align-items: baseline;
+}
+
+
+
+
+
 .scrolls {
     overflow: auto;
 }
@@ -111,21 +167,8 @@
     max-width: 480px;
 }
 
-.layout-no-shrink {
-    flex-shrink: 0;
-}
-
-.layout-no-grow {
-    flex-grow: 0;
-}
- 
-.layout-no-resize {
-    flex-shrink: 0;
-    flex-grow: 0;
-}
-
-.layout-stretch {
-    align-items: stretch;
+.max-width-640 {
+    max-width: 640px;
 }
 
 .no-wrap {
@@ -135,20 +178,6 @@
 .member-info {
     padding: 0 0 0 16px;
     margin: 16px 0;
-}
-
-/**
- * Level
- */
-.riddle-card {
-    cursor: pointer;
-    padding: 0;
-    display: block;
-    min-width: 480px;
-}
-
-.riddle-title {
-    padding-right: 10px;
 }
 
 /**
@@ -205,6 +234,14 @@ table td {
 }
 
 .light {
+    opacity: 0.75;
+}
+
+.lighter {
+    opacity: 0.5;
+}
+
+.lightest {
     opacity: 0.25;
 }
 

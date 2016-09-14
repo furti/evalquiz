@@ -67,13 +67,15 @@ class RiddleController {
         this.uiService.confirm('Trash Your Code', 'Are you sure that you want to clear the editor?\n\n' +
             'This will delete all the code you have written for this riddle.').then(() => {
                 self.riddle.code = self.riddle.member.stub;
+
+                this.uiService.toast('Code trashed.');
             });
     }
 
     public save(): void {
         this.riddleManager.saveRiddle(this.riddle);
 
-        this.uiService.info('Save', 'The code was saved successfully.');
+        this.uiService.toast('Code saved successfully.');
     }
 
     public solve(): void {
@@ -95,14 +97,14 @@ class RiddleController {
                     .markdown('Evaluation failed.')
                     .markdown('Hmmm... something seems to be wrong. Change some code and try it again.')
                     .markdown(result.failedMessage);
-                this.uiService.alert('Evaluation failed', 'Hmmm... something seems to be wrong. Change some code and try it again.\n\n' + result.failedMessage);
+                this.uiService.toast('Failed to solve riddle. See console for more info.');
             }
         }
         catch (err) {
             console.error(err);
 
             this.consoleService.errorBlock().markdown('Failed to execute function:').code(err);
-            this.uiService.alert('Error', 'Failed to execute function:\n\n`' + err + '`');
+            this.uiService.toast('Execution failed. See console for more info.');
         }
     }
 }

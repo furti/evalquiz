@@ -52,6 +52,10 @@
     color: white;
 }
 
+.console h1, .console h2, .console h3, .console h4, .console h5, .console h6 {
+    color: skyblue;
+} 
+
 .console > div.block {
     margin: 0.2em 0.4em;
     display: flex;

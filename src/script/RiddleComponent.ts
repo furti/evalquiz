@@ -65,7 +65,7 @@ class RiddleController {
         var self = this;
 
         this.uiService.confirm('Trash Your Code', 'Are you sure that you want to clear the editor?\n\n' +
-            'This will delete all the code you have written for this riddle.').then(() => {
+            'This will **delete all the code** you have written for this riddle.', 'Delete', 'Abort').then(() => {
                 self.riddle.code = self.riddle.member.stub;
 
                 this.uiService.toast('Code trashed.');

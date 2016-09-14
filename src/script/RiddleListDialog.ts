@@ -5,6 +5,7 @@ let module = angular.module('evalquiz');
 import './RiddleListComponent';
 import {RiddleManager, RiddleData} from './RiddleManager';
 import {StorageService} from './StorageService';
+import {UIService} from './UIService';
 import {Dialog} from './Utils';
 
 @Dialog(module, 'riddleListDialog', {
@@ -15,30 +16,22 @@ import {Dialog} from './Utils';
     templateUrl: 'script/RiddleListDialog.html'
 })
 class Controller {
-    static $inject = ['$mdDialog', '$location', 'riddleManager', 'storageService'];
+    static $inject = ['$mdDialog', '$location', 'riddleManager', 'storageService', 'uiService'];
 
-    constructor(protected $mdDialog: ng.material.IDialogService, protected $location: ng.ILocationService, protected riddleManager: RiddleManager, protected storageService: StorageService) {
+    constructor(protected $mdDialog: ng.material.IDialogService, protected $location: ng.ILocationService, protected riddleManager: RiddleManager, protected storageService: StorageService, protected uiService: UIService) {
     }
 
     protected clear(): void {
-        var confirm = this.$mdDialog.confirm()
-            .title('Clear Progress?')
-            .htmlContent(`<p>I am fully aware, that proceeding this action will:</p>
-                <ul>
-                    <li>erase all saved riddles</li>
-                    <li>remove all achieved stars</li>
-                    <li>reset the progress to the first riddle</li>
-                </ul>`)
-            .ok('Erase Everything')
-            .cancel('Abort Action')
-            .clickOutsideToClose(true);
+        this.uiService.confirm('Clear Progress?', `I am fully aware, that proceeding this action will:
 
-        this.$mdDialog.show(confirm).then(() => {
-            this.storageService.clearSaveGames();
-            this.riddleManager.setupRiddles().then(() => {
-                this.$location.path('/riddles/intro');
+* **erase** all saved riddles
+* **remove** all achieved stars
+* **reset** the progress to the first riddle`, 'Erase Everything', 'Abort Action').then(() => {
+                this.storageService.clearSaveGames();
+                this.riddleManager.setupRiddles().then(() => {
+                    this.$location.path('/riddles/intro');
+                });
             });
-        });
     }
 
     protected close(): void {

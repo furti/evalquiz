@@ -3,12 +3,24 @@
     to   { opacity: 1; }
 }
 
+/* View */
+
+ng-view {
+    height: 100vh;
+}
+
 /* Loader */
 
 .loader {
     width: 240px;
     margin: 3em auto 0;
     text-align: center;
+    animation: fade-in 1.2s;
+}
+
+/* Workspace */
+workspace {
+    overflow: hidden;
     animation: fade-in 1s;
 }
 
@@ -16,7 +28,6 @@
 
 .riddle-left-card {
     overflow: hidden;
-    animation: fade-in 1s;
 }
 
 .riddle-left-card > md-card-title {
@@ -47,7 +58,6 @@
 
 .riddle-right-card {
     overflow: hidden;
-    animation: fade-in 1s;
 }
 
 .riddle-right-card .members {
@@ -221,10 +231,6 @@ code {
     margin-left: 10px;
 }
 
-ng-view {
-    overflow: hidden;
-}
-
 table td {
     padding: 8px 12px;
 }
@@ -247,4 +253,9 @@ table td {
 
 .glow {
     text-shadow: 0px 0px 16px goldenRod;   
+}
+
+.separated {
+    margin-left: 0.5em;
+    margin-right: 0.5em;
 }

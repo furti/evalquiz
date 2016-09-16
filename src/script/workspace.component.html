@@ -1,16 +1,10 @@
-<md-content flex ng-if="!$ctrl.available">
-    <div class="loader">
-        <md-progress-linear md-mode="indeterminate"></md-progress-linear>
-        <p>Loading ...</p>
-    </div>
-</md-content>
-
-<md-content class="text" flex="50" layout="column" class="layout-stretch" ng-if="$ctrl.available">
+<md-content class="text" flex="50" layout="column" class="layout-stretch">
     <md-card flex class="riddle-left-card">
         <md-card-title>
             <md-card-title-text>
                 <div class="md-headline">
-                    <i class="fa" ng-class="{'fa-square-o': $ctrl.riddle.score < $ctrl.riddle.minScoreToSolve, 'fa-check-square-o': $ctrl.riddle.score >= $ctrl.riddle.minScoreToSolve}"></i>&nbsp;{{$ctrl.riddle.title}}&nbsp;
+                    <i class="fa" ng-class="{'fa-square-o': $ctrl.riddle.score < $ctrl.riddle.minScoreToSolve, 'fa-check-square-o': $ctrl.riddle.score >= $ctrl.riddle.minScoreToSolve}"></i>&nbsp;
+                    <span class="lighter">Level {{$ctrl.riddle.level}}:</span>&nbsp;<span>{{$ctrl.riddle.title}}</span>&nbsp;
                     <i class="fa" ng-class="{'fa-star-o lightest': $ctrl.riddle.score <= 0, 'fa-star': $ctrl.riddle.score > 0}"></i>
                     <i class="fa" ng-class="{'fa-star-o lightest': $ctrl.riddle.score <= 1, 'fa-star': $ctrl.riddle.score > 1}"></i>
                     <i class="fa" ng-class="{'fa-star-o lightest': $ctrl.riddle.score <= 2, 'fa-star': $ctrl.riddle.score > 2}"></i>
@@ -75,7 +69,7 @@
     </md-card>
 </md-content>
 
-<md-content flex="50" layout="column" ng-if="$ctrl.available">
+<md-content flex="50" layout="column">
     <md-card flex class="riddle-right-card no-scrolls">
         <md-card-title class="layout-no-resize">
             <md-card-title-text>
@@ -101,7 +95,9 @@
             <md-button ng-click="$ctrl.trash()">Trash</md-button>
             <md-button ng-click="$ctrl.save()">Save</md-button>
             <span flex="" class="flex"></span>
-            <md-button class="md-primary md-raised" ng-click="$ctrl.solve($event)">Solve</md-button>
+            <md-button class="md-primary md-raised" ng-click="$ctrl.solve($event)">
+                <i class="fa fa-play-circle separated" aria-hidden="true"></i> Solve
+            </md-button>
         </md-card-actions>
     </md-card>
 </md-content>

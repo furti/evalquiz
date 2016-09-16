@@ -1,25 +1,30 @@
 /// <reference path="./index.d.ts" />
 
+let module = angular.module('evalquiz');
+
 import {ConsoleService, ConsoleBlock} from './console.service';
 import './member-info.component';
 import {RiddleManager, RiddleData, Riddle, Result} from './riddle.manager';
 import './solved.dialog';
+import './toolbar.component';
 import {UIService} from './ui.service';
 import {Component, Service, DialogService, Dialog} from './utils';
 
-let module = angular.module('evalquiz');
+@Component(module, 'workspace', {
+    templateUrl: 'script/workspace.component.html',
+    bindings: {
+        riddle: '<'
+    }
+})
+class WorkspaceComponent {
+    static $inject = ['riddleManager', '$mdDialog', '$location', 'SolvedDialog', 'consoleService', 'uiService'];
 
-class RiddleController {
-    static $inject = ['$routeParams', 'riddleManager', '$mdDialog', '$location', 'SolvedDialog', 'consoleService', 'uiService'];
-
-    public riddle: Riddle;
-    protected loading: boolean;
-    public editorOptions: any;
-    public selectedTab: number = 0;
+    protected riddle: Riddle;
+    protected editorOptions: any;
+    protected selectedTab: number = 0;
 
     constructor(protected $routeParams: ng.route.IRouteParamsService, protected riddleManager: RiddleManager, protected $mdDialog: ng.material.IDialogService,
         protected $location: ng.ILocationService, protected solvedDialog: DialogService, protected consoleService: ConsoleService, protected uiService: UIService) {
-        this.loading = true;
 
         //After the value of the editor is set we mark the first and last line as readonly
         var cmChange = (editor: any, change: any) => {
@@ -51,16 +56,8 @@ class RiddleController {
                 cm.on('change', cmChange);
             }
         };
-
-        riddleManager.startRiddle($routeParams['riddleId']).then((riddle) => {
-            this.riddle = riddle;
-            this.loading = false;
-        });
     }
 
-    protected get available(): boolean {
-        return this.riddleManager.initialized && !this.loading;
-    }
     public trash($event: any): void {
         var self = this;
 
@@ -108,19 +105,3 @@ class RiddleController {
         }
     }
 }
-
-module.controller('RiddleController', RiddleController);
-
-module.config(['$mdThemingProvider', '$routeProvider', ($mdThemingProvider: ng.material.IThemingProvider,
-    $routeProvider: ng.route.IRouteProvider) => {
-    console.log('Hmmm... I dont\'t think you need the console right now ;)');
-
-    $mdThemingProvider.theme('default')
-        .accentPalette('lime');
-
-    $routeProvider.when('/riddles/:riddleId', {
-        templateUrl: 'script/riddle.component.html',
-        controller: 'RiddleController',
-        controllerAs: '$ctrl'
-    });
-}]);

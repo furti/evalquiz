@@ -27,9 +27,6 @@ export interface Riddle extends RiddleData {
     member: Member;
     code: string;
     engine: string;
-}
-
-interface FullRiddle extends Riddle {
     location: string;
     initialized: boolean;
 }
@@ -58,8 +55,8 @@ export interface Result {
 @Service(module, 'riddleManager')
 export class RiddleManager {
     public initialized: boolean = false;
-    public riddleList: FullRiddle[];
-    protected riddleMap: { [id: string]: FullRiddle };
+    public riddleList: Riddle[];
+    protected riddleMap: { [id: string]: Riddle };
 
     static $inject = ['$http', '$q', 'storageService', 'consoleService', 'uiService'];
 
@@ -71,7 +68,7 @@ export class RiddleManager {
      * 
      * @memberOf RiddleManager
      */
-    public setupRiddles(): angular.IPromise<any> {
+    setupRiddles(): angular.IPromise<any> {
         let deferred = this.$q.defer();
 
         this.initialized = false;
@@ -79,7 +76,7 @@ export class RiddleManager {
         this.riddleMap = null;
 
         this.$http.get('riddles/riddles.json').then(response => {
-            let riddles: FullRiddle[] = response.data as FullRiddle[];
+            let riddles: Riddle[] = response.data as Riddle[];
 
             for (let i = 0; i < riddles.length; i++) {
                 riddles[i].level = i + 1;
@@ -102,12 +99,12 @@ export class RiddleManager {
      * that holds all the riddles with the id as key.
      * 
      * @private
-     * @param {FullRiddle[]} riddles the riddle index
+     * @param {Riddle[]} riddles the riddle index
      * @returns {void}
      * 
      * @memberOf RiddleManager
      */
-    private prepareRiddles(riddles: FullRiddle[]): void {
+    private prepareRiddles(riddles: Riddle[]): void {
         if (!riddles) {
             return;
         }
@@ -139,7 +136,7 @@ export class RiddleManager {
         this.initialized = true;
     }
 
-    public startRiddle(riddleId: string): angular.IPromise<Riddle> {
+    startRiddle(riddleId: string): angular.IPromise<Riddle> {
         var promise = this.initializeRiddle(riddleId);
 
         promise.then(() => {
@@ -154,11 +151,11 @@ export class RiddleManager {
      * 
      * @private
      * @param {string} riddleId the id of the riddle
-     * @returns {angular.IPromise<FullRiddle>} a promise delivering the riddle
+     * @returns {angular.IPromise<Riddle>} a promise delivering the riddle
      * 
      * @memberOf RiddleManager
      */
-    private initializeRiddle(riddleId: string): angular.IPromise<FullRiddle> {
+    private initializeRiddle(riddleId: string): angular.IPromise<Riddle> {
         var defered = this.$q.defer();
 
         let riddle = this.riddleMap[riddleId];
@@ -196,7 +193,7 @@ export class RiddleManager {
         return defered.promise;
     }
 
-    private processMember(riddle: FullRiddle, member: Member): Member {
+    private processMember(riddle: Riddle, member: Member): Member {
         member.signature = member.name;
 
         this.processMemberReference(riddle, member, 'description');
@@ -230,7 +227,7 @@ export class RiddleManager {
         return member;
     }
 
-    private processMemberReference(riddle: FullRiddle, member: Member, key: string): void {
+    private processMemberReference(riddle: Riddle, member: Member, key: string): void {
         let text = member[key];
 
         if (text && text.indexOf('file:') === 0) {
@@ -239,11 +236,11 @@ export class RiddleManager {
         }
     }
 
-    public saveRiddle(riddle: Riddle): void {
+    saveRiddle(riddle: Riddle): void {
         this.storageService.storeSaveGames(riddle);
     }
 
-    public solveRiddle(riddle: Riddle): Result {
+    solveRiddle(riddle: Riddle): Result {
         var solve = this.parseCode(riddle);
         var syntax = this.analyzeCode(riddle);
         var riddleEngine = this.buildEngine(riddle);
@@ -271,7 +268,7 @@ export class RiddleManager {
                 riddle.score = score;
             }
 
-            var next = this.nextRiddle(<FullRiddle>riddle);
+            var next = this.nextRiddle(<Riddle>riddle);
 
             if (next) {
                 result.nextRiddleId = next.id;
@@ -291,7 +288,7 @@ export class RiddleManager {
         return result;
     }
 
-    private nextRiddle(riddle: FullRiddle): FullRiddle {
+    nextRiddle(riddle: Riddle): Riddle {
         //Get the position of the actual riddle
         var pos = this.riddleList.indexOf(riddle);
 

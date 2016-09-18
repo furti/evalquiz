@@ -1,0 +1,22 @@
+{
+  "goals": [
+    "Solve the task.",
+    "As single statement.",
+    "Avoid any conditions (if, switch, ?) to solve the riddle."
+  ],
+  "description": "file: description.md",
+  "hints": null,
+  "member": {
+    "name": "dictate",
+    "type": "string",
+    "description": "Returns the string `\"Nothing\"`, if `s` is null or undefined, `s` otherwise.",
+    "params": [
+      {
+        "name": "s",
+        "type": "string",
+        "description": "The contents. May be null or undefined."
+      }
+    ]
+  },
+  "engine": "file: engine.js"
+}

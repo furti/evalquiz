@@ -1,10 +1,8 @@
-<md-progress-linear ng-show="$ctrl.loading" md-mode="indeterminate"></md-progress-linear>
-
 <md-list class="riddle-list">
-    <md-list-item class="md-3-line" ng-repeat="riddle in $ctrl.riddleManager.riddleList" ng-click="$ctrl.startRiddle(riddle)">
+    <md-list-item class="md-3-line" ng-repeat="riddle in $ctrl.riddles" ng-click="$ctrl.gotoRiddle(riddle.id)" ng-disabled="!$ctrl.isAvailable(riddle)" ng-class="{'lightest': !$ctrl.isAvailable(riddle)}">
         <div class="md-list-item-text" layout="column">
             <md-headline class="no-wrap" layout="row">
-                <i class="layout-no-resize fa" ng-class="{'fa-square-o': riddle.score < riddle.minScoreToSolve, 'fa-check-square-o': riddle.score >= riddle.minScoreToSolve}"></i>&nbsp;
+                <i class="layout-no-resize fa" ng-class="{'fa-square-o': !$ctrl.isSolved(riddle), 'fa-check-square-o': !$ctrl.isSolved(riddle)}"></i>&nbsp;
                 <div flex style="min-width: 16em"><span class="lighter">Level {{riddle.level}}:</span>&nbsp;<span>{{riddle.title}}</span></div>
                 &nbsp;
                 <i class="layout-no-resize fa" ng-class="{'fa-star-o lightest': riddle.score <= 0, 'fa-star': riddle.score > 0}"></i>&nbsp;

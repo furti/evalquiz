@@ -2,22 +2,39 @@
 
 let module = angular.module('evalquiz');
 
-import {RiddleManager, RiddleData} from './riddle.manager';
+import {EvalQuizService} from './evalquiz.service';
+import {RiddleService} from './riddle.service';
+import {Riddle} from './riddle';
 import {Component} from './utils';
 
 @Component(module, 'riddleList', {
-    templateUrl: 'script/riddle-list.component.html'
+    templateUrl: 'script/riddle-list.component.html',
+    bindings: {
+        riddles: '<',
+        selectedRiddle: '<'
+    }
 })
 class Controller {
-    static $inject = ['riddleManager', '$mdDialog', '$location', '$timeout'];
+    static $inject = ['evalQuizService', 'riddleService', '$mdDialog', '$timeout'];
 
-    constructor(protected riddleManager: RiddleManager, protected $mdDialog: ng.material.IDialogService, protected $location: ng.ILocationService, protected $timeout: ng.ITimeoutService) {
+    protected riddles: Riddle[];
+    protected selectedRiddle: Riddle;
+
+    constructor(protected evalQuizService: EvalQuizService, protected riddleService: RiddleService, protected $mdDialog: angular.material.IDialogService, protected $timeout: ng.ITimeoutService) {
     }
 
-    startRiddle(riddle: RiddleData) {
+    isSolved(riddle: Riddle): boolean {
+        return this.riddleService.isSolved(riddle);
+    }
+
+    isAvailable(riddle: Riddle): boolean {
+        return this.riddleService.isAvailable(riddle);
+    }
+    
+    gotoRiddle(riddleId: string): void {
         this.$timeout(() => {
             this.$mdDialog.hide();
-            this.$location.path('/riddles/' + riddle.id);
+            this.evalQuizService.gotoRiddle(riddleId);
         }, 200);
     }
 

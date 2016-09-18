@@ -3,11 +3,6 @@
         "id": "intro",
         "title": "Intro",
         "shortDescription": "eval(Quiz) sounds like fun :)",
-        "goals": [
-            "Solve the calculation.",
-            "Avoid any additions (+, ++, +=).",
-            "Avoid any subtractions (-, --, -=)."
-        ],
         "minScoreToSolve": 1,
         "location": "intro"
     },
@@ -15,82 +10,56 @@
         "id": "gauss",
         "title": "Little Carly",
         "shortDescription": "Help litte Carly to solve his task.",
-        "goals": [
-            "Solve Carlies task.",
-            "Avoid any loops (for, while, do) to solve the riddle.",
-            "Avoid any multiplications (*, *=)."
-        ],
         "minScoreToSolve": 2,
-        "location": "gauss"
+        "location": "gauss",
+        "dependsOn": ["intro"]
     },
     {
         "id": "defaultvalue",
         "title": "Nobbys List",
         "shortDescription": "Help Nobby to write his list.",
-        "goals": [
-            "Solve the task.",
-            "As single statement.",
-            "Avoid any conditions (if, switch, ?) to solve the riddle."
-        ],
         "minScoreToSolve": 3,
-        "location": "defaultvalue"
+        "location": "defaultvalue",
+        "dependsOn": ["gauss"]
     },
     {
         "id": "dwarfs",
         "title": "Dwarfs and dragons",
         "shortDescription": "Help the dwarfs to save their lives.",
-        "goals": [
-            "Solve the riddle.",
-            "Do not exceed an average of 8 checkColor() calls per dwarf.",
-            "Avoid any loops (for, while, do)."
-        ],
         "minScoreToSolve": 1,
-        "location": "dwarfs"
+        "location": "dwarfs",
+        "dependsOn": ["defaultvalue"]
     },
     {
         "id": "subsetsum",
         "title": "Altitude Differences",
         "shortDescription": "Know where your blisters come from.",
-        "goals": [
-            "Implement a working algorithm.",
-            "Meet a linear time complexity [O(n)] to solve the riddle.",
-            "Avoid any conditional statements (if, switch, ?)"
-        ],
         "minScoreToSolve": 2,
-        "location": "subsetsum"
+        "location": "subsetsum",
+        "dependsOn": ["dwarfs"]
     },
     {
         "id": "badmoney",
         "title": "Bad Money",
         "shortDescription": "All that glitters is not gold.",
-        "goals": [
-            "Solve the riddle."
-        ],
         "minScoreToSolve": 1,
-        "location": "badmoney"
+        "location": "badmoney",
+        "dependsOn": ["subsetsum"]
     },
     {
         "id": "badmoney2",
         "title": "Bad Money 2",
         "shortDescription": "All that glitters is still not gold.",
-        "goals": [
-            "Solve the task.",
-            "Perform only the minimal amount of weightings to solve the riddle.",
-            "Avoid any loops (for, while, do)."
-        ],
         "minScoreToSolve": 2,
-        "location": "badmoney2"
+        "location": "badmoney2",
+        "dependsOn": ["badmoney"]
     },
     {
         "id": "dogs",
         "title": "Two dogs",
         "shortDescription": "Bark! Bark!",
-        "goals": [
-            "Solve the riddle.",
-            "Avoid any loops (for, while, do).",
-            "Avoid any caluclations (+, &, ||, ...)"
-        ],
         "minScoreToSolve": 2,
-        "location": "dogs"
+        "location": "dogs",
+        "dependsOn": ["badmoney2"]
     }
 ]

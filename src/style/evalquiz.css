@@ -18,8 +18,8 @@ ng-view {
     animation: fade-in 1.2s;
 }
 
-/* Workspace */
-workspace {
+/* workbench */
+workbench {
     overflow: hidden;
     animation: fade-in 1s;
 }
@@ -197,7 +197,7 @@ workspace {
     margin-right: 10px;
 }
 
-.md-toolbar-item .md-button {
+.md-toolbar-item .md-button, md-dialog-actions .md-button, md-card-actions .md-button {
     padding-left: 15px;
     padding-right: 15px;
 }

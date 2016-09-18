@@ -6,10 +6,8 @@
 
 let module = angular.module('evalquiz', ['ngRoute', 'ngMaterial', 'ui.codemirror', 'LocalStorageModule', 'btford.markdown']);
 
-import './console.service';
-import './main.component';
-import {RiddleManager} from './riddle.manager';
-import {StorageService} from './storage.service';
+import {EvalQuizService} from './evalquiz.service';
+import './page.component';
 
 module.config(function ($mdThemingProvider) {
     $mdThemingProvider
@@ -20,10 +18,10 @@ module.config(function ($mdThemingProvider) {
         .backgroundPalette('grey');
 });
 
-module.run(['$location', 'riddleManager', 'storageService', function ($location: ng.ILocationService, riddleManager: RiddleManager, storageService: StorageService) {
-    riddleManager.setupRiddles().then(() => {
-        let id = storageService.loadLastPlayedRiddleId();
-        $location.path('/riddles/' + id);
-    });;
+module.run(['evalQuizService', (evalQuizService: EvalQuizService) => {
+    evalQuizService.initialize().then(() => {
+        // initially redirect to saved selected riddle
+        evalQuizService.gotoRiddle(evalQuizService.selectedRiddleId);
+    });
 }]);
 

@@ -1,80 +1,90 @@
-<md-dialog aria-label="Success" style="max-width: 560px;">
+<md-dialog aria-label="{{$ctrl.success ? 'Success' : 'Failure'" style="max-width: 560px;">
     <md-toolbar>
         <div class="md-toolbar-tools">
-            <span flex="">Congratulations</span>
-            <i class="fa" ng-class="{'fa-square-o': $ctrl.result.score < $ctrl.result.riddle.minScoreToSolve, 'fa-check-square-o': $ctrl.result.score >= $ctrl.result.riddle.minScoreToSolve}"></i>&nbsp;
+            <span ng-if="$ctrl.solved" flex>Congratulations</span>
+            <span ng-if="$ctrl.success && !$ctrl.solved" flex>Success</span>
+            <span ng-if="!$ctrl.success" flex>Failure</span>
+            <i class="fa" ng-class="{'fa-square-o': !$ctrl.solved, 'fa-check-square-o': $ctrl.solved}"></i>&nbsp;
         </div>
     </md-toolbar>
 
     <md-dialog-content class="md-dialog-content" layout="column" layout-align="center center">
     	<p>
-    		<i class="fa fa-star fa-3x glow"></i>
-            <i class="fa fa-3x" ng-class="{'fa-star-o lightest': $ctrl.result.score <= 1, 'fa-star glow': $ctrl.result.score > 1}"></i>
-            <i class="fa fa-3x" ng-class="{'fa-star-o lightest': $ctrl.result.score <= 2, 'fa-star glow': $ctrl.result.score > 2}"></i>
+    		<i class="fa fa-3x" ng-class="{'fa-star-o lightest': $ctrl.score <= 0, 'fa-star glow': $ctrl.score > 0}"></i>
+            <i class="fa fa-3x" ng-class="{'fa-star-o lightest': $ctrl.score <= 1, 'fa-star glow': $ctrl.score > 1}"></i>
+            <i class="fa fa-3x" ng-class="{'fa-star-o lightest': $ctrl.score <= 2, 'fa-star glow': $ctrl.score > 2}"></i>
     	</p>
 
-        <p ng-if="$ctrl.result.score >= $ctrl.result.riddle.minScoreToSolve">
+        <p ng-if="$ctrl.solved">
             <b>Congratulations, you've sovled this riddle!</b>
         </p>
-
-    	<p ng-if="$ctrl.result.solvedMessage">{{$ctrl.result.solvedMessage}}</p>
-
-        <p ng-if="($ctrl.result.score < $ctrl.result.riddle.minScoreToSolve) &amp;&amp; ($ctrl.result.riddle.minScoreToSolve == 2)">
-            Congratulations, you've found the correct answer. But you need at least two stars (<i class="fa fa-star"></i>&nbsp;<i class="fa fa-star"></i>&nbsp;<i class="fa fa-star-o lightest"></i>) in order to solve the riddle. Keep trying! Can you achieve the next goal?
+        <p ng-if="$ctrl.success && !$ctrl.solved">
+            <b>Bravo, you've found the correct answer!</b>
+        </p>
+        <p ng-if="!$ctrl.success">
+            <b>Hm ... something seems to be wrong.</b>
         </p>
 
-        <p ng-if="($ctrl.result.score < $ctrl.result.riddle.minScoreToSolve) &amp;&amp; ($ctrl.result.riddle.minScoreToSolve == 3)">
-            Congratulations, you've found the correct answer. But you need all three stars (<i class="fa fa-star">&nbsp;</i><i class="fa fa-star"></i>&nbsp;<i class="fa fa-star"></i>) in order to solve the riddle. Keep trying! Can you achieve the next goal?
+    	<p ng-if="$ctrl.message">{{$ctrl.message}}</p>
+
+        <p ng-if="!$ctrl.success">
+			Refine your code and try once more.
+        </p>
+		
+        <p ng-if="$ctrl.success && !$ctrl.solved && $ctrl.riddle.minScoreToSolve === 2">
+			That's ok, but I am sure you can do better than this! You neet at least two stars (<i class="fa fa-star"></i>&nbsp;<i class="fa fa-star"></i>&nbsp;<i class="fa fa-star-o lightest"></i>) in order to solve this riddle. Keep trying! Can you achieve the next goal?
         </p>
 
-    	<p ng-if="($ctrl.result.score >= $ctrl.result.riddle.minScoreToSolve) &amp;&amp; ($ctrl.result.score < $ctrl.result.riddle.goals.length)">
+        <p ng-if="$ctrl.success && !$ctrl.solved && $ctrl.riddle.minScoreToSolve === 3">
+            That's ok, but I am sure you can do better than this! You neet at least three stars (<i class="fa fa-star">&nbsp;</i><i class="fa fa-star"></i>&nbsp;<i class="fa fa-star"></i>) in order to solve the riddle. Keep trying! Can you achieve the next goal?
+        </p>
+
+    	<p ng-if="$ctrl.solved && $ctrl.score < 3">
     		Want more stars? Try the next goal of this riddle:
     	</p>
 
-    	<table ng-if="$ctrl.result.score < $ctrl.result.riddle.goals.length">
+    	<table ng-if="$ctrl.score < $ctrl.riddle.detail.goals.length">
     		<tbody>
-    			<tr ng-if="$ctrl.result.score == 1">
+    			<tr ng-if="$ctrl.score === 1">
     				<td style="min-width: 5em;">
 		                <i class="fa fa-star"></i>
 		                <i class="fa fa-star"></i>
 		                <i class="fa fa-star-o lightest"></i>
 		            </td>
 		            <td>
-                        <i ng-if="$ctrl.result.riddle.minScoreToSolve < 2">Bonus Goal:</i>
-	                	{{$ctrl.result.riddle.goals[1]}}
+	                	{{$ctrl.riddle.detail.goals[1]}}
 	                </td>
 		        </tr>
 
-    			<tr ng-if="$ctrl.result.score == 2">
+    			<tr ng-if="$ctrl.score === 2">
     				<td style="min-width: 5em;">
 		                <i class="fa fa-star"></i>
 		                <i class="fa fa-star"></i>
 		                <i class="fa fa-star"></i>
 		            </td>
 		            <td>
-                        <i ng-if="$ctrl.result.riddle.minScoreToSolve < 3">Bonus Goal:</i>
-	                	{{$ctrl.result.riddle.goals[2]}}
+	                	{{$ctrl.riddle.detail.goals[2]}}
 	                </td>
 		        </tr>
 		    </tbody>
 		</table>
 
-		<p ng-if="!$ctrl.result.nextRiddleId">
+		<p ng-if="!$ctrl.nextRiddleId">
 			This was the last riddle for now. If you are still enthusiastic, implement your own riddles.
 			<a href="https://github.com/furti/evalquiz">Just fork me on GitHub</a>!
 		</p>
     </md-dialog-content>
 
     <md-dialog-actions layout="row">
-        <md-button class="md-raised" ng-click="$ctrl.sameRiddle()" ng-if="$ctrl.result.score < 3">
+        <md-button class="md-raised" ng-click="$ctrl.close()" ng-if="$ctrl.score < 3">
            	Keep Trying
         </md-button>
 
-        <md-button class="md-raised" ng-click="$ctrl.sameRiddle()" ng-if="$ctrl.result.score >= 3">
-           	Enought for now
+        <md-button class="md-raised" ng-click="$ctrl.close()" ng-if="$ctrl.score === 3">
+           	Close
         </md-button>
 
-        <md-button class="md-primary md-raised" ng-click="$ctrl.nextRiddle()" ng-if="$ctrl.result.nextRiddleId">
+        <md-button class="md-primary md-raised" ng-click="$ctrl.gotoRiddle($ctrl.nextRiddleId)" ng-if="$ctrl.solved && $ctrl.nextRiddleId">
             Next Riddle
         </md-button>
     </md-dialog-actions>

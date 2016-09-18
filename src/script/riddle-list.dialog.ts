@@ -2,9 +2,9 @@
 
 let module = angular.module('evalquiz');
 
+import {EvalQuizService} from './evalquiz.service';
+import {Riddle} from './riddle';
 import './riddle-list.component';
-import {RiddleManager, RiddleData} from './riddle.manager';
-import {StorageService} from './storage.service';
 import {UIService} from './ui.service';
 import {Dialog} from './utils';
 
@@ -16,9 +16,9 @@ import {Dialog} from './utils';
     templateUrl: 'script/riddle-list.dialog.html'
 })
 class Controller {
-    static $inject = ['$mdDialog', '$location', 'riddleManager', 'storageService', 'uiService'];
+    static $inject = ['$mdDialog', 'evalQuizService', 'uiService', 'riddles', 'selectedRiddle'];
 
-    constructor(protected $mdDialog: ng.material.IDialogService, protected $location: ng.ILocationService, protected riddleManager: RiddleManager, protected storageService: StorageService, protected uiService: UIService) {
+    constructor(protected $mdDialog: ng.material.IDialogService, protected evalQuizService: EvalQuizService, protected uiService: UIService, protected riddles: Riddle[], protected selectedRiddle: Riddle) {
     }
 
     protected clear(): void {
@@ -27,10 +27,7 @@ class Controller {
 * **erase** all saved riddles
 * **remove** all achieved stars
 * **reset** the progress to the first riddle`, 'Erase Everything', 'Abort Action').then(() => {
-                this.storageService.clearSaveGames();
-                this.riddleManager.setupRiddles().then(() => {
-                    this.$location.path('/riddles/intro');
-                });
+                this.evalQuizService.reset(true);
             });
     }
 

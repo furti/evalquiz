@@ -1,4 +1,4 @@
-<md-toolbar class="md-default-theme">
+<md-toolbar class="md-default-theme md-whiteframe-1dp">
     <div class="md-toolbar-tools" layout="row">
         <div class="md-toolbar-item">
             <h1>eval(Quiz)</h1>
@@ -11,12 +11,14 @@
         </div>
 
         <div class="md-toolbar-item">
-            <md-button ng-click="$ctrl.showRiddleListDialog($event)" class="md-raised" ng-disabled="!$ctrl.riddleManager.initialized">
+            <md-button ng-click="$ctrl.showRiddleListDialog($event)" class="md-raised" ng-disabled="!$ctrl.riddles">
                 <i class="fa fa-bars separated" aria-hidden="true"></i>
                 List of Riddles
             </md-button>
+        </div>
 
-            <md-button ng-click="$ctrl.gotoRiddle($ctrl.nextRiddleId)" class="md-raised" ng-disabled="!$ctrl.nextRiddleId">
+        <div class="md-toolbar-item">
+            <md-button ng-click="$ctrl.gotoRiddle($ctrl.nextRiddleId)" class="md-raised" ng-disabled="!$ctrl.nextAvailable">
                 Next Riddle
                 <i class="fa fa-arrow-right separated" aria-hidden="true"></i>
             </md-button>

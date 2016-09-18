@@ -1,0 +1,16 @@
+<toolbar riddles="$ctrl.riddles" selected-riddle="$ctrl.selectedRiddle"></toolbar>
+
+<md-content ng-if="!$ctrl.selectedRiddle">
+    <div class="loader">
+        <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+        <p>Loading ...</p>
+    </div>
+</md-content>
+
+<md-content ng-if="$ctrl.selectedRiddle && !$ctrl.isAvailable($ctrl.selectedRiddle)">
+    <div class="loader">
+        The riddle "{{$ctrl.selectedRiddle.title}}" is not yet available. You have to solve some earlier riddle, first!
+    </div>
+</md-content>
+
+<workbench ng-if="$ctrl.selectedRiddle && $ctrl.isAvailable($ctrl.selectedRiddle)" riddle="$ctrl.selectedRiddle" layout="row" flex layout-padding></workbench>

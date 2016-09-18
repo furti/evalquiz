@@ -1,0 +1,22 @@
+{
+  "goals": [
+    "Solve Carlies task.",
+    "Avoid any loops (for, while, do) to solve the riddle.",
+    "Avoid any multiplications (*, *=)."
+  ],
+  "description": "file: description.md",
+  "hints": null,
+  "member": {
+    "name": "carly",
+    "type": "number",
+    "description": "Returns the sum of all numbers, from 1 to `n`.",
+    "params": [
+      {
+        "name": "n",
+        "type": "number",
+        "description": "A number."
+      }
+    ]
+  },
+  "engine": "file: engine.js"
+}

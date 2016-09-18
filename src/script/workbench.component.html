@@ -3,11 +3,11 @@
         <md-card-title>
             <md-card-title-text>
                 <div class="md-headline">
-                    <i class="fa" ng-class="{'fa-square-o': $ctrl.riddle.score < $ctrl.riddle.minScoreToSolve, 'fa-check-square-o': $ctrl.riddle.score >= $ctrl.riddle.minScoreToSolve}"></i>&nbsp;
+                    <i class="fa" ng-class="{'fa-square-o': !$ctrl.solved, 'fa-check-square-o': $ctrl.solved}"></i>&nbsp;
                     <span class="lighter">Level {{$ctrl.riddle.level}}:</span>&nbsp;<span>{{$ctrl.riddle.title}}</span>&nbsp;
-                    <i class="fa" ng-class="{'fa-star-o lightest': $ctrl.riddle.score <= 0, 'fa-star': $ctrl.riddle.score > 0}"></i>
-                    <i class="fa" ng-class="{'fa-star-o lightest': $ctrl.riddle.score <= 1, 'fa-star': $ctrl.riddle.score > 1}"></i>
-                    <i class="fa" ng-class="{'fa-star-o lightest': $ctrl.riddle.score <= 2, 'fa-star': $ctrl.riddle.score > 2}"></i>
+                    <i class="fa" ng-class="{'fa-star-o lightest': $ctrl.riddle.state.score <= 0, 'fa-star': $ctrl.riddle.state.score > 0}"></i>
+                    <i class="fa" ng-class="{'fa-star-o lightest': $ctrl.riddle.state.score <= 1, 'fa-star': $ctrl.riddle.state.score > 1}"></i>
+                    <i class="fa" ng-class="{'fa-star-o lightest': $ctrl.riddle.state.score <= 2, 'fa-star': $ctrl.riddle.state.score > 2}"></i>
                 </div>
                 <div class="md-subhead">
                     {{$ctrl.riddle.shortDescription}}
@@ -19,7 +19,7 @@
             <md-tab label="Info" class="info-tab">
                 <div flex layout="column" class="lined-top">
                     <div flex class="scrolls md-padding">
-                        <div btf-markdown="$ctrl.riddle.description"></div>
+                        <div btf-markdown="$ctrl.riddle.detail.description"></div>
                     </div>
 
                     <div class="md-headline md-padding layout-no-resize lined-top">
@@ -29,9 +29,9 @@
                     <div class="md-padding layout-no-resize">
                         <table>
                             <tbody>
-                                <tr ng-repeat="goal in $ctrl.riddle.goals track by $index" ng-if="$index <= $ctrl.riddle.score">
+                                <tr ng-repeat="goal in $ctrl.riddle.detail.goals track by $index" ng-if="$index <= $ctrl.riddle.state.score">
                                     <td>
-                                        <i class="fa" ng-class="{'fa-square-o': $ctrl.riddle.score <= $index, 'fa-check-square-o': $ctrl.riddle.score > $index}"></i>
+                                        <i class="fa" ng-class="{'fa-square-o': $ctrl.riddle.state.score <= $index, 'fa-check-square-o': $ctrl.riddle.state.score > $index}"></i>
                                     </td>
                                     <td style="min-width: 5em; text-align: center;">
                                         <i class="fa fa-star"></i>
@@ -64,8 +64,15 @@
                     </div>
                 </div>
             </md-tab>
-        </md-tabs>
 
+            <md-tab label="Hints" class="hints-tab" ng-if="$ctrl.riddle.detail.hints">
+                <div flex layout="column" class="lined-top">
+                    <div flex class="scrolls md-padding">
+                        <div btf-markdown="$ctrl.riddle.detail.hints"></div>
+                    </div>
+                </div>
+            </md-tab>
+        </md-tabs>
     </md-card>
 </md-content>
 
@@ -75,20 +82,20 @@
             <md-card-title-text>
                 <div class="md-headline">
                     <i class="fa fa-code"></i>&nbsp;Function
-                    <code>{{$ctrl.riddle.member.signature}}</code>
+                    <code>{{$ctrl.riddle.detail.member.signature}}</code>
                 </div>
 
-                <div class="md-subhead markdown" btf-markdown="$ctrl.riddle.member.description"></div>
+                <div class="md-subhead markdown" btf-markdown="$ctrl.riddle.detail.member.description"></div>
             </md-card-title-text>
         </md-card-title>
 
         <md-card-content class="members lined-top layout-no-resize">
-            <div btf-markdown="$ctrl.riddle.member.explanation"></div>
-            <member-info member="$ctrl.riddle.member"></member-info>
+            <div btf-markdown="$ctrl.riddle.detail.member.explanation"></div>
+            <member-info member="$ctrl.riddle.detail.member"></member-info>
         </md-card-content>
 
         <md-card-content flex layout="column" class="editor lined-top lined-bottom">
-            <textarea ng-model="$ctrl.riddle.code" ui-codemirror="$ctrl.editorOptions"></textarea>
+            <textarea ng-model="$ctrl.riddle.state.code" ui-codemirror="$ctrl.editorOptions"></textarea>
         </md-card-content>
 
         <md-card-actions layout="row" layout-align="end center">

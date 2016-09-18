@@ -2,7 +2,7 @@
 
 let module = angular.module('evalquiz');
 
-import {Member} from './riddle.manager';
+import {Member} from './riddle';
 import {Component} from './utils';
 
 @Component(module, 'memberInfo', {

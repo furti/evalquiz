@@ -1,0 +1,27 @@
+{
+  "goals": [
+    "Solve the riddle.",
+    "Avoid any loops (for, while, do).",
+    "Avoid any caluclations (+, &, ||, ...)"
+  ],
+  "description": "file: description.md",
+  "hints": null,
+  "member": {
+    "name": "distance",
+    "type": "number",
+    "description": "Returns the distance the small dog has traveled.",
+    "params": [
+      {
+        "name": "d",
+        "type": "number",
+        "description": "The distance from your position to the tree in meters."
+      },
+      {
+        "name": "s",
+        "type": "number",
+        "description": "The speed of the slow dog in meters per second."
+      }
+    ]
+  },
+  "engine": "file: engine.js"
+}

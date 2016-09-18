@@ -46,13 +46,11 @@
                         </table>
 
                         <p ng-if="$ctrl.riddle.minScoreToSolve == 2">
-                            You need at least two stars (<i class="fa fa-star"></i>&nbsp;<i class="fa fa-star"></i>&nbsp;
-                            <i class="fa fa-star-o lightest"></i>) in order to solve the riddle.
+                            You need at least two stars (<i class="fa fa-star"></i>&nbsp;<i class="fa fa-star"></i>&nbsp;<i class="fa fa-star-o lightest"></i>) in order to solve the riddle.
                         </p>
 
                         <p ng-if="$ctrl.riddle.minScoreToSolve == 3">
-                            You need all three stars (<i class="fa fa-star">&nbsp;</i><i class="fa fa-star"></i>&nbsp;
-                            <i class="fa fa-star"></i>) in order to solve the riddle.
+                            You need all three stars (<i class="fa fa-star">&nbsp;</i><i class="fa fa-star"></i>&nbsp;<i class="fa fa-star"></i>) in order to solve the riddle.
                         </p>
                     </div>
                 </div>
@@ -99,9 +97,12 @@
         </md-card-content>
 
         <md-card-actions layout="row" layout-align="end center">
-            <md-button ng-click="$ctrl.trash()">Trash</md-button>
             <md-button ng-click="$ctrl.save()">Save</md-button>
+            <md-button class="code-load-button" ng-click="$ctrl.load()" ng-disabled="!$ctrl.hasSaves">Load</md-button>
+            <md-button ng-click="$ctrl.trash()">Trash</md-button>
+
             <span flex="" class="flex"></span>
+
             <md-button class="md-primary md-raised" ng-click="$ctrl.solve($event)">
                 <i class="fa fa-play-circle separated" aria-hidden="true"></i> Solve
             </md-button>

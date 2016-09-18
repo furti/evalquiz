@@ -64,16 +64,35 @@ class WorkbenchComponent {
     }
 
     public trash($event: any): void {
-        this.uiService.confirm('Trash Your Code', 'Are you sure that you want to clear the editor?\n\n' +
-            'This will **delete all the code** you have written for this riddle.', 'Delete', 'Abort').then(() => {
-                this.riddle.state.code = this.riddle.detail.stub;
-                this.evalQuizService.saveRiddle(this.riddle);
+        this.uiService.confirm('Trash Your Code', 'Are you sure that you want to clear the editor?', 'Delete', 'Abort').then(() => {
+            this.riddle.state.code = this.riddle.detail.stub;
+            this.evalQuizService.saveRiddle(this.riddle);
+            this.uiService.toast('Code trashed.');
+        });
+    }
 
-                this.uiService.toast('Code trashed.');
-            });
+    get hasSaves(): boolean {
+        return this.riddle.state.savedCode && Object.keys(this.riddle.state.savedCode).length > 0;
+    }
+
+    public load(): void {
+        let items = this.hasSaves ? Object.keys(this.riddle.state.savedCode) : [];
+
+        items.sort();
+
+        this.uiService.menu('.code-load-button', items).then(item => {
+            if (item) {
+                this.riddle.state.code = this.riddle.state.savedCode[item];
+                this.evalQuizService.saveRiddle(this.riddle);
+                this.uiService.toast(`Loaded "${item}".`);
+            }
+        });
     }
 
     public save(): void {
+        this.riddle.state.savedCode = this.riddle.state.savedCode || {};
+        this.riddle.state.savedCode['Manual Save'] = this.riddle.state.code;
+
         this.evalQuizService.saveRiddle(this.riddle);
         this.uiService.toast('Code saved successfully.');
     }
@@ -86,8 +105,10 @@ class WorkbenchComponent {
         this.consoleService.block().markdown('# Solving riddle: ' + this.riddle.title);
 
         this.riddleService.execute(this.riddle).then(result => {
-            if (result.score > 0 && result.score >= this.riddle.state.score) {
-                this.riddle.state.score = result.score;
+            if (result.score > 0) {
+                if (result.score >= this.riddle.state.score) {
+                    this.riddle.state.score = result.score;
+                }
 
                 let key = result.score === 1 ? '1 Star' : result.score + ' Stars';
 

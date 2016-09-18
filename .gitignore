@@ -13,3 +13,4 @@ typings/
 node_modules/
 dist/
 docs/
+target/

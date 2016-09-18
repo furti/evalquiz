@@ -4,7 +4,8 @@ let module = angular.module('evalquiz');
 
 import {EvalQuizService} from './evalquiz.service';
 import {Riddle} from './riddle';
-import {RiddleService, Result} from './riddle.service';
+import {RiddleService} from './riddle.service';
+import {Result} from './riddle.runner';
 import {Dialog} from './utils';
 
 @Dialog(module, 'SolvedDialog', {
@@ -14,7 +15,7 @@ import {Dialog} from './utils';
     hasBackdrop: true,
     templateUrl: 'script/solved.dialog.html'
 })
-export class Controller {
+export class Controller { 
     static $inject = ['result', 'evalQuizService', 'riddleService', '$mdDialog'];
 
     constructor(protected result: Result, protected evalQuizService: EvalQuizService, protected riddleService: RiddleService, protected $mdDialog: ng.material.IDialogService) {

@@ -40,7 +40,7 @@ class PageComponent {
 module.controller('PageComponent', PageComponent);
 
 module.config(['$routeProvider', ($routeProvider: ng.route.IRouteProvider) => {
-    console.log('Hmmm... I dont\'t think you need the console right now ;)');
+    console.log('Hmmm... I don\'t think you need the console right now ;)');
 
     $routeProvider.when('/riddles/:riddleId', {
         templateUrl: 'script/page.component.html',

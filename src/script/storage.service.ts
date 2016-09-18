@@ -5,7 +5,7 @@ let module = angular.module('evalquiz');
 import {Riddle, RiddleState} from './riddle';
 import {Service} from './utils';
 
-type RiddleStateMap = { [riddleId: string]: RiddleState };
+export type RiddleStateMap = { [riddleId: string]: RiddleState };
 
 const STATE_KEY = 'evalQuiz.state';
 const SELECTED_RIDDLE_ID_KEY = 'evalQuiz.selectedRiddleId';

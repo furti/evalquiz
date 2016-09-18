@@ -9,7 +9,7 @@ let module = angular.module('evalquiz', ['ngRoute', 'ngMaterial', 'ui.codemirror
 import {EvalQuizService} from './evalquiz.service';
 import './page.component';
 
-module.config(function ($mdThemingProvider) {
+module.config(function ($mdThemingProvider: angular.material.IThemingProvider) {
     $mdThemingProvider
         .theme('default')
         .primaryPalette('indigo')

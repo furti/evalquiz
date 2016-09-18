@@ -1,0 +1,11 @@
+<div ng-repeat="member in $ctrl.api" class="md-padding md-body-1">
+    <div class="md-headline">
+        Function <code>{{member.signature}}</code>
+    </div>
+
+    <p class="md-subhead markdown" btf-markdown="member.description"></p>
+
+    <p class="markdown" btf-markdown="member.explanation"></p>
+
+    <member-info member="member"></member-info>
+</div>

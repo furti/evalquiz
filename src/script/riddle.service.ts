@@ -4,23 +4,17 @@ let module = angular.module('evalquiz');
 
 import {ConsoleService, ConsoleBlock} from './console.service';
 import {EvalQuizService} from './evalquiz.service';
-import {Program} from './program';
 import {Riddle, RiddleDetail, RiddleState, Member} from './riddle';
+import {RiddleRunner, Result} from './riddle.runner';
 import {UIService} from './ui.service';
 import {Service} from './utils';
-
-export interface Result {
-    riddle: Riddle;
-    score: number;
-    message?: string;
-}
 
 @Service(module, 'riddleService')
 export class RiddleService {
 
-    static $inject = ['evalQuizService', '$http', '$q', 'consoleService', 'uiService'];
+    static $inject = ['evalQuizService', '$http', '$q', '$timeout', 'consoleService', 'uiService'];
 
-    constructor(protected evalQuizService: EvalQuizService, protected $http: ng.IHttpService, protected $q: ng.IQService, protected consoleService: ConsoleService, protected uiService: UIService) {
+    constructor(protected evalQuizService: EvalQuizService, protected $http: ng.IHttpService, protected $q: ng.IQService, protected $timeout: ng.ITimeoutService, protected consoleService: ConsoleService, protected uiService: UIService) {
     }
 
     prepare(riddle: Riddle): angular.IPromise<Riddle> {
@@ -39,6 +33,10 @@ export class RiddleService {
             this.processTextReference(riddle.location, detail, 'hints');
             this.processTextReference(riddle.location, detail, 'engine');
 
+            detail.api = detail.api || [];
+
+            detail.api.forEach(member => this.processMember(riddle.location, member));
+
             this.processMember(riddle.location, detail.member);
 
             if (!detail.stub) {
@@ -50,7 +48,7 @@ export class RiddleService {
             if (!riddle.state.code) {
                 riddle.state.code = detail.stub;
             }
-            
+
             deferred.resolve(riddle);
         }, (err) => {
             deferred.reject(err);
@@ -135,77 +133,43 @@ export class RiddleService {
         let deferred = this.$q.defer<Result>();
 
         try {
-            let solve = this.parseCode(riddle);
-            let syntax = this.analyzeCode(riddle);
-            let engine = this.buildEngine(riddle);
+            let engine = new RiddleRunner(this.$q, this.$timeout, this.consoleService, riddle);
 
-            this.consoleService.block().markdown('Initializing engine ...');
-
-            engine.init();
-
-            this.consoleService.block().markdown('Starting tests ...');
-
-            let score = engine.run(solve, syntax);
-
-            let result = {
-                riddle,
-                score, 
-                message: 'TODO FIXME WRITEME HATEME KILLME IGNOREME'
-            }
-
-            deferred.resolve(result);
+            engine.execute().then(() => {
+                deferred.resolve();
+            }, err => deferred.reject(err));
         }
         catch (err) {
             deferred.reject(err);
         }
-        // let solved = score > 0;
 
-        // if (solved) {
-        //     // result.solvedMessage = engine.solvedMessage(result.score);
-        //     riddle.state.solved = true;
+        // try {
+        //     let solve = this.parseCode(riddle);
+        //     let syntax = this.analyzeCode(riddle);
+        //     let engine = this.buildEngine(riddle);
 
-        //     if (score >= riddle.state.score) {
-        //         riddle.state.score = score;
+        //     this.consoleService.block().markdown('Initializing engine ...');
+
+        //     engine.init();
+
+        //     this.consoleService.block().markdown('Starting tests ...');
+
+        //     let score = engine.run(solve, syntax);
+
+        //     let result = {
+        //         riddle,
+        //         score, 
+        //         message: 'TODO FIXME WRITEME HATEME KILLME IGNOREME'
         //     }
 
-        //     let next = this.nextRiddle(<RiddleDetail>riddle);
-
-        //     if (next) {
-        //         result.nextRiddleId = next.id;
-
-        //         this.storageService.save(riddle, next);
-        //     }
-        //     else {
-        //         this.storageService.save(riddle);
-        //     }
+        //     deferred.resolve(result);
         // }
-        // else {
-        //     result.failedMessage = engine.failedMessage();
-
-        //     this.storageService.save(riddle);
+        // catch (err) {
+        //     deferred.reject(err);
         // }
 
         return deferred.promise;
     }
 
-    private parseCode(riddle: Riddle): any {
-        var create = new Function('return ' + riddle.state.code.trim());
-
-        return create();
-    }
-
-    private analyzeCode(riddle: Riddle): Program {
-        var syntax = new Program(riddle.state.code.trim());
-
-        return syntax;
-    }
-
-    private buildEngine(riddle: Riddle): any {
-        var factory = new Function('return ' + riddle.detail.engine);
-
-        return factory();
-    }
-
 }
-
 

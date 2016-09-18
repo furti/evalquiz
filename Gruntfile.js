@@ -1,6 +1,7 @@
 module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-browserify");
     grunt.loadNpmTasks("grunt-contrib-copy");
+    grunt.loadNpmTasks("grunt-ts");
     grunt.loadNpmTasks("grunt-typedoc");
     grunt.loadNpmTasks("grunt-contrib-watch");
     grunt.loadNpmTasks("grunt-contrib-connect");
@@ -71,6 +72,21 @@ module.exports = function (grunt) {
             }
         },
 
+        ts: {
+            default: {
+                src: ["./src/riddles/**/*.ts"],
+                options: {
+                    rootDir: "./src/riddles",
+                    target: "es5",
+                    module: "commonjs",
+                    experimentalDecorators: true,
+                    emitDecoratorMetadata: false,
+                    noImplicitAny: true,
+                    removeComments: true
+                }
+            }
+        },
+
         typedoc: {
             build: {
                 options: {
@@ -92,7 +108,7 @@ module.exports = function (grunt) {
 
             others: {
                 files: ["./src/**/*.html", "./src/**/*.css", "./src/riddles/**/*"],
-                tasks: ["copy:default"]
+                tasks: ["ts", "copy:default"]
             }
         },
 
@@ -104,7 +120,7 @@ module.exports = function (grunt) {
     });
 
     grunt.registerTask("build", ["browserify"]);
-    grunt.registerTask("dist", ["copy"]);
+    grunt.registerTask("dist", ["ts", "copy"]);
     grunt.registerTask("default", ["build", "dist", "connect", "open", "watch"]);
     grunt.registerTask("dev", ["build", "connect", "watch"]);
 };

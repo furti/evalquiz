@@ -1,27 +1,41 @@
 {
-  "goals": [
-    "Solve the calculation.",
-    "Avoid any additions (+, ++, +=).",
-    "Avoid any subtractions (-, --, -=)."
-  ],
-  "description": "file: description.md",
-  "hints": "file: hints.md",
-  "member": {
-    "name": "add",
-    "type": "number",
-    "description": "Returns the sum of two numbers.",
-    "params": [
-      {
-        "name": "a",
+    "goals": [
+        "Solve the calculation.",
+        "Avoid any additions (+, ++, +=).",
+        "Avoid any subtractions (-, --, -=)."
+    ],
+    "description": "file: description.md",
+    "hints": "file: hints.md",
+    "api": [
+        {
+            "name": "log",
+            "type": "void",
+            "description": "Writes logging output to the console.",
+            "params": [
+                {
+                    "name": "obj",
+                    "type": "any",
+                    "description": "The object to write."
+                }
+            ]
+        }
+    ],
+    "member": {
+        "name": "add",
         "type": "number",
-        "description": "The first number."
-      },
-      {
-        "name": "b",
-        "type": "number",
-        "description": "The second number."
-      }
-    ]
-  },
-  "engine": "file: engine.js"
+        "description": "Returns the sum of two numbers.",
+        "params": [
+            {
+                "name": "a",
+                "type": "number",
+                "description": "The first number."
+            },
+            {
+                "name": "b",
+                "type": "number",
+                "description": "The second number."
+            }
+        ]
+    },
+    "engine": "file: engine.js"
 }

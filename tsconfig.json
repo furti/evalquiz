@@ -7,13 +7,13 @@
         "jsx": "react",
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
-        "declaration": false,
-        "noImplicitAny": false,
+        "declaration": true,
+        "noImplicitAny": true,
         "removeComments": true,
         "noLib": false,
         "preserveConstEnums": true,
         "suppressImplicitAnyIndexErrors": true,
-        "out": "dist/script/evalquiz.js"
+        "outDir": "target/script"
     },
     "filesGlob": [
         "./src/script/**/*.ts",
@@ -26,5 +26,23 @@
         "./src/riddles",
         "./src/style",
         "./typings"
+    ],
+    "files": [
+        "src/script/console.service.ts",
+        "src/script/credits.dialog.ts",
+        "src/script/evalquiz.ts",
+        "src/script/index.d.ts",
+        "src/script/member-info.component.ts",
+        "src/script/program.ts",
+        "src/script/riddle-list.component.ts",
+        "src/script/riddle-list.dialog.ts",
+        "src/script/riddle.component.ts",
+        "src/script/riddle.manager.ts",
+        "src/script/solved.dialog.ts",
+        "src/script/storage.service.ts",
+        "src/script/test.ts",
+        "src/script/toolbar.component.ts",
+        "src/script/ui.service.ts",
+        "src/script/utils.ts"
     ]
 }

@@ -2,6 +2,7 @@
 
 let module = angular.module('evalquiz');
 
+import './api-info.component';
 import {ConsoleService, ConsoleBlock} from './console.service';
 import {EvalQuizService} from './evalquiz.service';
 import './member-info.component';
@@ -100,7 +101,7 @@ class WorkbenchComponent {
     public solve(): void {
         this.evalQuizService.saveRiddle(this.riddle);
 
-        this.selectedTab = 1;
+        this.selectedTab = 2;
         this.consoleService.clear();
         this.consoleService.block().markdown('# Solving riddle: ' + this.riddle.title);
 

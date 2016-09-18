@@ -18,6 +18,7 @@ export interface RiddleDetail {
     goals: String[];
     description: string;
     hints: string;
+    api: Member[];
     member: Member;
     engine: string;
 

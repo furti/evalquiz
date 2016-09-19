@@ -31,12 +31,12 @@ class WorkbenchComponent {
         // After the value of the editor is set we mark the first and last line as readonly
         var cmChange = (editor: any, change: any) => {
             if (change.origin === 'setValue') {
-                editor.markText({ line: 0, ch: 0 }, { line: 1 }, { readOnly: true });
+                editor.markText({ line: 0, ch: 0 }, { line: 0 }, { readOnly: true });
                 editor.markText({ line: editor.lastLine(), ch: 0 }, {
                     line: editor.lastLine(),
                     ch: 2
                 }, { readOnly: true });
-                editor.setCursor(3, 1);
+                editor.setCursor(1, 1);
 
                 // Remove the change listener as we do not need it anymore
                 editor.off('change', cmChange);

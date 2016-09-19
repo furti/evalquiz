@@ -5,7 +5,7 @@ let module = angular.module('evalquiz');
 import {ConsoleService, ConsoleBlock} from './console.service';
 import {EvalQuizService} from './evalquiz.service';
 import {Riddle, RiddleDetail, RiddleState, Member} from './riddle';
-import {RiddleRunner, Result} from './riddle.runner';
+import {RiddleRunner, XXX} from './riddle.runner';
 import {UIService} from './ui.service';
 import {Service} from './utils';
 
@@ -40,7 +40,7 @@ export class RiddleService {
             this.processMember(riddle.location, detail.member);
 
             if (!detail.stub) {
-                detail.stub = `function ${detail.member.name}(${detail.member.paramsString}) {\n\t"use strict";\n\t\n\t\n}`;
+                detail.stub = `function ${detail.member.name}(${detail.member.paramsString}) {\n\t\n}`;
             }
 
             riddle.detail = detail;
@@ -129,8 +129,8 @@ export class RiddleService {
         return true;
     }
 
-    execute(riddle: Riddle): angular.IPromise<Result> {
-        let deferred = this.$q.defer<Result>();
+    execute(riddle: Riddle): angular.IPromise<XXX> {
+        let deferred = this.$q.defer<XXX>();
 
         try {
             let engine = new RiddleRunner(this.$q, this.$timeout, this.consoleService, riddle);

@@ -15,9 +15,9 @@ declare namespace engine {
 
     export class Context {
 
-        buildFn(...fnFactoryParams: any[]): Function;
+        invokeFn(...fnParams: any[]): any;
 
-        invokeFn(fn: Function, ...fnParams: any[]): any;
+        defer<AnyType>(): angular.IDeferred<AnyType>;
 
         countTypes(...types: string[]): number;
 
@@ -43,10 +43,8 @@ declare namespace engine {
 
 
 
-
         // canceled: boolean;
 
-        // defer(): angular.IDeferred<Result>;
 
         // log(message: string): void;
 

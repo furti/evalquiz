@@ -2,15 +2,41 @@
 
 export class Engine {
 
-    testBasic(context: engine.Context): void {
-        this.execute(context, 1, 2, 3);
+    constructor(private context: engine.Context) {
     }
 
-    testNegative(context: engine.Context): void {
-        this.execute(context, -1, -2, -3);
+    log(obj: any): void {
+        console.log(obj);
     }
 
-    execute(context: engine.Context, a: number, b: number, expected: number): void {
+    testBasic(): angular.IPromise<engine.Result> {
+        return this.execute(1, 2, 3);
+    }
+
+    testNegative(): angular.IPromise<engine.Result> {
+        return this.execute(-1, -2, -3);
+    }
+
+    execute(a: number, b: number, expected: number): angular.IPromise<engine.Result> {
+        let deferred = this.context.defer();
+        let c = this.context.invokeFn(a, b);
+
+        if (c === expected) {
+            deferred.resolve({
+                success: true,
+                message: undefined
+            })
+        }
+        else {
+            deferred.resolve({
+                success: false,
+                message: `Expected ${expected}, but got ${c}.`
+            });
+        }
+
+        return deferred.promise;
+
+
         // context.log(`${a} + ${b} = `);
         // context.logThinking();
 

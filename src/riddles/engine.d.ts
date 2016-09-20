@@ -13,11 +13,34 @@ declare namespace engine {
         message: string;
     }
 
+    export class LogItem {
+
+        withClass(classname: string): this;
+
+        withIcon(icon?: string): this;
+
+        newLine(): JQuery;
+
+        space(): JQuery;
+
+        icon(icon: string): JQuery;
+
+        write(s: any): JQuery;
+
+        markdown(s: string): JQuery;
+
+        code(s: string): JQuery;
+    }
+
     export class Context {
 
         invokeFn(...fnParams: any[]): any;
 
         defer<AnyType>(): angular.IDeferred<AnyType>;
+
+        postpone(seconds: number, fn: () => void): void;
+
+        log(message?: any): LogItem;
 
         countTypes(...types: string[]): number;
 
@@ -32,7 +55,6 @@ declare namespace engine {
         countStatements(): number;
 
         countOperators(...operators: string[]): number;
-
 
 
 

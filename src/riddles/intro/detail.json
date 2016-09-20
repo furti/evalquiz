@@ -13,7 +13,7 @@
             "description": "Writes logging output to the console.",
             "params": [
                 {
-                    "name": "obj",
+                    "name": "message",
                     "type": "any",
                     "description": "The object to write."
                 }

@@ -2,7 +2,7 @@
 
 let module = angular.module('evalquiz');
 
-import {ConsoleService, ConsoleBlock} from './console.service';
+import {ConsoleService, ConsoleLogItem} from './console.service';
 import {EvalQuizService} from './evalquiz.service';
 import {Riddle, RiddleDetail, RiddleState, Member} from './riddle';
 import {RiddleRunner, XXX} from './riddle.runner';

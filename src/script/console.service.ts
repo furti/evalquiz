@@ -15,81 +15,110 @@ export class ConsoleService {
     }
 
     public clear(): void {
-        let consoleElement = document.getElementById('console');
-
-        while (consoleElement.firstChild) {
-            consoleElement.removeChild(consoleElement.firstChild);
-        }
+        angular.element('#console').empty();
     }
 
-    public block(className?: string, icon?: string): ConsoleBlock {
+    public log(message?: any): ConsoleLogItem {
         let id = 'console-block-' + (this.index++);
-        let consoleElement = document.getElementById('console');
-        let blockElement = document.createElement('div');
-        let blockClassName = 'block';
+        let consoleElement: JQuery = angular.element('#console');
+        let itemElement: JQuery = angular.element('<div></div>').attr({ id }).addClass('item');
+        let iconElement: JQuery = angular.element('<div></div>').addClass('icon');
+        let contentElement: JQuery = angular.element('<div</div>').addClass('content');
 
-        if (className) {
-            blockClassName += ' ' + className;
+        itemElement.append(iconElement, contentElement);
+        consoleElement.append(itemElement);
+
+        let block: ConsoleLogItem = new ConsoleLogItem(this.uiService, itemElement, iconElement, contentElement);
+
+        if (message) {
+            block.write(message);
         }
 
-        blockElement.id = id;
-        blockElement.className = blockClassName;
-
-        let iconElement = document.createElement('div');
-
-        iconElement.className = 'icon';
-
-        if (icon) {
-            iconElement.innerHTML = '<i class="icon fa ' + icon + '" aria-hidden="true"></i>';
-        }
-
-        blockElement.appendChild(iconElement);
-
-        let contentElement = document.createElement('div');
-
-        contentElement.className = 'content';
-
-        blockElement.appendChild(contentElement);
-
-        consoleElement.appendChild(blockElement);
-
-        return new ConsoleBlock(this.uiService, blockElement, contentElement);
-    }
-
-    public errorBlock(): ConsoleBlock {
-        return this.block('error', 'fa-exclamation-circle');
+        return block;
     }
 }
 
-export class ConsoleBlock {
+export class ConsoleLogItem implements engine.LogItem {
 
-    constructor(protected uiService: UIService, protected blockElement: HTMLElement, protected contentElement: HTMLElement) {
+    private lastElement: JQuery;
+
+    constructor(private uiService: UIService, private itemElement: JQuery, private iconElement: JQuery, protected contentElement: JQuery) {
     }
 
-    private append(name: string, className: string, html: string): HTMLElement {
-        let element = document.createElement(name);
+    withClass(classname: string = ''): this {
+        this.itemElement.attr('class', 'item ' + classname);
 
-        if (className) {
-            element.className = className;
+        return this;
+    }
+
+    withIcon(icon?: string): this {
+        this.iconElement.empty();
+
+        if (icon) {
+            this.iconElement.append(`<i class="icon fa ${icon}" aria-hidden="true">`);
         }
 
-        element.innerHTML = html;
-
-        this.contentElement.appendChild(element);
-
-        return element;
-    }
-
-    public markdown(s: string): this {
-        this.append('div', null, this.uiService.markdownToHtml(s));
-
         return this;
     }
 
-    public code(s: string): this {
-        this.append('pre', 'code', s);
+    newLine(): JQuery {
+        this.lastElement = angular.element('<br />');
+        this.contentElement.append(this.lastElement);
 
-        return this;
+        return this.lastElement;
+    }
+
+    space(): JQuery {
+        this.lastElement = angular.element('<span>&nbsp;&nbsp;</span>');
+        this.contentElement.append(this.lastElement);
+
+        return this.lastElement;
+    }
+
+    icon(icon: string): JQuery {
+        this.lastElement = angular.element(`<i class="icon fa ${icon}" aria-hidden="true"></i>`);
+        this.contentElement.append(this.lastElement);
+
+        return this.lastElement;
+    }
+
+    write(obj: any): JQuery {
+        if ((obj === undefined) || (obj === null)) {
+            this.lastElement = angular.element('<span></span>').text(obj.toString());
+        }
+        else if ((typeof obj === "boolean") || (typeof obj === "number") || (typeof obj === "string")) {
+            this.lastElement = angular.element('<span></span>').text(obj.toString());
+        }
+        else if (typeof obj === "function") {
+            this.lastElement = angular.element('<div></div>').text(obj.toString());
+        }
+        else if (angular.isArray(obj)) {
+            this.lastElement = angular.element('<div></div>').text(obj.toString());
+        }
+        else if (typeof obj === "object") {
+            this.lastElement = angular.element('<div></div>').text(JSON.stringify(obj));
+        }
+        else {
+            this.lastElement = angular.element('<div></div>').text("WHAT IS A " + typeof obj);
+        }
+
+        this.contentElement.append(this.lastElement);
+
+        return this.lastElement;
+    }
+
+    markdown(s: string): JQuery {
+        this.lastElement = angular.element('<div></div>').html(this.uiService.markdownToHtml(s));
+        this.contentElement.append(this.lastElement);
+
+        return this.lastElement;
+    }
+
+    code(s: string): JQuery {
+        this.lastElement = angular.element('<pre></pre>').addClass('code').text(s);
+        this.contentElement.append(this.lastElement);
+
+        return this.lastElement;
     }
 }
 

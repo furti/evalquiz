@@ -31,6 +31,7 @@ module.exports = function (grunt) {
 
             libs: {
                 files: [
+                    { expand: true, src: ["./node_modules/jquery/dist/jquery.min.js"], dest: ("./dist/script/"), flatten: true },
                     { expand: true, src: ["./node_modules/hammerjs/hammer.min.js"], dest: ("./dist/script/"), flatten: true },
                     { expand: true, src: ["./node_modules/angular/angular.js"], dest: ("./dist/script/"), flatten: true },
                     { expand: true, src: ["./node_modules/angular-route/angular-route.min.js"], dest: ("./dist/script/"), flatten: true },

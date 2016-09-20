@@ -3,7 +3,7 @@
 let module = angular.module('evalquiz');
 
 import './api-info.component';
-import {ConsoleService, ConsoleBlock} from './console.service';
+import {ConsoleService, ConsoleLogItem} from './console.service';
 import {EvalQuizService} from './evalquiz.service';
 import './member-info.component';
 import {Riddle} from './riddle';
@@ -103,7 +103,7 @@ class WorkbenchComponent {
 
         this.selectedTab = 2;
         this.consoleService.clear();
-        this.consoleService.block().markdown('# Solving riddle: ' + this.riddle.title);
+        this.consoleService.log().markdown(`# Solving riddle: ${this.riddle.title}`);
 
         this.riddleService.execute(this.riddle).then(result => {
             if (result.score > 0) {
@@ -124,7 +124,11 @@ class WorkbenchComponent {
         }, err => {
             console.error(err);
 
-            this.consoleService.errorBlock().markdown('Failed to execute function:').code(err);
+            let log = this.consoleService.log();
+            
+            log.markdown('Failed to execute function:')
+            log.code(err);
+
             this.uiService.toast('Execution failed. See console for more info.');
         });
     }

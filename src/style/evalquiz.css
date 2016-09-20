@@ -95,23 +95,40 @@ workbench {
     color: skyblue;
 } 
 
-.console > div.block {
+.console > div.item {
     margin: 0.2em 0.4em;
     display: flex;
+    align-items: baseline;
 }
 
-.console > div.block div.icon {
-    width: 24px;
+.console > div.item div.icon {
+    width: 32px;
     margin: 0.2em 0;
     flex: 0 0 auto;
 }
 
-.console > div.block div.content {
+.console > div.item div.content {
     flex: 1 1 auto;
 }
 
 .console p, .console pre {
     margin: 0.2em 0;
+}
+
+.console .success {
+    color: lime;
+}
+
+.console .warning {
+    color: gold;
+}
+
+.console .error {
+    color: tomato;
+}
+
+.console .large {
+    font-size: 140%;
 }
 
 .console .code {

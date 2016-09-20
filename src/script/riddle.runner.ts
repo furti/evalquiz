@@ -1,6 +1,6 @@
 /// <reference path="./index.d.ts" />
 
-import {ConsoleService, ConsoleBlock} from './console.service';
+import {ConsoleService, ConsoleLogItem} from './console.service';
 import {Riddle} from './riddle';
 import {isPromise} from './utils';
 
@@ -53,8 +53,6 @@ export class RiddleRunner implements engine.Context {
 
         this.fnWrapper = new Function(...args);
         this.tree = esprima.parse(code);
-
-        console.log(this.fnWrapper);
     }
 
     execute(): angular.IPromise<XXX> {
@@ -162,7 +160,7 @@ export class RiddleRunner implements engine.Context {
         let fnParams: any[] = [];
 
         for (let fnWrapperArg of this.fnWrapperArgs) {
-            let fnParam = this.engine[fnWrapperArg];
+            let fnParam = (...args: any[]) => this.engine[fnWrapperArg].apply(this.engine, args);
 
             if (fnParam === undefined) {
                 let message = `API reference "${fnWrapperArg}" of riddle "${this.riddle.id}" is missing in engine.`;
@@ -176,7 +174,7 @@ export class RiddleRunner implements engine.Context {
         fnParams = fnParams.concat(params);
 
         try {
-            return this.fnWrapper(...fnParams);
+            return this.fnWrapper.apply(this.fnWrapper, fnParams);
         }
         catch (err) {
             let message = `Failed to invoke function.`;
@@ -189,6 +187,10 @@ export class RiddleRunner implements engine.Context {
         return this.$q.defer();
     }
 
+    postpone(seconds: number, fn: () => void): void {
+        this.$timeout(() => fn(), seconds * 1000);
+    }
+
     private logSuccess(message: string): void {
         console.log(message);
     }
@@ -197,10 +199,8 @@ export class RiddleRunner implements engine.Context {
         console.log(message);
     }
 
-    log(obj: any, ...flags: string[]): void {
-    }
-
-    print(obj: any, ...flags: string[]): void {
+    log(message?: any): engine.LogItem {
+        return this.consoleService.log(message);
     }
 
     public countTypes(...types: string[]): number {

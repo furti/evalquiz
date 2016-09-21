@@ -42,9 +42,9 @@ export class Engine {
 
     execute(a: number, b: number, expected: number): angular.IPromise<engine.Result> {
         let deferred = this.context.defer();
-        let logItem = this.context.log().withClass('large warning');
+        let logItem = this.context.log().withClass('large');
 
-        logItem.write(`${a} + ${b} = `);
+        logItem.write(`${a} + ${b} = `).addClass('info');
 
         this.context.postpone(0.125, () => {
             let c = this.context.invokeFn(a, b);
@@ -54,9 +54,8 @@ export class Engine {
 
                 this.context.postpone(0.5, () => {
                     if (c === expected) {
-                        logItem.withClass('large success');
                         logItem.space();
-                        logItem.icon('fa-check');
+                        logItem.mark("ok");
 
                         deferred.resolve({
                             success: true,
@@ -64,9 +63,8 @@ export class Engine {
                         });
                     }
                     else {
-                        logItem.withClass('large error');
                         logItem.space();
-                        logItem.icon('fa-times');
+                        logItem.mark("not-ok");
 
                         deferred.resolve({
                             success: false,

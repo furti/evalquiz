@@ -1,13 +1,19 @@
 @keyframes fade-in {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
+
 
 /* View */
 
 ng-view {
     height: 100vh;
 }
+
 
 /* Loader */
 
@@ -18,11 +24,14 @@ ng-view {
     animation: fade-in 1.2s;
 }
 
+
 /* workbench */
+
 workbench {
     overflow: hidden;
     animation: fade-in 1s;
 }
+
 
 /* Left Riddle Card */
 
@@ -54,6 +63,7 @@ workbench {
     overflow: hidden;
 }
 
+
 /* Right Riddle Card */
 
 .riddle-right-card {
@@ -64,12 +74,14 @@ workbench {
     padding: 0 16px;
 }
 
+
 /* RiddleList */
 
 .riddle-list md-headline {
     align-items: baseline;
-    font-size: 20px;    
+    font-size: 20px;
 }
+
 
 /* Editor */
 
@@ -83,6 +95,7 @@ workbench {
     flex: 1 1 auto;
 }
 
+
 /* Console */
 
 .console {
@@ -93,10 +106,10 @@ workbench {
 
 .console h1, .console h2, .console h3, .console h4, .console h5, .console h6 {
     color: skyblue;
-} 
+}
 
 .console > div.item {
-    margin: 0.2em 0.4em;
+    margin: 0.4em 0.4em;
     display: flex;
     align-items: baseline;
 }
@@ -113,6 +126,11 @@ workbench {
 
 .console p, .console pre {
     margin: 0.2em 0;
+}
+
+.console .info {
+    color: lightsteelblue;
+    font-style: italic;
 }
 
 .console .success {
@@ -135,9 +153,50 @@ workbench {
     font-family: Courier New, Courier, monospace;
 }
 
-.console .error {
-    color: LightSalmon;
-} 
+
+/* Console Marks */
+
+@keyframes ok-anim {
+    from {
+        opacity: 0;
+        transform: scale(20);
+    }
+    to {
+        opacity: 1;
+        transform: scale(2);
+    }
+}
+
+.console .mark.ok, .console .mark.not-ok {
+    position: relative;
+    display: inline-block;
+    animation: ok-anim 0.25s ease-in forwards;
+    margin: 0 0.5em;
+}
+
+.console .mark.ok {
+    color: lime;
+}
+
+.console .mark.not-ok {
+    color: tomato;
+}
+
+.console .mark.ok:before, .console .mark.not-ok:before {
+    font-family: FontAwesome;
+    top: 0;
+    left: -5px;
+    padding-right: 10px;
+}
+
+.console .mark.ok:before {
+    content: "\f00c";
+}
+
+.console .mark.not-ok:before {
+    content: "\f00d";
+}
+
 
 /* Layout Helpers */
 
@@ -148,7 +207,7 @@ workbench {
 .layout-no-grow {
     flex-grow: 0;
 }
- 
+
 .layout-no-resize {
     flex-shrink: 0;
     flex-grow: 0;
@@ -162,10 +221,6 @@ workbench {
     align-items: baseline;
 }
 
-
-
-
-
 .scrolls {
     overflow: auto;
 }
@@ -174,20 +229,20 @@ workbench {
     overflow: hidden;
 }
 
-.markdown > :first-child  {
+.markdown >:first-child {
     margin-top: 0;
 }
 
-.markdown > :last-child  {
+.markdown >:last-child {
     margin-bottom: 0;
 }
 
 .lined-top {
-    border-top: 1px solid rgba(0,0,0,0.12);
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
 }
 
 .lined-bottom {
-    border-bottom: 1px solid rgba(0,0,0,0.12);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 }
 
 .max-width-480 {
@@ -207,9 +262,11 @@ workbench {
     margin: 16px 0;
 }
 
+
 /**
  * Toolbar
  */
+
 .md-toolbar-item {
     margin-right: 10px;
 }
@@ -219,9 +276,11 @@ workbench {
     padding-right: 15px;
 }
 
+
 /**
  * Transitions
  */
+
 .grow {
     transition: all .2s ease-in-out;
 }
@@ -230,9 +289,11 @@ workbench {
     transform: scale(1.05);
 }
 
+
 /**
  * Code
  */
+
 code {
     background: #F6F6F6;
     padding: 2px 5px;
@@ -269,7 +330,7 @@ table td {
 }
 
 .glow {
-    text-shadow: 0px 0px 16px goldenRod;   
+    text-shadow: 0px 0px 16px goldenRod;
 }
 
 .separated {

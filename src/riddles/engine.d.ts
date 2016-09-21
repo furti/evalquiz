@@ -23,6 +23,8 @@ declare namespace engine {
 
         space(): JQuery;
 
+        mark(mark: string): JQuery;
+
         icon(icon: string): JQuery;
 
         write(s: any): JQuery;
@@ -30,6 +32,7 @@ declare namespace engine {
         markdown(s: string): JQuery;
 
         code(s: string): JQuery;
+        
     }
 
     export class Context {

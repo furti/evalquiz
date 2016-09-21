@@ -75,6 +75,13 @@ export class ConsoleLogItem implements engine.LogItem {
         return this.lastElement;
     }
 
+    mark(mark: string): JQuery {
+        this.lastElement = angular.element(`<span class="mark ${mark}"></span>`);
+        this.contentElement.append(this.lastElement);
+
+        return this.lastElement;
+    }
+
     icon(icon: string): JQuery {
         this.lastElement = angular.element(`<i class="icon fa ${icon}" aria-hidden="true"></i>`);
         this.contentElement.append(this.lastElement);

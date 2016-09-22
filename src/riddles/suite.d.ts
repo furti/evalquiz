@@ -1,21 +1,17 @@
 /// <reference path="./../../typings/index.d.ts" />
 
-declare namespace engine {
+declare namespace suite {
 
-    export class Result {
-
-        static success(message?: string): Result;
-
-        static failure(message?: string): Result;
+    export interface Result {
 
         success: boolean;
 
-        message: string;
+        message?: string;
     }
 
-    export class LogItem {
+    export interface LogItem {
 
-        withClass(classname: string): this;
+        withClass(...classname: string[]): this;
 
         withIcon(icon?: string): this;
 
@@ -35,13 +31,13 @@ declare namespace engine {
         
     }
 
-    export class Context {
+    export interface Context {
 
         invokeFn(...fnParams: any[]): any;
 
-        defer<AnyType>(): angular.IDeferred<AnyType>;
+        defer<Any>(): angular.IDeferred<Any>;
 
-        postpone(seconds: number, fn: () => void): void;
+        postpone<Any>(seconds: number, fn: () => Any | angular.IPromise<Any>): angular.IPromise<Any>;
 
         log(message?: any): LogItem;
 
@@ -56,6 +52,8 @@ declare namespace engine {
         countLogicals(): number;
 
         countStatements(): number;
+
+        countVariableDeclarations(): number;
 
         countOperators(...operators: string[]): number;
 

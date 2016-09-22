@@ -1,0 +1,13 @@
+<ul class="member-info" ng-if="$ctrl.member.params && $ctrl.member.params.length">
+    <li ng-repeat="param in $ctrl.member.params">
+        <div class="markdown" btf-markdown="param.signatureDescription"></div>
+        <member-info ng-if="param.params || param.properties" member="param"></member-info>
+    </li>
+</ul>
+
+<ul class="member-info" ng-if="$ctrl.member.properties && $ctrl.member.properties.length">
+    <li ng-repeat="property in $ctrl.member.properties">
+        <div class="markdown" btf-markdown="property.signatureDescription"></div>
+        <member-info ng-if="property.params || property.properties" member="property"></member-info>
+    </li>
+</ul>

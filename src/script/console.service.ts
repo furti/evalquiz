@@ -28,7 +28,7 @@ export class ConsoleService {
         itemElement.append(iconElement, contentElement);
         consoleElement.append(itemElement);
 
-        let block: ConsoleLogItem = new ConsoleLogItem(this.uiService, itemElement, iconElement, contentElement);
+        let block: ConsoleLogItem = new ConsoleLogItem(this.uiService, consoleElement, itemElement, iconElement, contentElement);
 
         if (message) {
             block.write(message);
@@ -38,15 +38,19 @@ export class ConsoleService {
     }
 }
 
-export class ConsoleLogItem implements engine.LogItem {
+export class ConsoleLogItem implements suite.LogItem {
 
     private lastElement: JQuery;
 
-    constructor(private uiService: UIService, private itemElement: JQuery, private iconElement: JQuery, protected contentElement: JQuery) {
+    constructor(private uiService: UIService, private consoleElement: JQuery, private itemElement: JQuery, private iconElement: JQuery, protected contentElement: JQuery) {
     }
 
-    withClass(classname: string = ''): this {
-        this.itemElement.attr('class', 'item ' + classname);
+    withClass(...classnames: string[]): this {
+        this.itemElement.attr('class', 'item');
+
+        if (classnames) {
+            classnames.forEach(classname => this.itemElement.addClass(classname));
+        }
 
         return this;
     }
@@ -61,71 +65,63 @@ export class ConsoleLogItem implements engine.LogItem {
         return this;
     }
 
-    newLine(): JQuery {
-        this.lastElement = angular.element('<br />');
-        this.contentElement.append(this.lastElement);
+    private append(element: JQuery): JQuery {
+        this.lastElement = element;
+        this.contentElement.append(element);
 
-        return this.lastElement;
+        this.consoleElement.animate({
+            scrollTop: element.offset().top,
+        });
+
+        return element;
+    }
+
+    newLine(): JQuery {
+        return this.append(angular.element('<br />'));
     }
 
     space(): JQuery {
-        this.lastElement = angular.element('<span>&nbsp;&nbsp;</span>');
-        this.contentElement.append(this.lastElement);
-
-        return this.lastElement;
+        return this.append(angular.element('<span>&nbsp;&nbsp;</span>'));
     }
 
     mark(mark: string): JQuery {
-        this.lastElement = angular.element(`<span class="mark ${mark}"></span>`);
-        this.contentElement.append(this.lastElement);
-
-        return this.lastElement;
+        return this.append(angular.element(`<span class="mark ${mark}"></span>`));
     }
 
     icon(icon: string): JQuery {
-        this.lastElement = angular.element(`<i class="icon fa ${icon}" aria-hidden="true"></i>`);
-        this.contentElement.append(this.lastElement);
-
-        return this.lastElement;
+        return this.append(angular.element(`<i class="icon fa ${icon}" aria-hidden="true"></i>`));
     }
 
     write(obj: any): JQuery {
         if ((obj === undefined) || (obj === null)) {
-            this.lastElement = angular.element('<span></span>').text(obj.toString());
-        }
-        else if ((typeof obj === "boolean") || (typeof obj === "number") || (typeof obj === "string")) {
-            this.lastElement = angular.element('<span></span>').text(obj.toString());
-        }
-        else if (typeof obj === "function") {
-            this.lastElement = angular.element('<div></div>').text(obj.toString());
-        }
-        else if (angular.isArray(obj)) {
-            this.lastElement = angular.element('<div></div>').text(obj.toString());
-        }
-        else if (typeof obj === "object") {
-            this.lastElement = angular.element('<div></div>').text(JSON.stringify(obj));
-        }
-        else {
-            this.lastElement = angular.element('<div></div>').text("WHAT IS A " + typeof obj);
+            return this.append(angular.element('<span></span>').text(obj.toString()));
         }
 
-        this.contentElement.append(this.lastElement);
+        if ((typeof obj === "boolean") || (typeof obj === "number") || (typeof obj === "string")) {
+            return this.append(angular.element('<span></span>').text(obj.toString()));
+        }
 
-        return this.lastElement;
+        if (typeof obj === "function") {
+            return this.append(angular.element('<div></div>').text(obj.toString()));
+        }
+
+        if (angular.isArray(obj)) {
+            return this.append(angular.element('<div></div>').text(obj.toString()));
+        }
+
+        if (typeof obj === "object") {
+            return this.append(angular.element('<div></div>').text(JSON.stringify(obj)));
+        }
+
+        return this.append(angular.element('<div></div>').text("WHAT IS A " + typeof obj));
     }
 
     markdown(s: string): JQuery {
-        this.lastElement = angular.element('<div></div>').html(this.uiService.markdownToHtml(s));
-        this.contentElement.append(this.lastElement);
-
-        return this.lastElement;
+        return this.append(angular.element('<div></div>').html(this.uiService.markdownToHtml(s)));
     }
 
     code(s: string): JQuery {
-        this.lastElement = angular.element('<pre></pre>').addClass('code').text(s);
-        this.contentElement.append(this.lastElement);
-
-        return this.lastElement;
+        return this.append(angular.element('<pre></pre>').addClass('code').text(s));
     }
 }
 

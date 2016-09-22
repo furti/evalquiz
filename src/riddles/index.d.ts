@@ -1,3 +1,3 @@
 /// <reference path="./../../typings/index.d.ts" />
-/// <reference path="./engine.d.ts" />
+/// <reference path="./suite.d.ts" />
 

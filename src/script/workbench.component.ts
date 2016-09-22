@@ -102,8 +102,6 @@ class WorkbenchComponent {
         this.evalQuizService.saveRiddle(this.riddle);
 
         this.selectedTab = 2;
-        this.consoleService.clear();
-        this.consoleService.log().markdown(`# Solving riddle: ${this.riddle.title}`);
 
         this.riddleService.execute(this.riddle).then(result => {
             if (result.score > 0) {

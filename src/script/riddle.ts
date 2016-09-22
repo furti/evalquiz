@@ -20,7 +20,7 @@ export interface RiddleDetail {
     hints: string;
     api: Member[];
     member: Member;
-    engine: string;
+    suite: string;
 
     stub?: string;
 }

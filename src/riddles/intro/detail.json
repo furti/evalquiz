@@ -1,8 +1,8 @@
 {
     "goals": [
         "Solve the calculation.",
-        "Avoid any additions (+, ++, +=).",
-        "Avoid any subtractions (-, --, -=)."
+        "Solve the calculation in one statement.",
+        "**Bonus Goal:** And avoid any additions (+, ++, +=)."
     ],
     "description": "file: description.md",
     "hints": "file: hints.md",
@@ -37,5 +37,5 @@
             }
         ]
     },
-    "engine": "file: engine.js"
+    "suite": "file: suite.js"
 }

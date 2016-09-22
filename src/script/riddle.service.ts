@@ -31,7 +31,7 @@ export class RiddleService {
 
             this.processTextReference(riddle.location, detail, 'description');
             this.processTextReference(riddle.location, detail, 'hints');
-            this.processTextReference(riddle.location, detail, 'engine');
+            this.processTextReference(riddle.location, detail, 'suite');
 
             detail.api = detail.api || [];
 
@@ -130,12 +130,33 @@ export class RiddleService {
     }
 
     execute(riddle: Riddle): angular.IPromise<XXX> {
+        this.consoleService.clear();
+        this.consoleService.log().markdown(`# Solving riddle: ${riddle.title}`);
+
         let deferred = this.$q.defer<XXX>();
 
         try {
-            let engine = new RiddleRunner(this.$q, this.$timeout, this.consoleService, riddle);
+            let runner = new RiddleRunner(this.$q, this.$timeout, this.consoleService, riddle);
 
-            engine.execute().then(() => {
+            runner.execute().then((result: XXX) => {
+
+
+
+                if (result.score > 0) {
+                    if (result.score >= riddle.state.score) {
+                        riddle.state.score = result.score;
+                    }
+
+                    let key = result.score === 1 ? '1 Star' : result.score + ' Stars';
+
+                    riddle.state.savedCode = riddle.state.savedCode || {};
+                    riddle.state.savedCode[key] = riddle.state.code;
+                    this.evalQuizService.saveRiddle(riddle);
+                }
+
+
+
+
                 deferred.resolve();
             }, err => deferred.reject(err));
         }

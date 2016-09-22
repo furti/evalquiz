@@ -11,13 +11,13 @@ export interface XXX {
 }
 
 
-// export class RiddleTestResult implements engine.Result {
+// export class RiddleTestResult implements suite.Result {
 
-//     static success(message?: string): engine.Result {
+//     static success(message?: string): suite.Result {
 //         return new RiddleTestResult(true, message);
 //     }
 
-//     static failure(message?: string): engine.Result {
+//     static failure(message?: string): suite.Result {
 //         return new RiddleTestResult(false, message);
 //     }
 
@@ -25,22 +25,22 @@ export interface XXX {
 //     }
 // }
 
-export class RiddleRunner implements engine.Context {
-    // for tests see: http://esprima.org/demo/parse.html
+const SECONDS_BETWEEN_TESTS: number = 0.25;
 
-    private engineFactory: Function;
+export class RiddleRunner implements suite.Context {
+    private suiteFactory: Function;
     private fnWrapperArgs: string[];
     private fnWrapper: Function;
     private tree: ESTree.Program;
 
     private deferred: angular.IDeferred<XXX>;
-    private engine: any;
-    private testFns: (() => engine.Result | angular.IPromise<engine.Result>)[];
+    private suite: any;
+    private testFns: (() => suite.Result | angular.IPromise<suite.Result>)[];
 
     constructor(private $q: angular.IQService, private $timeout: ng.ITimeoutService, private consoleService: ConsoleService, private riddle: Riddle) {
         let code = riddle.state.code;
 
-        this.engineFactory = new Function('var exports = {};\n' + riddle.detail.engine + '\nreturn exports;');
+        this.suiteFactory = new Function('var exports = {};\n' + riddle.detail.suite + '\nreturn exports;');
         this.fnWrapperArgs = riddle.detail.api.map(member => member.name);
 
         let args = this.fnWrapperArgs.slice();
@@ -68,13 +68,16 @@ export class RiddleRunner implements engine.Context {
         }
 
         if (this.testFns.length) {
-            let testFn: () => engine.Result | angular.IPromise<engine.Result> = this.testFns.shift();
+            let testFn: () => suite.Result | angular.IPromise<suite.Result> = this.testFns.shift();
 
             try {
                 this.invokeTestFn(testFn).then(result => {
-                    if (result.success) {
-                        this.logSuccess(result.message);
-                        this.execute();
+                    if ((result === undefined) || (result === null) || (result.success)) {
+                        if (result && result.message) {
+                            this.logSuccess(result.message);
+                        }
+
+                        this.$timeout(() => this.execute(), SECONDS_BETWEEN_TESTS * 1000);
                     }
                     else {
                         this.logFailure(result.message);
@@ -107,18 +110,25 @@ export class RiddleRunner implements engine.Context {
     private prepare(): void {
 
         try {
-            this.engine = new (this.engineFactory().Engine)(this);
+            let exports: { [key: string]: any } = this.suiteFactory();
+            let keys = Object.keys(exports);
+
+            if (keys.length !== 1) {
+                throw new Error('Expected one class in suite');
+            }
+
+            this.suite = new (exports[keys[0]])(this);
         }
         catch (err) {
-            let message = `Failed to instantiate engine of riddle "${this.riddle.id}".`;
+            let message = `Failed to instantiate suite of riddle "${this.riddle.id}".`;
             console.error(message, err);
             throw new Error(message);
         }
 
         try {
-            this.testFns = Object.getOwnPropertyNames(Object.getPrototypeOf(this.engine))
+            this.testFns = Object.getOwnPropertyNames(Object.getPrototypeOf(this.suite))
                 .filter(name => name.indexOf('test') === 0)
-                .map(name => this.engine[name])
+                .map(name => this.suite[name])
                 .filter(fn => typeof fn === 'function');
         }
         catch (err) {
@@ -134,14 +144,17 @@ export class RiddleRunner implements engine.Context {
         }
     }
 
-    private invokeTestFn(testFn: () => engine.Result | angular.IPromise<engine.Result>): angular.IPromise<engine.Result> {
-        let deferred = this.$q.defer<engine.Result>();
+    private invokeTestFn(testFn: () => suite.Result | angular.IPromise<suite.Result>): angular.IPromise<suite.Result> {
+        let deferred = this.$q.defer<suite.Result>();
 
         try {
-            let result = testFn.apply(this.engine);
+            let result = testFn.apply(this.suite);
 
             if (isPromise(result)) {
-                (result as angular.IPromise<engine.Result>).then(result => deferred.resolve(result), err => deferred.reject(err));
+                (result as angular.IPromise<suite.Result>).then(result => deferred.resolve(result), err => deferred.reject(err));
+            }
+            else if ((result === undefined) || (result === null)) {
+                deferred.resolve({ success: true });
             }
             else {
                 deferred.resolve(result);
@@ -160,10 +173,10 @@ export class RiddleRunner implements engine.Context {
         let fnParams: any[] = [];
 
         for (let fnWrapperArg of this.fnWrapperArgs) {
-            let fnParam = (...args: any[]) => this.engine[fnWrapperArg].apply(this.engine, args);
+            let fnParam = (...args: any[]) => this.suite[fnWrapperArg].apply(this.suite, args);
 
             if (fnParam === undefined) {
-                let message = `API reference "${fnWrapperArg}" of riddle "${this.riddle.id}" is missing in engine.`;
+                let message = `API reference "${fnWrapperArg}" of riddle "${this.riddle.id}" is missing in suite.`;
                 console.error(message);
                 throw new Error(message);
             }
@@ -183,12 +196,25 @@ export class RiddleRunner implements engine.Context {
         }
     }
 
-    defer<AnyType>(): angular.IDeferred<AnyType> {
+    defer<Any>(): angular.IDeferred<Any> {
         return this.$q.defer();
     }
 
-    postpone(seconds: number, fn: () => void): void {
-        this.$timeout(() => fn(), seconds * 1000);
+    postpone<Any>(seconds: number, fn: () => Any | angular.IPromise<Any>): angular.IPromise<Any> {
+        let deferred: angular.IDeferred<Any> = this.$q.defer<Any>();
+
+        this.$timeout(() => {
+            let result: Any | angular.IPromise<Any> = fn();
+
+            if (isPromise(result)) {
+                (result as angular.IPromise<Any>).then(obj => deferred.resolve(obj), err => deferred.reject(err));
+            }
+            else {
+                deferred.resolve(result);
+            }
+        }, seconds * 1000);
+
+        return deferred.promise;
     }
 
     private logSuccess(message: string): void {
@@ -199,14 +225,14 @@ export class RiddleRunner implements engine.Context {
         console.log(message);
     }
 
-    log(message?: any): engine.LogItem {
+    log(message?: any): suite.LogItem {
         return this.consoleService.log(message);
     }
 
     public countTypes(...types: string[]): number {
         var count = 0;
 
-        this.crawl(this.tree, function (node: any) {
+        this.crawl(this.tree, (node: any) => {
             if (types.indexOf(node.type) >= 0) {
                 count++;
             }
@@ -235,10 +261,14 @@ export class RiddleRunner implements engine.Context {
         return this.countTypes('ForStatement', 'WhileStatement', 'DoWhileStatement', 'IfStatement', 'SwitchStatement', 'ExpressionStatement', 'ReturnStatement');
     }
 
+    public countVariableDeclarations(): number {
+        return this.countTypes('VariableDeclaration');
+    }
+
     public countOperators(...operators: string[]): number {
         var count = 0;
 
-        this.crawl(this.tree, function (node: any) {
+        this.crawl(this.tree, (node: any) => {
             if ((node.type == 'BinaryExpression') || (node.type == 'UpdateExpression') || (node.type == 'AssignmentExpression')) {
                 if (operators.indexOf(node.operator) >= 0) {
                     count++;

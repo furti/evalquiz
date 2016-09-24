@@ -2,10 +2,10 @@
 
 let module = angular.module('evalquiz');
 
-import {Riddle, RiddleDetail, RiddleState, Member} from './riddle';
-import {StorageService} from './storage.service';
-import {UIService} from './ui.service';
-import {Service} from './utils';
+import { Riddle, RiddleDetail, RiddleState, Member } from './riddle';
+import { StorageService } from './storage.service';
+import { UIService } from './ui.service';
+import { Service } from './utils';
 
 @Service(module, 'evalQuizService')
 export class EvalQuizService {
@@ -30,8 +30,8 @@ export class EvalQuizService {
         this._initialized = false;
         this._selectedRiddleId;
 
-        this.riddles = null;
-        this.riddleMap = null;
+        this.riddles = [];
+        this.riddleMap = {};
 
         this.$http.get('riddles/riddles.json').then(response => {
             let riddles: Riddle[] = response.data as Riddle[];
@@ -130,17 +130,17 @@ export class EvalQuizService {
         return this.riddles;
     }
 
-    getRiddle(riddleId: string): Riddle {
+    getRiddle(riddleId: string): Riddle | undefined {
         if (!this.riddleMap) {
-            return null;
+            return undefined;
         }
 
         return this.riddleMap[riddleId];
     }
 
-    getNextRiddle(riddle: Riddle): Riddle {
+    getNextRiddle(riddle: Riddle): Riddle | undefined {
         if (!riddle) {
-            return null;
+            return undefined;
         }
 
         let pos = this.riddles.indexOf(riddle);
@@ -148,20 +148,22 @@ export class EvalQuizService {
         if (this.riddles.length > pos + 1) {
             return this.riddles[pos + 1];
         }
+
+        return undefined;
     }
 
-    getNextRiddleId(riddleId: string): string {
+    getNextRiddleId(riddleId: string): string | undefined {
         for (let i = 0; i < this.riddles.length; i++) {
             if (this.riddles[i].id === riddleId) {
                 if (i + 1 >= this.riddles.length) {
-                    return null;
+                    return undefined;
                 }
 
                 return this.riddles[i + 1].id;
             }
         }
 
-        return null;
+        return undefined;
     }
 
     saveRiddle(...riddles: Riddle[]): void {

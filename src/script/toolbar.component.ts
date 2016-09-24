@@ -3,11 +3,11 @@
 let module = angular.module('evalquiz');
 
 import './credits.dialog';
-import {EvalQuizService} from './evalquiz.service';
-import {Riddle} from './riddle';
+import { EvalQuizService } from './evalquiz.service';
+import { Riddle } from './riddle';
 import './riddle-list.dialog';
-import {RiddleService} from './riddle.service';
-import {Component, DialogService} from './utils';
+import { RiddleService } from './riddle.service';
+import { Component, DialogService } from './utils';
 
 @Component(module, 'toolbar', {
     templateUrl: 'script/toolbar.component.html',
@@ -29,16 +29,24 @@ class Controller {
         return this.selectedRiddle && this.riddleService.isSolved(this.selectedRiddle);
     }
 
-    protected get nextRiddleId(): string {
+    protected get nextRiddleId(): string | undefined {
         if (!this.selectedRiddle) {
-            return null;
+            return undefined;
         }
-        
+
         return this.evalQuizService.getNextRiddleId(this.selectedRiddle.id);
     }
 
     protected get nextAvailable(): boolean {
-        return this.solved && this.riddleService.isAvailable(this.evalQuizService.getRiddle(this.nextRiddleId));
+        if (!this.solved) {
+            return false;
+        }
+
+        if (!this.nextRiddleId) {
+            return false;
+        }
+
+        return !!this.evalQuizService.getRiddle(this.nextRiddleId);
     }
 
     protected gotoRiddle(riddleId: string): void {

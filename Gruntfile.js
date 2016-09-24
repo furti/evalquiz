@@ -78,12 +78,21 @@ module.exports = function (grunt) {
                 src: ["./src/riddles/**/*.ts"],
                 options: {
                     rootDir: "./src/riddles",
-                    target: "es5",
-                    module: "commonjs",
-                    experimentalDecorators: true,
-                    emitDecoratorMetadata: false,
-                    noImplicitAny: true,
-                    removeComments: true
+                    "target": "es5",
+                    "module": "commonjs",
+                    "moduleResolution": "node",
+                    "isolatedModules": false,
+                    "jsx": "react",
+                    "experimentalDecorators": true,
+                    "emitDecoratorMetadata": true,
+                    "declaration": false,
+                    "noImplicitAny": false,
+                    "removeComments": true,
+                    "noLib": false,
+                    "preserveConstEnums": true,
+                    "suppressImplicitAnyIndexErrors": true,
+                    "noImplicitThis": true,
+                    "strictNullChecks": true
                 }
             }
         },

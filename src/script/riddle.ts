@@ -3,8 +3,8 @@
 let module = angular.module('evalquiz');
 
 export interface Member {
-    name?: string;
-    type?: string;
+    name: string;
+    type: string;
     description?: string;
     explanation?: string;
     params?: Member[];
@@ -41,5 +41,5 @@ export interface Riddle {
     dependsOn?: string[];
 
     state: RiddleState;
-    detail: RiddleDetail;
+    detail: RiddleDetail | null;
 }

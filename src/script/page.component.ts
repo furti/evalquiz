@@ -16,16 +16,24 @@ class PageComponent {
 
     constructor(protected $routeParams: ng.route.IRouteParamsService, protected evalQuizService: EvalQuizService, protected riddleService: RiddleService, protected uiService: UIService) {
         let riddleId = $routeParams['riddleId'];
+        let riddle = evalQuizService.getRiddle(riddleId);
 
-        riddleService.prepare(evalQuizService.getRiddle(riddleId)).then(riddle => {
-            this.selectedRiddle = riddle;
-        }, err => {
-            console.error(`Failed to load riddle "${riddleId}": %o`, err);
-
-            this.uiService.alert('Error', `Failed to load riddle "${riddleId}".`).then(() => {
+        if (!riddle) {
+            this.uiService.alert('Error', `Unknown riddle: ${riddleId}`).then(() => {
                 evalQuizService.gotoRiddle('intro');
             });
-        });
+        }
+        else {
+            riddleService.prepare(riddle).then(r => {
+                this.selectedRiddle = r;
+            }, (err: any) => {
+                console.error(`Failed to load riddle "${riddleId}": %o`, err);
+
+                this.uiService.alert('Error', `Failed to load riddle: ${riddleId}`).then(() => {
+                    evalQuizService.gotoRiddle('intro');
+                });
+            });
+        }
     }
 
     get riddles(): Riddle[] {

@@ -1,8 +1,10 @@
 /// <reference path="./index.d.ts" />
 
-import {ConsoleService, ConsoleLogItem} from './console.service';
-import {Riddle} from './riddle';
-import {isPromise} from './utils';
+import { ConsoleService, ConsoleLogItem } from './console.service';
+import { Riddle } from './riddle';
+import { isPromise } from './utils';
+import { UIService } from './ui.service';
+import { MILLIS_MULTIPLIER } from './utils';
 
 export interface XXX {
     riddle: Riddle;
@@ -35,24 +37,26 @@ export class RiddleRunner implements suite.Context {
 
     private deferred: angular.IDeferred<XXX>;
     private suite: any;
-    private testFns: (() => suite.Result | angular.IPromise<suite.Result>)[];
+    private testFns: (() => suite.Result | angular.IPromise<suite.Result | undefined> | undefined)[];
 
-    constructor(private $q: angular.IQService, private $timeout: ng.ITimeoutService, private consoleService: ConsoleService, private riddle: Riddle) {
+    constructor(private $q: angular.IQService, private uiService: UIService, private consoleService: ConsoleService, private riddle: Riddle) {
+
         let code = riddle.state.code;
+        let detail = riddle.detail!;
 
-        this.suiteFactory = new Function('var exports = {};\n' + riddle.detail.suite + '\nreturn exports;');
-        this.fnWrapperArgs = riddle.detail.api.map(member => member.name);
+        this.suiteFactory = new Function('var exports = {};\n' + detail.suite + '\nreturn exports;');
+        this.fnWrapperArgs = detail.api.map(member => member.name);
 
         let args = this.fnWrapperArgs.slice();
 
-        if (this.riddle.detail.member.params) {
-            args = args.concat(this.riddle.detail.member.params.map(param => param.name));
+        if (detail.member.params) {
+            args = args.concat(detail.member.params.map(param => param.name));
         }
 
-        args.push(`"use strict";\n${code}\nreturn ${riddle.detail.member.name}(${riddle.detail.member.paramsString});`);
+        args.push(`"use strict";\n${code}\nreturn ${detail.member.name}(${detail.member.paramsString});`);
 
         this.fnWrapper = new Function(...args);
-        this.tree = esprima.parse(code);
+        this.tree = esprima.parse(code!);
     }
 
     execute(): angular.IPromise<XXX> {
@@ -67,41 +71,47 @@ export class RiddleRunner implements suite.Context {
             }
         }
 
-        if (this.testFns.length) {
-            let testFn: () => suite.Result | angular.IPromise<suite.Result> = this.testFns.shift();
+        let testFn = this.testFns.shift();
 
-            try {
-                this.invokeTestFn(testFn).then(result => {
-                    if ((result === undefined) || (result === null) || (result.success)) {
-                        if (result && result.message) {
-                            this.logSuccess(result.message);
-                        }
-
-                        this.$timeout(() => this.execute(), SECONDS_BETWEEN_TESTS * 1000);
-                    }
-                    else {
-                        this.logFailure(result.message);
-
-                        this.deferred.resolve({
-                            riddle: this.riddle,
-                            score: 0,
-                            message: result.message
-                        });
-                    }
-                });
-            }
-            catch (err) {
-                let message = `Failed to invoke test.`;
-                console.error(message, err);
-                throw new Error(message);
-            }
-        }
-        else {
+        if (testFn === undefined) {
             this.deferred.resolve({
                 riddle: this.riddle,
                 score: 1,
                 message: "Juhu"
             });
+
+            return this.deferred.promise;
+        }
+
+        try {
+            this.invokeTestFn(testFn).then(result => {
+                if (result === undefined) {
+                    this.uiService.postpone(SECONDS_BETWEEN_TESTS, () => this.execute());
+                }
+                else if (result.success) {
+                    if (result.message) {
+                        this.logSuccess(result.message);
+                    }
+
+                    this.uiService.postpone(SECONDS_BETWEEN_TESTS, () => this.execute());
+                }
+                else {
+                    if (result.message) {
+                        this.logFailure(result.message);
+                    }
+
+                    this.deferred.resolve({
+                        riddle: this.riddle,
+                        score: 0,
+                        message: result.message
+                    });
+                }
+            });
+        }
+        catch (err) {
+            let message = `Failed to invoke test.`;
+            console.error(message, err);
+            throw new Error(message);
         }
 
         return this.deferred.promise;
@@ -144,7 +154,7 @@ export class RiddleRunner implements suite.Context {
         }
     }
 
-    private invokeTestFn(testFn: () => suite.Result | angular.IPromise<suite.Result>): angular.IPromise<suite.Result> {
+    private invokeTestFn(testFn: () => suite.Result | angular.IPromise<suite.Result | undefined> | undefined): angular.IPromise<suite.Result> {
         let deferred = this.$q.defer<suite.Result>();
 
         try {
@@ -154,7 +164,9 @@ export class RiddleRunner implements suite.Context {
                 (result as angular.IPromise<suite.Result>).then(result => deferred.resolve(result), err => deferred.reject(err));
             }
             else if ((result === undefined) || (result === null)) {
-                deferred.resolve({ success: true });
+                deferred.resolve({
+                    success: true
+                });
             }
             else {
                 deferred.resolve(result);
@@ -201,20 +213,7 @@ export class RiddleRunner implements suite.Context {
     }
 
     postpone<Any>(seconds: number, fn: () => Any | angular.IPromise<Any>): angular.IPromise<Any> {
-        let deferred: angular.IDeferred<Any> = this.$q.defer<Any>();
-
-        this.$timeout(() => {
-            let result: Any | angular.IPromise<Any> = fn();
-
-            if (isPromise(result)) {
-                (result as angular.IPromise<Any>).then(obj => deferred.resolve(obj), err => deferred.reject(err));
-            }
-            else {
-                deferred.resolve(result);
-            }
-        }, seconds * 1000);
-
-        return deferred.promise;
+        return this.uiService.postpone(seconds, fn);
     }
 
     private logSuccess(message: string): void {

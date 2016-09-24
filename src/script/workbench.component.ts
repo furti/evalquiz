@@ -3,15 +3,15 @@
 let module = angular.module('evalquiz');
 
 import './api-info.component';
-import {ConsoleService, ConsoleLogItem} from './console.service';
-import {EvalQuizService} from './evalquiz.service';
+import { ConsoleService, ConsoleLogItem } from './console.service';
+import { EvalQuizService } from './evalquiz.service';
 import './member-info.component';
-import {Riddle} from './riddle';
-import {RiddleService} from './riddle.service';
+import { Riddle } from './riddle';
+import { RiddleService } from './riddle.service';
 import './solved.dialog';
 import './toolbar.component';
-import {UIService} from './ui.service';
-import {Component, Service, DialogService, Dialog} from './utils';
+import { UIService } from './ui.service';
+import { Component, Service, DialogService, Dialog } from './utils';
 
 @Component(module, 'workbench', {
     templateUrl: 'script/workbench.component.html',
@@ -66,14 +66,14 @@ class WorkbenchComponent {
 
     public trash($event: any): void {
         this.uiService.confirm('Trash Your Code', 'Are you sure that you want to clear the editor?', 'Delete', 'Abort').then(() => {
-            this.riddle.state.code = this.riddle.detail.stub;
+            this.riddle.state.code = this.riddle.detail!.stub;
             this.evalQuizService.saveRiddle(this.riddle);
             this.uiService.toast('Code trashed.');
         });
     }
 
     get hasSaves(): boolean {
-        return this.riddle.state.savedCode && Object.keys(this.riddle.state.savedCode).length > 0;
+        return !!this.riddle.state.savedCode && Object.keys(this.riddle.state.savedCode).length > 0;
     }
 
     public load(): void {
@@ -83,7 +83,7 @@ class WorkbenchComponent {
 
         this.uiService.menu('.code-load-button', items).then(item => {
             if (item) {
-                this.riddle.state.code = this.riddle.state.savedCode[item];
+                this.riddle.state.code = this.riddle.state.savedCode![item];
                 this.evalQuizService.saveRiddle(this.riddle);
                 this.uiService.toast(`Loaded "${item}".`);
             }
@@ -92,15 +92,13 @@ class WorkbenchComponent {
 
     public save(): void {
         this.riddle.state.savedCode = this.riddle.state.savedCode || {};
-        this.riddle.state.savedCode['Manual Save'] = this.riddle.state.code;
+        this.riddle.state.savedCode['Manual Save'] = this.riddle.state.code!;
 
         this.evalQuizService.saveRiddle(this.riddle);
         this.uiService.toast('Code saved successfully.');
     }
 
     public solve(): void {
-        this.evalQuizService.saveRiddle(this.riddle);
-
         this.selectedTab = 2;
 
         this.riddleService.execute(this.riddle).then(result => {
@@ -112,7 +110,7 @@ class WorkbenchComponent {
                 let key = result.score === 1 ? '1 Star' : result.score + ' Stars';
 
                 this.riddle.state.savedCode = this.riddle.state.savedCode || {};
-                this.riddle.state.savedCode[key] = this.riddle.state.code;
+                this.riddle.state.savedCode[key] = this.riddle.state.code!;
                 this.evalQuizService.saveRiddle(this.riddle);
             }
 
@@ -123,7 +121,7 @@ class WorkbenchComponent {
             console.error(err);
 
             let log = this.consoleService.log();
-            
+
             log.markdown('Failed to execute function:')
             log.code(err);
 

@@ -9,11 +9,11 @@ export class Suite {
         this.context.log(message);
     }
 
-    testInit(): angular.IPromise<suite.Result> {
+    testInit(): angular.IPromise<undefined> {
         return this.context.postpone(0.5, () => {
             this.context.log("Let's perform some tests on your precious masterpiece:");
 
-            return this.context.postpone(1, () => null);
+            return this.context.postpone(1, () => undefined);
         });
     }
 

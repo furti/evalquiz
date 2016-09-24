@@ -1,5 +1,7 @@
 /// <reference path="./index.d.ts" />
 
+export const MILLIS_MULTIPLIER: number = 1000;
+
 /**
  * A decorator for creating an Angular Component.
  * 
@@ -108,5 +110,4 @@ export function Dialog(nameOrModule: string | angular.IModule, selector: string,
 export function isPromise(obj: any): boolean {
     return obj && angular.isFunction(obj.then);
 }
-
 

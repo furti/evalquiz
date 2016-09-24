@@ -144,12 +144,16 @@ workbench {
     color: gold;
 }
 
-.console .error {
+.console .error, .console .error h1, .console .error h2, .console .error h3, .console .error h4, .console .error h5, .console .error h6 {
     color: tomato;
 }
 
 .console .large {
     font-size: 140%;
+}
+
+.console .xlarge {
+    font-size: 180%;
 }
 
 .console .code {
@@ -158,6 +162,12 @@ workbench {
 
 
 /* Console Marks */
+
+.console .mark.ok, .console .mark.not-ok, .console .mark.star, .console .mark.no-star {
+    position: relative;
+    display: inline-block;
+    margin: 0 0.3em;
+}
 
 @keyframes ok-anim {
     from {
@@ -171,10 +181,23 @@ workbench {
 }
 
 .console .mark.ok, .console .mark.not-ok {
-    position: relative;
-    display: inline-block;
     animation: ok-anim 0.25s ease-in forwards;
     margin: 0 0 0 1.5em;
+}
+
+@keyframes star-anim {
+    from {
+        opacity: 0;
+        transform: scale(4) rotate(360deg);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) rotate(0);
+    }
+}
+
+.console .mark.star, .console .mark.no-star {
+    animation: star-anim 0.5s ease-out forwards;
 }
 
 .console .mark.ok {
@@ -185,7 +208,15 @@ workbench {
     color: tomato;
 }
 
-.console .mark.ok:before, .console .mark.not-ok:before {
+.console .mark.star {
+    color: gold;
+}
+
+.console .mark.no-star {
+    color: gold;
+}
+
+.console .mark.ok:before, .console .mark.not-ok:before, .console .mark.star:before, .console .mark.no-star:before {
     font-family: FontAwesome;
     top: 0;
 }
@@ -196,6 +227,14 @@ workbench {
 
 .console .mark.not-ok:before {
     content: "\f00d";
+}
+
+.console .mark.star:before {
+    content: "\f005";
+}
+
+.console .mark.no-star:before {
+    content: "\f006";
 }
 
 
@@ -337,4 +376,20 @@ table td {
 .separated {
     margin-left: 0.5em;
     margin-right: 0.5em;
+}
+
+.anim-delay-1 {
+    animation-delay: 0.32s
+}
+
+.anim-delay-2 {
+    animation-delay: 0.48s
+}
+
+.anim-delay-3 {
+    animation-delay: 0.56s
+}
+
+.anim-delay-4 {
+    animation-delay: 0.60s
 }

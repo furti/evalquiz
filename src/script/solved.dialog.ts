@@ -45,11 +45,11 @@ export class Controller {
         return this.riddle.state.score >= this.riddle.minScoreToSolve;
     }
 
-    protected get message(): string {
+    protected get message(): string | undefined {
         return this.result.message;
     }
 
-    protected get nextRiddleId(): string {
+    protected get nextRiddleId(): string | undefined {
         return this.evalQuizService.getNextRiddleId(this.riddle.id);
     }
 

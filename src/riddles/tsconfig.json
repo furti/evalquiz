@@ -12,6 +12,12 @@
         "removeComments": true,
         "noLib": false,
         "preserveConstEnums": true,
-        "suppressImplicitAnyIndexErrors": true
-    }
+        "suppressImplicitAnyIndexErrors": true,
+        "noImplicitThis": true,
+        "strictNullChecks": true
+    },
+    "include": [
+        "./**/*.ts",
+        "./**/*.tsx"
+    ]
 }

@@ -2,11 +2,11 @@
 
 let module = angular.module('evalquiz');
 
-import {Service} from './utils';
+import { MILLIS_MULTIPLIER, Service, isPromise } from './utils';
 
 class MenuController {
     static $inject = ['mdPanelRef'];
-    
+
     protected selected: string;
     protected items: string[];
     protected deferred: angular.IDeferred<string>
@@ -22,9 +22,12 @@ class MenuController {
 
 @Service(module, 'uiService')
 export class UIService {
-    static $inject = ['$mdPanel', '$mdDialog', '$mdToast', '$q', '$sanitize', 'markdownConverter'];
+    static $inject = ['$mdPanel', '$mdDialog', '$mdToast', '$q', '$timeout', '$sanitize', 'markdownConverter'];
 
-    constructor(protected $mdPanel: ng.material.IPanelService, protected $mdDialog: ng.material.IDialogService, protected $mdToast: ng.material.IToastService, protected $q: angular.IQService, protected $sanitize: angular.sanitize.ISanitizeService, protected markdownConverter: any) {
+    constructor(private $mdPanel: ng.material.IPanelService, private $mdDialog: ng.material.IDialogService,
+        private $mdToast: ng.material.IToastService, private $q: angular.IQService,
+        private $timeout: ng.ITimeoutService, private $sanitize: angular.sanitize.ISanitizeService,
+        private markdownConverter: any) {
     }
 
     markdownToHtml(markdown: string): string {
@@ -60,36 +63,56 @@ export class UIService {
         });
 
         return deferred.promise;
-}
+    }
 
-toast(content: string): void {
-    this.$mdToast.show(
-        this.$mdToast.simple()
-            .textContent(content)
-            .position('top right')
-            .hideDelay(3000)
-    );
-}
+    toast(content: string): void {
+        this.$mdToast.show(
+            this.$mdToast.simple()
+                .textContent(content)
+                .position('top right')
+                .hideDelay(3000)
+        );
+    }
 
-info(title: string, content: string, ok: string = 'Ok'): angular.IPromise < any > {
-    return this.$mdDialog.show(this.$mdDialog.alert()
-        .title(title)
-        .htmlContent(this.markdownToHtml(content))
-        .ok(ok));
-}
+    info(title: string, content: string, ok: string = 'Ok'): angular.IPromise<any> {
+        return this.$mdDialog.show(this.$mdDialog.alert()
+            .title(title)
+            .htmlContent(this.markdownToHtml(content))
+            .ok(ok));
+    }
 
-alert(title: string, content: string, ok: string = 'Got it!'): angular.IPromise < any > {
-    return this.$mdDialog.show(this.$mdDialog.alert()
-        .title(title)
-        .htmlContent(this.markdownToHtml(content))
-        .ok(ok));
-}
+    alert(title: string, content: string, ok: string = 'Got it!'): angular.IPromise<any> {
+        return this.$mdDialog.show(this.$mdDialog.alert()
+            .title(title)
+            .htmlContent(this.markdownToHtml(content))
+            .ok(ok));
+    }
 
-confirm(title: string, content: string, ok: string = 'Yes', cancel: string = 'No'): angular.IPromise < any > {
-    return this.$mdDialog.show(this.$mdDialog.confirm()
-        .title(title)
-        .htmlContent(this.markdownToHtml(content))
-        .ok(ok)
-        .cancel(cancel));
-}
+    confirm(title: string, content: string, ok: string = 'Yes', cancel: string = 'No'): angular.IPromise<any> {
+        return this.$mdDialog.show(this.$mdDialog.confirm()
+            .title(title)
+            .htmlContent(this.markdownToHtml(content))
+            .ok(ok)
+            .cancel(cancel));
+    }
+
+    postpone<Any>(seconds: number, fn: () => Any | angular.IPromise<Any>): angular.IPromise<Any> {
+        let deferred: angular.IDeferred<Any> = this.$q.defer<Any>();
+
+        this.$timeout(() => {
+            let result = fn();
+
+            if (isPromise(result)) {
+                (result as angular.IPromise<Any>).then(obj => deferred.resolve(obj), err => deferred.reject(err));
+            }
+            else {
+                deferred.resolve(result);
+            }
+        }, seconds * MILLIS_MULTIPLIER);
+
+        return deferred.promise;
+    }
+
+
+
 }

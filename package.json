@@ -6,6 +6,7 @@
     "awesome-typescript-loader": "^2.2.4",
     "grunt": "^1.0.1",
     "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-watch": "^1.0.0",
     "grunt-ts": "^6.0.0-beta.3",
     "grunt-typedoc": "^0.2.4",
     "grunt-webpack": "^1.0.14",
@@ -20,11 +21,7 @@
     "postinstall": "npm run typings",
     "typings": "typings install",
     "start": "grunt -d",
-    "build": "webpack --inline --colors --progress --display-error-details --display-cached",
-    "webpack": "webpack",
-    "watch": "npm run build -- --watch",
-    "server2": "webpack-dev-server --inline --colors --progress --display-error-details --display-cached --port 3000  --content-base src",
-    "server": "webpack-dev-server"
+    "deploy": "grunt deploy"
   },
   "repository": {
     "type": "git",

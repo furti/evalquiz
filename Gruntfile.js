@@ -3,7 +3,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-ts");
     grunt.loadNpmTasks("grunt-typedoc");
     grunt.loadNpmTasks("grunt-contrib-watch");
-    grunt.loadNpmTasks("grunt-open");
     grunt.loadNpmTasks("grunt-webpack");
 
     var tsconfig = require("./src/riddles/tsconfig.json");
@@ -68,14 +67,16 @@ module.exports = function (grunt) {
 
             build: {
                 plugins: webpackConfig.plugins.concat(
-                    new webpack.DefinePlugin({
-                        "process.env": {
-                            // This has effect on the react lib size
-                            "NODE_ENV": JSON.stringify("production")
-                        }
-                    }),
-                    new webpack.optimize.DedupePlugin(),
-                    new webpack.optimize.UglifyJsPlugin()
+                    // Uglified code fails with module load error
+                    // 
+                    // new webpack.DefinePlugin({
+                    //     "process.env": {
+                    //         // This has effect on the react lib size
+                    //         "NODE_ENV": JSON.stringify("production")
+                    //     }
+                    // }),
+                    // new webpack.optimize.DedupePlugin(),
+                    // new webpack.optimize.UglifyJsPlugin()
                 )
             },
 

@@ -19,5 +19,10 @@
     "include": [
         "./**/*.ts",
         "./**/*.tsx"
-    ]
+    ],
+    "compileOnSave": false,
+    "buildOnSave": false,
+    "atom": {
+        "rewriteTsconfig": false
+    }
 }

@@ -1,46 +1,29 @@
 module.exports = function (grunt) {
-    grunt.loadNpmTasks("grunt-browserify");
     grunt.loadNpmTasks("grunt-contrib-copy");
     grunt.loadNpmTasks("grunt-ts");
     grunt.loadNpmTasks("grunt-typedoc");
     grunt.loadNpmTasks("grunt-contrib-watch");
-    grunt.loadNpmTasks("grunt-contrib-connect");
     grunt.loadNpmTasks("grunt-open");
+    grunt.loadNpmTasks("grunt-webpack");
 
-    var port = 8080;
+    var tsconfig = require("./src/riddles/tsconfig.json");
+    var webpack = require("webpack");
+    var webpackConfig = require("./webpack.config.js");
 
     grunt.initConfig({
-        connect: {
-            server: {
-                options: {
-                    port: port,
-                    base: "./dist"
-                }
-            }
-        },
-
         copy: {
             default: {
                 files: [
                     { expand: true, cwd: "./src", src: ["index.html"], dest: ("./dist"), flatten: true },
                     { expand: true, cwd: "./src", src: ["style/**/*.css"], dest: ("./dist"), flatten: false },
-                    { expand: true, cwd: "./src", src: ["riddles/**/*"], dest: ("./dist"), flatten: false },
-                    { expand: true, cwd: "./src", src: ["script/**/*.html"], dest: ("./dist"), flatten: false },
+                    { expand: true, cwd: "./src", src: ["riddles/**/*"], dest: ("./dist"), flatten: false }
                 ]
             },
 
             libs: {
                 files: [
                     { expand: true, src: ["./node_modules/jquery/dist/jquery.min.js"], dest: ("./dist/script/"), flatten: true },
-                    { expand: true, src: ["./node_modules/hammerjs/hammer.min.js"], dest: ("./dist/script/"), flatten: true },
-                    { expand: true, src: ["./node_modules/angular/angular.js"], dest: ("./dist/script/"), flatten: true },
-                    { expand: true, src: ["./node_modules/angular-route/angular-route.min.js"], dest: ("./dist/script/"), flatten: true },
-                    { expand: true, src: ["./node_modules/angular-animate/angular-animate.min.js"], dest: ("./dist/script/"), flatten: true },
-                    { expand: true, src: ["./node_modules/angular-aria/angular-aria.min.js"], dest: ("./dist/script/"), flatten: true },
-                    { expand: true, src: ["./node_modules/angular-sanitize/angular-sanitize.min.js"], dest: ("./dist/script/"), flatten: true },
-                    { expand: true, src: ["./node_modules/angular-material/angular-material.min.js"], dest: ("./dist/script/"), flatten: true },
                     { expand: true, src: ["./node_modules/angular-material/angular-material.min.css"], dest: ("./dist/style/"), flatten: true },
-                    { expand: true, src: ["./node_modules/angular-markdown-directive/markdown.js"], dest: ("./dist/script/"), flatten: true },
                     { expand: true, src: ["./node_modules/showdown/compressed/showdown.min.js"], dest: ("./dist/script/"), flatten: true },
                     { expand: true, src: ["./node_modules/codemirror/lib/codemirror.js"], dest: ("./dist/script/"), flatten: true },
                     { expand: true, src: ["./node_modules/codemirror/lib/codemirror.css"], dest: ("./dist/style/"), flatten: true },
@@ -50,9 +33,6 @@ module.exports = function (grunt) {
                     { expand: true, src: ["./node_modules/codemirror/addon/lint/lint.css"], dest: ("./dist/style/"), flatten: true },
                     { expand: true, src: ["./node_modules/codemirror/addon/lint/javascript-lint.js"], dest: ("./dist/script/"), flatten: true },
                     { expand: true, src: ["./node_modules/codemirror/theme/elegant.css"], dest: ("./dist/style/"), flatten: true },
-                    { expand: true, src: ["./node_modules/angular-ui-codemirror/src/ui-codemirror.js"], dest: ("./dist/script/"), flatten: true },
-                    { expand: true, src: ["./node_modules/angular-cookies/angular-cookies.min.js"], dest: ("./dist/script/"), flatten: true },
-                    { expand: true, src: ["./node_modules/angular-local-storage/dist/angular-local-storage.min.js"], dest: ("./dist/script/"), flatten: true },
                     { expand: true, src: ["./node_modules/esprima/esprima.js"], dest: ("./dist/script/"), flatten: true },
                     { expand: true, src: ["./node_modules/roboto-fontface/css/roboto/roboto-fontface.css"], dest: ("./dist/style/roboto"), flatten: true },
                     { expand: true, src: ["./node_modules/roboto-fontface/fonts/Roboto/*"], dest: ("./dist/fonts/Roboto"), flatten: true },
@@ -62,38 +42,10 @@ module.exports = function (grunt) {
             }
         },
 
-        browserify: {
-            default: {
-                files: {
-                    "dist/script/evalquiz.js": ["./src/script/evalquiz.ts"]
-                },
-                options: {
-                    plugin: ["tsify"]
-                }
-            }
-        },
-
         ts: {
             default: {
                 src: ["./src/riddles/**/*.ts"],
-                options: {
-                    rootDir: "./src/riddles",
-                    "target": "es5",
-                    "module": "commonjs",
-                    "moduleResolution": "node",
-                    "isolatedModules": false,
-                    "jsx": "react",
-                    "experimentalDecorators": true,
-                    "emitDecoratorMetadata": true,
-                    "declaration": false,
-                    "noImplicitAny": false,
-                    "removeComments": true,
-                    "noLib": false,
-                    "preserveConstEnums": true,
-                    "suppressImplicitAnyIndexErrors": true,
-                    "noImplicitThis": true,
-                    "strictNullChecks": true
-                }
+                options: tsconfig.compilerOptions
             }
         },
 
@@ -106,31 +58,76 @@ module.exports = function (grunt) {
                     jsx: "react",
                     out: "docs/",
                 },
+
                 src: "./src/script/**/*.ts"
             }
         },
 
-        watch: {
-            scripts: {
-                files: ["./src/script/**/*.ts", "./src/script/**/*.tsx"],
-                tasks: ["build"]
+        webpack: {
+            options: webpackConfig,
+
+            build: {
+                plugins: webpackConfig.plugins.concat(
+                    new webpack.DefinePlugin({
+                        "process.env": {
+                            // This has effect on the react lib size
+                            "NODE_ENV": JSON.stringify("production")
+                        }
+                    }),
+                    new webpack.optimize.DedupePlugin(),
+                    new webpack.optimize.UglifyJsPlugin()
+                )
             },
 
-            others: {
-                files: ["./src/**/*.html", "./src/**/*.css", "./src/riddles/**/*"],
-                tasks: ["ts", "copy:default"]
+            "build-dev": {
+                devtool: "source-map",
+                debug: true
             }
         },
 
-        open: {
-            dev: {
-                path: "http://localhost:" + port + "/index.html"
+        "webpack-dev-server": {
+            options: {
+                webpack: webpackConfig,
+                contentBase: "dist/",
+                publicPath: webpackConfig.output.publicPath
+            },
+
+            start: {
+                keepAlive: false,
+                webpack: {
+                    devtool: "eval",
+                    debug: true
+                }
+            },
+
+            run: {
+                keepAlive: true,
+                webpack: {
+                    devtool: "eval",
+                    debug: true
+                }
             }
+        },
+
+        watch: {
+            riddles: {
+                files: ["src/riddles/**/*"],
+                tasks: ["ts", "copy:default"],
+                options: {
+                    spawn: false,
+                }
+            },
+
+            static: {
+                files: ["src/*", "src/style/**/*"],
+                tasks: ["ts", "copy:default"],
+                options: {
+                    spawn: false,
+                }
+            },
         }
     });
 
-    grunt.registerTask("build", ["browserify"]);
-    grunt.registerTask("dist", ["ts", "copy"]);
-    grunt.registerTask("default", ["build", "dist", "connect", "open", "watch"]);
-    grunt.registerTask("dev", ["build", "connect", "watch"]);
+    grunt.registerTask("deploy", ["ts", "copy", "webpack:build"]);
+    grunt.registerTask("default", ["ts", "copy", "webpack-dev-server:start", "watch"]);
 };

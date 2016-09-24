@@ -8,7 +8,7 @@ import {Riddle} from './riddle';
 import {Component} from './utils';
 
 @Component(module, 'riddleList', {
-    templateUrl: 'script/riddle-list.component.html',
+    template: require('./riddle-list.component.html'),
     bindings: {
         riddles: '<',
         selectedRiddle: '<'

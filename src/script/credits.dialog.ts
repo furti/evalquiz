@@ -9,7 +9,7 @@ let module = angular.module('evalquiz');
     escapeToClose: true,
     focusOnOpen: true,
     hasBackdrop: true,
-    templateUrl: 'script/credits.dialog.html'
+    template: require('./credits.dialog.html')
 })
 class Controller {
     static $inject = ['$mdDialog'];

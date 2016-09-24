@@ -28,5 +28,10 @@
         "./src/riddles",
         "./src/style",
         "./typings"
-    ]
+    ],
+    "compileOnSave": false,
+    "buildOnSave": false,
+    "atom": {
+        "rewriteTsconfig": false
+    }
 }

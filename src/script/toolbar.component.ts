@@ -10,7 +10,7 @@ import { RiddleService } from './riddle.service';
 import { Component, DialogService } from './utils';
 
 @Component(module, 'toolbar', {
-    templateUrl: 'script/toolbar.component.html',
+    template: require('./toolbar.component.html'),
     bindings: {
         riddles: '<',
         selectedRiddle: '<'

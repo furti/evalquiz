@@ -6,7 +6,7 @@ import {Member} from './riddle';
 import {Component} from './utils';
 
 @Component(module, 'memberInfo', {
-    templateUrl: 'script/member-info.component.html',
+    template: require('./member-info.component.html'),
     bindings: {
         member: '<'
     }

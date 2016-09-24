@@ -6,7 +6,7 @@ import {Member} from './riddle';
 import {Component} from './utils';
 
 @Component(module, 'apiInfo', {
-    templateUrl: 'script/api-info.component.html',
+    template: require('./api-info.component.html'),
     bindings: {
         api: '<'
     }

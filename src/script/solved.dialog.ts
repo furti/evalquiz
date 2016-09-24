@@ -13,7 +13,7 @@ import {Dialog} from './utils';
     escapeToClose: false,
     focusOnOpen: true,
     hasBackdrop: true,
-    templateUrl: 'script/solved.dialog.html'
+    template: require('./solved.dialog.html')
 })
 export class Controller { 
     static $inject = ['result', 'evalQuizService', 'riddleService', '$mdDialog'];

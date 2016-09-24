@@ -14,7 +14,7 @@ import { UIService } from './ui.service';
 import { Component, Service, DialogService, Dialog } from './utils';
 
 @Component(module, 'workbench', {
-    templateUrl: 'script/workbench.component.html',
+    template: require('./workbench.component.html'),
     bindings: {
         riddle: '<'
     }

@@ -6,6 +6,10 @@ declare namespace suite {
 
         success: boolean;
 
+        abort?: boolean;
+
+        score?: number;
+        
         message?: string;
     }
 
@@ -15,9 +19,19 @@ declare namespace suite {
 
         withIcon(icon?: string): this;
 
+        withContentClass(...classname: string[]): this;
+
+        sub(): LogItem;
+
         newLine(): JQuery;
 
         space(): JQuery;
+
+        h1(s: string): JQuery;
+
+        h2(s: string): JQuery;
+
+        h3(s: string): JQuery;
 
         mark(mark: string): JQuery;
 

@@ -125,10 +125,15 @@ workbench {
 
 .console > div.item div.content {
     flex: 1 1 auto;
+    overflow: visible;
 }
 
-.console p, .console pre {
-    margin: 0.2em 0;
+.console div, .console p, .console pre {
+    margin: 0.4em 0;
+}
+
+.console .center {
+    text-align: center;
 }
 
 .console .info {
@@ -160,6 +165,21 @@ workbench {
     font-family: Courier New, Courier, monospace;
 }
 
+@keyframes move-in-anim {
+    from {
+        opacity: 0;
+        transform: scale(1.5) translateY(1em);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.console .move-in {
+    animation: move-in-anim 0.5s ease-in forwards;    
+}
+
 
 /* Console Marks */
 
@@ -181,6 +201,7 @@ workbench {
 }
 
 .console .mark.ok, .console .mark.not-ok {
+    opacity: 0;
     animation: ok-anim 0.25s ease-in forwards;
     margin: 0 0 0 1.5em;
 }
@@ -197,6 +218,8 @@ workbench {
 }
 
 .console .mark.star, .console .mark.no-star {
+    opacity: 0;
+    font-size: 48px;
     animation: star-anim 0.5s ease-out forwards;
 }
 
@@ -239,6 +262,16 @@ workbench {
 
 
 /* Layout Helpers */
+
+.layout-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.layout-column {
+    display: flex;
+    flex-direction: column;
+}
 
 .layout-no-shrink {
     flex-shrink: 0;

@@ -3,7 +3,7 @@
         "id": "intro",
         "title": "Intro",
         "shortDescription": "eval(Quiz) sounds like fun :)",
-        "minScoreToSolve": 1,
+        "minScoreToSolve": 2,
         "location": "intro"
     },
     {

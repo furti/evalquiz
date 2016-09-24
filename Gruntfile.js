@@ -129,6 +129,7 @@ module.exports = function (grunt) {
         }
     });
 
+    grunt.registerTask("build", ["ts", "webpack:build"]);
     grunt.registerTask("deploy", ["ts", "copy", "webpack:build"]);
     grunt.registerTask("default", ["ts", "copy", "webpack-dev-server:start", "watch"]);
 };

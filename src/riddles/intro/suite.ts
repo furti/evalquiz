@@ -2,6 +2,8 @@
 
 export class Suite {
 
+    private failed = false;
+
     constructor(private context: suite.Context) {
     }
 
@@ -44,27 +46,43 @@ export class Suite {
         return this.execute(a, b, a + b);
     }
 
-    testStatenents(): void {
+    testStatenents(): suite.Result {
         var statementCount = this.context.countStatements() + this.context.countVariableDeclarations();
+        var score: number | undefined = undefined;
 
-        if (statementCount === 1) {
+        if ((!this.failed) && (statementCount === 1)) {
             let logItem = this.context.log();
 
             logItem.write('The riddle was solved with only one statement.');
             logItem.mark('ok');
+
+            score = 2;
         }
+
+        return {
+            success: true,
+            score
+        };
     }
 
-    testBonusGoal(): void {
+    testBonusGoal(): suite.Result {
         var statementCount = this.context.countStatements() + this.context.countVariableDeclarations();
         var plusCount = this.context.countOperators('+', '++', '+=');
+        var score: number | undefined = undefined;
 
-        if ((statementCount === 1) && (plusCount === 0)) {
+        if ((!this.failed) && (statementCount === 1) && (plusCount === 0)) {
             let logItem = this.context.log();
 
             logItem.write('Bonus goal: Solved without any additions.');
             logItem.mark('ok');
+
+            score = 3;
         }
+
+        return {
+            success: true,
+            score
+        };
     }
 
     execute(a: number, b: number, expected: number): angular.IPromise<suite.Result> {
@@ -89,12 +107,13 @@ export class Suite {
                         });
                     }
                     else {
+                        this.failed = true;
+                        
                         logItem.space();
                         logItem.mark("not-ok");
 
                         deferred.resolve({
-                            success: false,
-                            message: `Expected ${expected}, but got ${c}.`
+                            success: false
                         });
                     }
                 });

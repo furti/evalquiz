@@ -45,8 +45,8 @@ export class Controller {
         return this.riddle.state.score >= this.riddle.minScoreToSolve;
     }
 
-    protected get message(): string | undefined {
-        return this.result.message;
+    protected get messages(): string[] | undefined {
+        return undefined;
     }
 
     protected get nextRiddleId(): string | undefined {

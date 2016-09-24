@@ -15,7 +15,7 @@ export interface Member {
 }
 
 export interface RiddleDetail {
-    goals: String[];
+    goals: string[];
     description: string;
     hints: string;
     api: Member[];

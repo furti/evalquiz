@@ -150,21 +150,80 @@ export class RiddleService {
                 let solved: boolean = result.score >= riddle.minScoreToSolve;
 
                 if (!passed) {
-                    this.consoleService.log().withClass("error").markdown('## Tests failed\n\nYour code failed to pass the tests.');
+                    let logItem = this.consoleService.log();
 
-                    if (result.message) {
-                        this.consoleService.log().markdown(result.message);
+                    logItem.markdown('## Tests failed\n\nYour code did not pass all tests.').addClass("error");
+
+                    if (result.messages) {
+                        result.messages.forEach(message => logItem.markdown(message));
                     }
 
-                    this.consoleService.log('Refine your code and try again. Good luck.');
+                    logItem.markdown('Refine your code and try again. Good luck.');
                 }
                 else {
-                    let logItem = this.consoleService.log().withClass('large');
+                    let logItem = this.consoleService.log();
 
-                    logItem.mark('star').addClass('xlarge');
-                    logItem.mark('star').addClass('xlarge');
-                    logItem.mark('star').addClass('xlarge');
-                    // .markdown('## Bravo\n\nYour code passed all tests.');
+                    if (solved) {
+                        logItem.h2('Contrgatulations');
+                    }
+                    else {
+                        logItem.h2('Tests passed');
+                    }
+
+                    logItem.mark(result.score >= 1 ? 'star' : 'no-star').attr('style', 'animation-delay: 0.5s');;
+                    logItem.mark(result.score >= 2 ? 'star' : 'no-star').attr('style', 'animation-delay: 0.75s');
+                    logItem.mark(result.score >= 3 ? 'star' : 'no-star').attr('style', 'animation-delay: 1s');;
+
+                    if (solved) {
+                        logItem.markdown('You\'ve sovled the riddle!');
+                    }
+                    else {
+                        logItem.markdown('Your code has passed all the tests.');
+                    }
+
+                    if (result.messages) {
+                        result.messages.forEach(message => logItem.markdown(message));
+                    }
+
+                    if (solved) {
+                        if (result.score < 3) {
+                            logItem.markdown('Want more stars? Try the next goal of this riddle:');
+                        }
+                    }
+                    else {
+                        if (riddle.minScoreToSolve === 2) {
+                            logItem.write('That was okay, but you need at least two stars (');
+                            logItem.icon('fa-star');
+                            logItem.space();
+                            logItem.icon('fa-star');
+                            logItem.space();
+                            logItem.icon('fa-star-o');
+                            logItem.write(') to solve this level. Keep trying! Can you achieve the next goal?');
+                        }
+
+                        if (riddle.minScoreToSolve === 3) {
+                            logItem.write('That was okay, but you need at least three stars (');
+                            logItem.icon('fa-star');
+                            logItem.space();
+                            logItem.icon('fa-star');
+                            logItem.space();
+                            logItem.icon('fa-star');
+                            logItem.write(') to solve this level. Keep trying! Can you achieve the next goal?');
+                        }
+                    }
+
+                    if (result.score < 3) {
+                        let subItem = logItem.sub().withContentClass("layout-row", "layout-baseline");
+
+                        subItem.icon('fa-star').addClass("warning");
+                        subItem.space();
+                        subItem.icon('fa-star').addClass("warning");
+                        subItem.space();
+                        subItem.icon('fa-star-o').addClass("warning");
+                        subItem.space(3);
+                        subItem.markdown(riddle.detail!.goals[result.score + 1]);
+                    }
+
 
                 }
 

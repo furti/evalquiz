@@ -2,8 +2,8 @@
 
 let module = angular.module('evalquiz');
 
-import {UIService} from './ui.service';
-import {Injectable} from './utils';
+import { UIService } from './ui.service';
+import { Injectable } from './utils';
 
 @Injectable(module, 'consoleService')
 export class ConsoleService {
@@ -23,7 +23,7 @@ export class ConsoleService {
         let consoleElement: JQuery = angular.element('#console');
         let itemElement: JQuery = angular.element('<div></div>').attr({ id }).addClass('item');
         let iconElement: JQuery = angular.element('<div></div>').addClass('icon');
-        let contentElement: JQuery = angular.element('<div</div>').addClass('content');
+        let contentElement: JQuery = angular.element('<div></div>').addClass('content');
 
         itemElement.append(iconElement, contentElement);
         consoleElement.append(itemElement);
@@ -65,23 +65,65 @@ export class ConsoleLogItem implements suite.LogItem {
         return this;
     }
 
+    withContentClass(...classnames: string[]): this {
+        this.contentElement.attr('class', '');
+
+        if (classnames) {
+            classnames.forEach(classname => this.contentElement.addClass(classname));
+        }
+
+        return this;
+    }
+
+
     private append(element: JQuery): JQuery {
         this.lastElement = element;
         this.contentElement.append(element);
 
         this.consoleElement.animate({
             scrollTop: element.offset().top,
-        });
+        }, 0);
 
         return element;
+    }
+
+    sub(): ConsoleLogItem {
+        let itemElement: JQuery = angular.element('<div></div>').addClass('item');
+        let iconElement: JQuery = angular.element('<div></div>').addClass('icon');
+        let contentElement: JQuery = angular.element('<div></div>').addClass('content');
+
+        itemElement.append(iconElement, contentElement);
+        this.contentElement.append(itemElement);
+
+        let block: ConsoleLogItem = new ConsoleLogItem(this.uiService, this.consoleElement, itemElement, iconElement, contentElement);
+
+        return block;
     }
 
     newLine(): JQuery {
         return this.append(angular.element('<br />'));
     }
 
-    space(): JQuery {
-        return this.append(angular.element('<span>&nbsp;&nbsp;</span>'));
+    space(count: number = 1): JQuery {
+        let npsps = '';
+
+        for (let i=0; i<count; i++) {
+            npsps += '&nbsp;';
+        }
+
+        return this.append(angular.element(`<span>${npsps}</span>`));
+    }
+
+    h1(s: string): JQuery {
+        return this.append(angular.element(`<h1>${s}</h1>`));
+    }
+
+    h2(s: string): JQuery {
+        return this.append(angular.element(`<h2>${s}</h2>`));
+    }
+
+    h3(s: string): JQuery {
+        return this.append(angular.element(`<h3>${s}</h3>`));
     }
 
     mark(mark: string): JQuery {

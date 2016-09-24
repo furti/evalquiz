@@ -9,7 +9,7 @@ import { MILLIS_MULTIPLIER } from './utils';
 export interface XXX {
     riddle: Riddle;
     score: number;
-    message?: string;
+    messages?: string[];
 }
 
 
@@ -38,6 +38,9 @@ export class RiddleRunner implements suite.Context {
     private deferred: angular.IDeferred<XXX>;
     private suite: any;
     private testFns: (() => suite.Result | angular.IPromise<suite.Result | undefined> | undefined)[];
+
+    private score: number = 1;
+    private messages: string[] = [];
 
     constructor(private $q: angular.IQService, private uiService: UIService, private consoleService: ConsoleService, private riddle: Riddle) {
 
@@ -76,8 +79,8 @@ export class RiddleRunner implements suite.Context {
         if (testFn === undefined) {
             this.deferred.resolve({
                 riddle: this.riddle,
-                score: 1,
-                message: "Juhu"
+                score: this.score,
+                messages: this.messages
             });
 
             return this.deferred.promise;
@@ -86,26 +89,26 @@ export class RiddleRunner implements suite.Context {
         try {
             this.invokeTestFn(testFn).then(result => {
                 if (result === undefined) {
-                    this.uiService.postpone(SECONDS_BETWEEN_TESTS, () => this.execute());
+                    // quiet success
                 }
                 else if (result.success) {
-                    if (result.message) {
-                        this.logSuccess(result.message);
+                    if (result.score && result.score > this.score && this.score > 0) {
+                        this.score = result.score;
                     }
 
-                    this.uiService.postpone(SECONDS_BETWEEN_TESTS, () => this.execute());
+                    if (result.message) {
+                        this.messages.push(result.message);
+                    }
                 }
                 else {
-                    if (result.message) {
-                        this.logFailure(result.message);
-                    }
+                    this.score = 0;
 
-                    this.deferred.resolve({
-                        riddle: this.riddle,
-                        score: 0,
-                        message: result.message
-                    });
+                    if (result.message) {
+                        this.messages.push(result.message);
+                    }
                 }
+
+                this.uiService.postpone(SECONDS_BETWEEN_TESTS, () => this.execute());
             });
         }
         catch (err) {
@@ -214,14 +217,6 @@ export class RiddleRunner implements suite.Context {
 
     postpone<Any>(seconds: number, fn: () => Any | angular.IPromise<Any>): angular.IPromise<Any> {
         return this.uiService.postpone(seconds, fn);
-    }
-
-    private logSuccess(message: string): void {
-        console.log(message);
-    }
-
-    private logFailure(message: string): void {
-        console.log(message);
     }
 
     log(message?: any): suite.LogItem {

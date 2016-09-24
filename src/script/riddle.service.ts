@@ -146,7 +146,6 @@ export class RiddleService {
             let runner = new RiddleRunner(this.$q, this.uiService, this.consoleService, riddle);
 
             runner.execute().then((result: XXX) => {
-                console.log(result.score);
                 let passed: boolean = result.score > 0;
                 let solved: boolean = result.score >= riddle.minScoreToSolve;
 

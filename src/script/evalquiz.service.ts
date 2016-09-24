@@ -11,6 +11,7 @@ import { Injectable } from './utils';
 export class EvalQuizService {
 
     protected _initialized: boolean = false;
+    protected _initializeCallbacks: (() => void)[] = [];
     protected _selectedRiddleId: string;
 
     protected riddles: Riddle[];
@@ -75,7 +76,7 @@ export class EvalQuizService {
 
             riddle.detail = null;
 
-            this.riddleMap[riddle.id] = riddle;
+            this.riddleMap![riddle.id] = riddle;
         });
 
         let persistedRiddleStates = this.storageService.load();
@@ -89,10 +90,20 @@ export class EvalQuizService {
         }
 
         this._initialized = true;
+        this._initializeCallbacks.forEach(fn => fn());
     }
 
     get initialized(): boolean {
         return this._initialized;
+    }
+
+    whenInitialized(fn: () => void): void {
+        if (this._initialized) {
+            fn();
+        }
+        else {
+            this._initializeCallbacks.push(fn);
+        }
     }
 
     reset(clear: boolean): void {
@@ -131,18 +142,10 @@ export class EvalQuizService {
     }
 
     getRiddle(riddleId: string): Riddle | undefined {
-        if (!this.riddleMap) {
-            return undefined;
-        }
-
         return this.riddleMap[riddleId];
     }
 
     getNextRiddle(riddle: Riddle): Riddle | undefined {
-        if (!riddle) {
-            return undefined;
-        }
-
         let pos = this.riddles.indexOf(riddle);
 
         if (this.riddles.length > pos + 1) {

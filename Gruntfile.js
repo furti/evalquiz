@@ -89,7 +89,7 @@ module.exports = function (grunt) {
             options: {
                 webpack: webpackConfig,
                 contentBase: "dist/",
-                publicPath: webpackConfig.output.publicPath
+                publicPath: "/" + webpackConfig.output.publicPath
             },
 
             start: {

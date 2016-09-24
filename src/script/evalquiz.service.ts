@@ -5,9 +5,9 @@ let module = angular.module('evalquiz');
 import { Riddle, RiddleDetail, RiddleState, Member } from './riddle';
 import { StorageService } from './storage.service';
 import { UIService } from './ui.service';
-import { Service } from './utils';
+import { Injectable } from './utils';
 
-@Service(module, 'evalQuizService')
+@Injectable(module, 'evalQuizService')
 export class EvalQuizService {
 
     protected _initialized: boolean = false;

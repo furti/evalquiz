@@ -3,14 +3,14 @@
 let module = angular.module('evalquiz');
 
 import {Riddle, RiddleState} from './riddle';
-import {Service} from './utils';
+import {Injectable} from './utils';
 
 export type RiddleStateMap = { [riddleId: string]: RiddleState };
 
 const STATE_KEY = 'evalQuiz.state';
 const SELECTED_RIDDLE_ID_KEY = 'evalQuiz.selectedRiddleId';
 
-@Service(module, 'storageService')
+@Injectable(module, 'storageService')
 export class StorageService {
     static $inject = ['localStorageService'];
 

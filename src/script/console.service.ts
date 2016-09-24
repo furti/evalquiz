@@ -3,9 +3,9 @@
 let module = angular.module('evalquiz');
 
 import {UIService} from './ui.service';
-import {Service} from './utils';
+import {Injectable} from './utils';
 
-@Service(module, 'consoleService')
+@Injectable(module, 'consoleService')
 export class ConsoleService {
     static $inject = ['uiService'];
 

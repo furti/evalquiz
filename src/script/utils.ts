@@ -29,7 +29,7 @@ export function Component(nameOrModule: string | angular.IModule, selector: stri
  * @param {string} selector the name of the component
  * @returns the service object
  */
-export function Service(nameOrModule: string | angular.IModule, selector: string) {
+export function Injectable(nameOrModule: string | angular.IModule, selector: string) {
     return (service: Function) => {
         var module = angular.isString(nameOrModule) ? angular.module(nameOrModule) : nameOrModule;
 

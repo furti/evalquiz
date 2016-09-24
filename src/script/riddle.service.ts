@@ -7,9 +7,9 @@ import { EvalQuizService } from './evalquiz.service';
 import { Riddle, RiddleDetail, RiddleState, Member } from './riddle';
 import { RiddleRunner, XXX } from './riddle.runner';
 import { UIService } from './ui.service';
-import { Service } from './utils';
+import { Injectable } from './utils';
 
-@Service(module, 'riddleService')
+@Injectable(module, 'riddleService')
 export class RiddleService {
 
     static $inject = ['evalQuizService', '$http', '$q', '$timeout', 'consoleService', 'uiService'];

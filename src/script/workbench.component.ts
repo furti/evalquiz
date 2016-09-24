@@ -11,7 +11,7 @@ import { RiddleService } from './riddle.service';
 import './solved.dialog';
 import './toolbar.component';
 import { UIService } from './ui.service';
-import { Component, Service, DialogService, Dialog } from './utils';
+import { Component, Injectable, DialogService, Dialog } from './utils';
 
 @Component(module, 'workbench', {
     template: require('./workbench.component.html'),

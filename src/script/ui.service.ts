@@ -2,7 +2,7 @@
 
 let module = angular.module('evalquiz');
 
-import { MILLIS_MULTIPLIER, Service, isPromise } from './utils';
+import { MILLIS_MULTIPLIER, Injectable, isPromise } from './utils';
 
 class MenuController {
     static $inject = ['mdPanelRef'];
@@ -20,7 +20,7 @@ class MenuController {
     }
 }
 
-@Service(module, 'uiService')
+@Injectable(module, 'uiService')
 export class UIService {
     static $inject = ['$mdPanel', '$mdDialog', '$mdToast', '$q', '$timeout', '$sanitize', 'markdownConverter'];
 

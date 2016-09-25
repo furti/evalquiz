@@ -64,6 +64,10 @@ class WorkbenchComponent {
         return this.riddleService.isSolved(this.riddle);
     }
 
+    get running(): boolean {
+        return this.riddleService.running;
+    }
+
     public trash($event: any): void {
         this.uiService.confirm('Trash Your Code', 'Are you sure that you want to clear the editor?', 'Delete', 'Abort').then(() => {
             this.riddle.state.code = this.riddle.detail!.stub;
@@ -99,33 +103,38 @@ class WorkbenchComponent {
     }
 
     public solve(): void {
-        this.selectedTab = 2;
+        if (this.running) {
+            this.riddleService.abort();
+        }
+        else {
+            this.selectedTab = 2;
 
-        this.riddleService.execute(this.riddle).then(result => {
-            if (result.score > 0) {
-                if (result.score >= this.riddle.state.score) {
-                    this.riddle.state.score = result.score;
+            this.riddleService.execute(this.riddle).then(result => {
+                if (result.score > 0) {
+                    if (result.score >= this.riddle.state.score) {
+                        this.riddle.state.score = result.score;
+                    }
+
+                    let key = result.score === 1 ? '1 Star' : result.score + ' Stars';
+
+                    this.riddle.state.savedCode = this.riddle.state.savedCode || {};
+                    this.riddle.state.savedCode[key] = this.riddle.state.code!;
+                    this.evalQuizService.saveRiddle(this.riddle);
                 }
 
-                let key = result.score === 1 ? '1 Star' : result.score + ' Stars';
+                this.solvedDialog.show({ result }).then(() => {
+                    // TODO focus editor
+                });
+            }, err => {
+                console.error(err);
 
-                this.riddle.state.savedCode = this.riddle.state.savedCode || {};
-                this.riddle.state.savedCode[key] = this.riddle.state.code!;
-                this.evalQuizService.saveRiddle(this.riddle);
-            }
+                let log = this.consoleService.log();
 
-            this.solvedDialog.show({ result }).then(() => {
-                // TODO focus editor
+                log.markdown('Failed to execute function:')
+                log.code(err);
+
+                this.uiService.toast('Execution failed. See console for more info.');
             });
-        }, err => {
-            console.error(err);
-
-            let log = this.consoleService.log();
-
-            log.markdown('Failed to execute function:')
-            log.code(err);
-
-            this.uiService.toast('Execution failed. See console for more info.');
-        });
+        }
     }
 }

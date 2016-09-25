@@ -49,6 +49,10 @@ class Controller {
         return !!this.evalQuizService.getRiddle(this.nextRiddleId);
     }
 
+    protected get running(): boolean {
+        return this.riddleService.running;
+    }
+    
     protected gotoRiddle(riddleId: string): void {
         this.evalQuizService.gotoRiddle(riddleId);
     }

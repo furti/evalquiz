@@ -35,7 +35,8 @@ export class RiddleRunner implements suite.Context {
     private fnWrapper: Function;
     private tree: ESTree.Program;
 
-    private deferred: angular.IDeferred<XXX>;
+    private executeDeferred: angular.IDeferred<XXX>;
+    private canceledDeferred: angular.IDeferred<never>;
     private suite: any;
     private testFns: (() => suite.Result | angular.IPromise<suite.Result | undefined> | undefined)[];
 
@@ -62,28 +63,34 @@ export class RiddleRunner implements suite.Context {
         this.tree = esprima.parse(code!);
     }
 
+    get executing(): boolean {
+        return !!this.executeDeferred;
+    }
+
     execute(): angular.IPromise<XXX> {
-        if (!this.deferred) {
-            this.deferred = this.$q.defer<XXX>();
+        this.checkCanceled();
+
+        if (!this.executing) {
+            this.executeDeferred = this.$q.defer<XXX>();
 
             try {
                 this.prepare();
             }
             catch (err) {
-                this.deferred.reject(err);
+                this.executeDeferred.reject(err);
             }
         }
 
         let testFn = this.testFns.shift();
 
         if (testFn === undefined) {
-            this.deferred.resolve({
+            this.executeDeferred.resolve({
                 riddle: this.riddle,
                 score: this.score,
                 messages: this.messages
             });
 
-            return this.deferred.promise;
+            return this.executeDeferred.promise;
         }
 
         try {
@@ -117,11 +124,10 @@ export class RiddleRunner implements suite.Context {
             throw new Error(message);
         }
 
-        return this.deferred.promise;
+        return this.executeDeferred.promise;
     }
 
     private prepare(): void {
-
         try {
             let exports: { [key: string]: any } = this.suiteFactory();
             let keys = Object.keys(exports);
@@ -157,7 +163,29 @@ export class RiddleRunner implements suite.Context {
         }
     }
 
+    get canceled(): boolean {
+        return !!this.canceledDeferred;
+    }
+
+    cancel(): angular.IPromise<never> {
+        if (!this.canceled) {
+            this.canceledDeferred = this.$q.defer<never>();
+        }
+
+        return this.canceledDeferred.promise;
+    }
+
+    checkCanceled(): void {
+        if (this.canceled) {
+            this.canceledDeferred.resolve();
+
+            throw new Error("Execution aborted.");
+        }
+    }
+
     private invokeTestFn(testFn: () => suite.Result | angular.IPromise<suite.Result | undefined> | undefined): angular.IPromise<suite.Result> {
+        this.checkCanceled();
+
         let deferred = this.$q.defer<suite.Result>();
 
         try {
@@ -185,6 +213,8 @@ export class RiddleRunner implements suite.Context {
     }
 
     invokeFn(...params: any[]): any {
+        this.checkCanceled();
+
         let fnParams: any[] = [];
 
         for (let fnWrapperArg of this.fnWrapperArgs) {
@@ -212,10 +242,14 @@ export class RiddleRunner implements suite.Context {
     }
 
     defer<Any>(): angular.IDeferred<Any> {
+        this.checkCanceled();
+
         return this.$q.defer();
     }
 
     postpone<Any>(seconds: number, fn: () => Any | angular.IPromise<Any>): angular.IPromise<Any> {
+        this.checkCanceled();
+
         return this.uiService.postpone(seconds, fn);
     }
 

@@ -105,14 +105,14 @@
         </md-card-content>
 
         <md-card-actions layout="row" layout-align="end center">
-            <md-button ng-click="$ctrl.save()">Save</md-button>
-            <md-button class="code-load-button" ng-click="$ctrl.load()" ng-disabled="!$ctrl.hasSaves">Load</md-button>
-            <md-button ng-click="$ctrl.trash()">Trash</md-button>
+            <md-button ng-click="$ctrl.save()" ng-disabled="$ctrl.running">Save</md-button>
+            <md-button class="code-load-button" ng-click="$ctrl.load()" ng-disabled="!$ctrl.hasSaves || $ctrl.running">Load</md-button>
+            <md-button ng-click="$ctrl.trash()" ng-disabled="$ctrl.running">Trash</md-button>
 
             <span flex="" class="flex"></span>
 
-            <md-button class="md-primary md-raised" ng-click="$ctrl.solve($event)">
-                <i class="fa fa-play-circle separated" aria-hidden="true"></i> Solve
+            <md-button class="md-primary md-raised" style="width: 10em;" ng-click="$ctrl.solve($event)">
+                <i class="fa fa-play-circle separated" ng-class="{'fa-spin': $ctrl.running}" aria-hidden="true"></i> {{$ctrl.running ? 'Abort' : 'Solve'}}
             </md-button>
         </md-card-actions>
     </md-card>

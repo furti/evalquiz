@@ -14,6 +14,8 @@ export class RiddleService {
 
     static $inject = ['evalQuizService', '$http', '$q', '$timeout', 'consoleService', 'uiService'];
 
+    private runner: RiddleRunner | null = null;
+
     constructor(protected evalQuizService: EvalQuizService, protected $http: ng.IHttpService, protected $q: ng.IQService, protected $timeout: ng.ITimeoutService, protected consoleService: ConsoleService, protected uiService: UIService) {
     }
 
@@ -134,18 +136,24 @@ export class RiddleService {
         return true;
     }
 
+    get running(): boolean {
+        return !!this.runner;
+    }
+
     execute(riddle: Riddle): angular.IPromise<XXX> {
         this.evalQuizService.saveRiddle(riddle);
 
         this.consoleService.clear();
-        this.consoleService.log().markdown(`# Solving riddle: ${riddle.title}`);
+        this.consoleService.log().markdown(`# ${riddle.title}`);
 
         let deferred = this.$q.defer<XXX>();
 
         try {
-            let runner = new RiddleRunner(this.$q, this.uiService, this.consoleService, riddle);
+            this.runner = new RiddleRunner(this.$q, this.uiService, this.consoleService, riddle);
 
-            runner.execute().then((result: XXX) => {
+            this.runner.execute().then((result: XXX) => {
+                this.runner = null;
+
                 let passed: boolean = result.score > 0;
                 let solved: boolean = result.score >= riddle.minScoreToSolve;
 
@@ -154,9 +162,13 @@ export class RiddleService {
 
                     logItem.markdown('## Tests failed\n\nYour code did not pass all tests.').addClass('error');
 
-                    if (result.messages) {
-                        result.messages.forEach(message => logItem.markdown(message));
+                    if (result.messages && result.messages.length) {
+                        logItem = this.consoleService.log();
+
+                        result.messages.forEach(message => logItem.markdown(message).addClass('fade-in'));
                     }
+
+                    logItem = this.consoleService.log();
 
                     logItem.markdown('Refine your code and try again. Good luck.');
                 }
@@ -181,12 +193,14 @@ export class RiddleService {
                         logItem.markdown('Your code has passed all the tests.').addClass('move-in').attr('style', 'animation-delay: 1.5s');
                     }
 
-                    if (result.messages) {
-                        result.messages.forEach(message => logItem.markdown(message));
-                    }
-
                     if (result.score < 3) {
                         this.uiService.postpone(2.5, () => {
+                            if (result.messages && result.messages.length) {
+                                logItem = this.consoleService.log();
+
+                                result.messages.forEach(message => logItem.markdown(message).addClass('fade-in'));
+                            }
+
                             logItem = this.consoleService.log();
 
                             if (solved) {
@@ -253,36 +267,18 @@ export class RiddleService {
             }, err => deferred.reject(err));
         }
         catch (err) {
+            this.runner = null;
+
             deferred.reject(err);
         }
-
-        // try {
-        //     let solve = this.parseCode(riddle);
-        //     let syntax = this.analyzeCode(riddle);
-        //     let engine = this.buildEngine(riddle);
-
-        //     this.consoleService.block().markdown('Initializing engine ...');
-
-        //     engine.init();
-
-        //     this.consoleService.block().markdown('Starting tests ...');
-
-        //     let score = engine.run(solve, syntax);
-
-        //     let result = {
-        //         riddle,
-        //         score, 
-        //         message: 'TODO FIXME WRITEME HATEME KILLME IGNOREME'
-        //     }
-
-        //     deferred.resolve(result);
-        // }
-        // catch (err) {
-        //     deferred.reject(err);
-        // }
 
         return deferred.promise;
     }
 
+    abort(): void {
+        if (this.runner) {
+            this.runner.cancel();
+        }
+    }
 }
 

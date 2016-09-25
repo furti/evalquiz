@@ -150,9 +150,9 @@ export class RiddleService {
                 let solved: boolean = result.score >= riddle.minScoreToSolve;
 
                 if (!passed) {
-                    let logItem = this.consoleService.log();
+                    let logItem = this.consoleService.log().withContentClass('center ', 'fade-in');
 
-                    logItem.markdown('## Tests failed\n\nYour code did not pass all tests.').addClass("error");
+                    logItem.markdown('## Tests failed\n\nYour code did not pass all tests.').addClass('error');
 
                     if (result.messages) {
                         result.messages.forEach(message => logItem.markdown(message));
@@ -161,70 +161,80 @@ export class RiddleService {
                     logItem.markdown('Refine your code and try again. Good luck.');
                 }
                 else {
-                    let logItem = this.consoleService.log();
+                    let logItem = this.consoleService.log().withContentClass('center');
 
                     if (solved) {
-                        logItem.h2('Contrgatulations');
+                        logItem.h2('Contrgatulations').addClass('fade-in');
                     }
                     else {
-                        logItem.h2('Tests passed');
+                        logItem.h2('Tests passed').addClass('fade-in');
                     }
 
-                    logItem.mark(result.score >= 1 ? 'star' : 'no-star').attr('style', 'animation-delay: 0.5s');;
+                    logItem.mark(result.score >= 1 ? 'star' : 'no-star').attr('style', 'animation-delay: 0.5s');
                     logItem.mark(result.score >= 2 ? 'star' : 'no-star').attr('style', 'animation-delay: 0.75s');
-                    logItem.mark(result.score >= 3 ? 'star' : 'no-star').attr('style', 'animation-delay: 1s');;
+                    logItem.mark(result.score >= 3 ? 'star' : 'no-star').attr('style', 'animation-delay: 1s');
 
                     if (solved) {
-                        logItem.markdown('You\'ve sovled the riddle!');
+                        logItem.markdown('You\'ve sovled the riddle!').addClass('move-in').attr('style', 'animation-delay: 1.5s');
                     }
                     else {
-                        logItem.markdown('Your code has passed all the tests.');
+                        logItem.markdown('Your code has passed all the tests.').addClass('move-in').attr('style', 'animation-delay: 1.5s');
                     }
 
                     if (result.messages) {
                         result.messages.forEach(message => logItem.markdown(message));
                     }
 
-                    if (solved) {
-                        if (result.score < 3) {
-                            logItem.markdown('Want more stars? Try the next goal of this riddle:');
-                        }
-                    }
-                    else {
-                        if (riddle.minScoreToSolve === 2) {
-                            logItem.write('That was okay, but you need at least two stars (');
-                            logItem.icon('fa-star');
-                            logItem.space();
-                            logItem.icon('fa-star');
-                            logItem.space();
-                            logItem.icon('fa-star-o');
-                            logItem.write(') to solve this level. Keep trying! Can you achieve the next goal?');
-                        }
-
-                        if (riddle.minScoreToSolve === 3) {
-                            logItem.write('That was okay, but you need at least three stars (');
-                            logItem.icon('fa-star');
-                            logItem.space();
-                            logItem.icon('fa-star');
-                            logItem.space();
-                            logItem.icon('fa-star');
-                            logItem.write(') to solve this level. Keep trying! Can you achieve the next goal?');
-                        }
-                    }
-
                     if (result.score < 3) {
-                        let subItem = logItem.sub().withContentClass("layout-row", "layout-baseline");
+                        this.uiService.postpone(2.5, () => {
+                            logItem = this.consoleService.log();
 
-                        subItem.icon('fa-star').addClass("warning");
-                        subItem.space();
-                        subItem.icon('fa-star').addClass("warning");
-                        subItem.space();
-                        subItem.icon('fa-star-o').addClass("warning");
-                        subItem.space(3);
-                        subItem.markdown(riddle.detail!.goals[result.score + 1]);
+                            if (solved) {
+                                if (result.score < 3) {
+                                    logItem.markdown('Want more stars? Try the next goal of this riddle!').addClass('fade-in');
+                                }
+                            }
+                            else {
+                                if (riddle.minScoreToSolve === 2) {
+                                    let subItem = logItem.sub().withContentClass('fade-in');
+
+                                    subItem.write('That was okay, but you need at least two stars (');
+                                    subItem.icon('fa-star');
+                                    subItem.space();
+                                    subItem.icon('fa-star');
+                                    subItem.space();
+                                    subItem.icon('fa-star-o');
+                                    subItem.write(') to solve this level. Keep trying! Can you achieve the next goal?');
+                                }
+
+                                if (riddle.minScoreToSolve === 3) {
+                                    let subItem = logItem.sub().withContentClass('fade-in');
+
+                                    subItem.write('That was okay, but you need at least three stars (');
+                                    subItem.icon('fa-star');
+                                    subItem.space();
+                                    subItem.icon('fa-star');
+                                    subItem.space();
+                                    subItem.icon('fa-star');
+                                    subItem.write(') to solve this level. Keep trying! Can you achieve the next goal?');
+                                }
+                            }
+
+                            let nextGoal = result.score + 1;
+
+                            if (nextGoal <= 3) {
+                                let subItem = logItem.sub().withContentClass('layout-row', 'layout-baseline', 'fade-in');
+
+                                subItem.icon(nextGoal >= 1 ? 'fa-star' : 'fa-star-o').addClass('warning');
+                                subItem.space();
+                                subItem.icon(nextGoal >= 2 ? 'fa-star' : 'fa-star-o').addClass('warning');
+                                subItem.space();
+                                subItem.icon(nextGoal >= 3 ? 'fa-star' : 'fa-star-o').addClass('warning');
+                                subItem.space(3);
+                                subItem.markdown(riddle.detail!.goals[nextGoal - 1]);
+                            }
+                        });
                     }
-
-
                 }
 
                 if (result.score > 0) {

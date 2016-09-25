@@ -1,21 +1,20 @@
-If you like to solve riddles and you are a passionate programmer (especially in javascript) eval(Quiz) is the right amusement for you.
+If you like to solve riddles and you have a basic knowledge of JavaScript, _eval(Quiz)_ is the right amusement for you.
 
-####What is eval(Quiz)
-eval(Quiz) is a game where you solve riddles by writing javascript code.
+#### What is _eval(Quiz)_?
 
-####Where to find the riddles
-The ```Riddles``` button in the toolbar on top gives you an overview of all available riddles.
-Simply click on a riddle to start it.
+_eval(Quiz)_ is a game that lets you solve riddles by writing JavaScript snipplets.
 
-All riddles you haven't solved yet are marked with an empty square. Every solved riddle is marked with
-a checked square.
+Check out the `List of Riddles` in the toolbar. There are plenty of riddles to solve!
 
-####How does it all work?
-On the left hand side of the page you have a general description of the riddle.
-I guess you have found it as you are reading here right now.
-Below the general description is a description of the javascript function you have to implement.
+#### How does it work?
 
-On the right hand side is a javascript editor. You write your javascript code here.
-When you think the code works click on ```Solve``` and your code is executed. You get feedback if your code is correct or not.
+On the left hand side you get a description of the riddle, an documentation of the available API, the console for the tests and maybe some hints. 
 
-So lets try this out with an easy example.
+On the right hand side you find a description of the function you should implement and a JavaScript editor.
+
+When you think your code may work, click on `Solve` button to run the tests.
+
+#### Lets try an easy example
+
+Mary has `a` apples and `b` bananas. How may fruits does she have?
+

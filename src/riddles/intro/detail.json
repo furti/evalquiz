@@ -2,7 +2,7 @@
     "goals": [
         "Solve the calculation.",
         "Solve the calculation in one statement.",
-        "**Bonus Goal:** Avoid any additions (+, ++, +=)."
+        "**Nerd Goal:** One statement, no additions."
     ],
     "description": "file: description.md",
     "hints": "file: hints.md",
@@ -21,19 +21,19 @@
         }
     ],
     "member": {
-        "name": "add",
+        "name": "sum",
         "type": "number",
-        "description": "Returns the sum of two numbers.",
+        "description": "Returns the number of fruits.",
         "params": [
             {
                 "name": "a",
                 "type": "number",
-                "description": "The first number."
+                "description": "The number of apples."
             },
             {
                 "name": "b",
                 "type": "number",
-                "description": "The second number."
+                "description": "The number of bananas."
             }
         ]
     },

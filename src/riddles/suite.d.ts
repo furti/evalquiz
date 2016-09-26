@@ -2,11 +2,16 @@
 
 declare namespace suite {
 
+
+    /**
+     * A result returned by a test function.
+     * 
+     * @export
+     * @interface Result
+     */
     export interface Result {
 
         success: boolean;
-
-        abort?: boolean;
 
         score?: number;
         

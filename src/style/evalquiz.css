@@ -266,6 +266,10 @@ workbench {
     content: "\f006";
 }
 
+.console code, .console pre {
+    background-color: inherit;
+    border: none;
+}
 
 /* Layout Helpers */
 

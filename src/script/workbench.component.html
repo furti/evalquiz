@@ -111,8 +111,11 @@
 
             <span flex="" class="flex"></span>
 
-            <md-button class="md-primary md-raised" style="width: 10em;" ng-click="$ctrl.solve($event)">
-                <i class="fa fa-play-circle separated" ng-class="{'fa-spin': $ctrl.running}" aria-hidden="true"></i> {{$ctrl.running ? 'Abort' : 'Solve'}}
+            <md-button class="md-primary md-raised" ng-click="$ctrl.solve($event)" ng-disabled="$ctrl.running">
+                <i class="fa fa-play-circle separated" aria-hidden="true"></i> Solve
+            </md-button>
+            <md-button class="md-accent md-raised" ng-click="$ctrl.solve($event)" ng-disabled="!$ctrl.running">
+                Abort
             </md-button>
         </md-card-actions>
     </md-card>

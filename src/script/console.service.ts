@@ -135,8 +135,12 @@ export class ConsoleLogItem implements suite.LogItem {
     }
 
     write(obj: any): JQuery {
-        if ((obj === undefined) || (obj === null)) {
-            return this.append(angular.element('<span></span>').text(obj.toString()));
+        if (obj === undefined) {
+            return this.append(angular.element('<span></span>').text('undefined'))
+        }
+
+        if (obj === null) {
+            return this.append(angular.element('<span></span>').text('null'));
         }
 
         if ((typeof obj === "boolean") || (typeof obj === "number") || (typeof obj === "string")) {

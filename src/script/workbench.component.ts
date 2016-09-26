@@ -8,7 +8,6 @@ import { EvalQuizService } from './evalquiz.service';
 import './member-info.component';
 import { Riddle } from './riddle';
 import { RiddleService } from './riddle.service';
-import './solved.dialog';
 import './toolbar.component';
 import { UIService } from './ui.service';
 import { Component, Injectable, DialogService, Dialog } from './utils';
@@ -20,13 +19,13 @@ import { Component, Injectable, DialogService, Dialog } from './utils';
     }
 })
 class WorkbenchComponent {
-    static $inject = ['evalQuizService', 'riddleService', 'SolvedDialog', 'consoleService', 'uiService'];
+    static $inject = ['evalQuizService', 'riddleService', 'consoleService', 'uiService'];
 
-    protected riddle: Riddle;
-    protected editorOptions: any;
-    protected selectedTab: number = 0;
+    riddle: Riddle;
+    editorOptions: any;
+    selectedTab: number = 0;
 
-    constructor(protected evalQuizService: EvalQuizService, protected riddleService: RiddleService, protected solvedDialog: DialogService, protected consoleService: ConsoleService, protected uiService: UIService) {
+    constructor(private evalQuizService: EvalQuizService, private riddleService: RiddleService, private consoleService: ConsoleService, private uiService: UIService) {
 
         // After the value of the editor is set we mark the first and last line as readonly
         var cmChange = (editor: any, change: any) => {
@@ -68,7 +67,7 @@ class WorkbenchComponent {
         return this.riddleService.running;
     }
 
-    public trash($event: any): void {
+    trash($event: any): void {
         this.uiService.confirm('Trash Your Code', 'Are you sure that you want to clear the editor?', 'Delete', 'Abort').then(() => {
             this.riddle.state.code = this.riddle.detail!.stub;
             this.evalQuizService.saveRiddle(this.riddle);
@@ -80,7 +79,7 @@ class WorkbenchComponent {
         return !!this.riddle.state.savedCode && Object.keys(this.riddle.state.savedCode).length > 0;
     }
 
-    public load(): void {
+    load(): void {
         let items = this.hasSaves ? Object.keys(this.riddle.state.savedCode) : [];
 
         items.sort();
@@ -94,7 +93,7 @@ class WorkbenchComponent {
         });
     }
 
-    public save(): void {
+    save(): void {
         this.riddle.state.savedCode = this.riddle.state.savedCode || {};
         this.riddle.state.savedCode['Manual Save'] = this.riddle.state.code!;
 
@@ -102,39 +101,14 @@ class WorkbenchComponent {
         this.uiService.toast('Code saved successfully.');
     }
 
-    public solve(): void {
+    solve(): void {
         if (this.running) {
             this.riddleService.abort();
         }
         else {
             this.selectedTab = 2;
-
-            this.riddleService.execute(this.riddle).then(result => {
-                if (result.score > 0) {
-                    if (result.score >= this.riddle.state.score) {
-                        this.riddle.state.score = result.score;
-                    }
-
-                    let key = result.score === 1 ? '1 Star' : result.score + ' Stars';
-
-                    this.riddle.state.savedCode = this.riddle.state.savedCode || {};
-                    this.riddle.state.savedCode[key] = this.riddle.state.code!;
-                    this.evalQuizService.saveRiddle(this.riddle);
-                }
-
-                this.solvedDialog.show({ result }).then(() => {
-                    // TODO focus editor
-                });
-            }, err => {
-                console.error(err);
-
-                let log = this.consoleService.log();
-
-                log.markdown('Failed to execute function:')
-                log.code(err);
-
-                this.uiService.toast('Execution failed. See console for more info.');
-            });
+            this.riddleService.execute(this.riddle);
         }
     }
+
 }

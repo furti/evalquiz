@@ -202,7 +202,7 @@ export class RiddleService {
                 }
 
                 if (result.score < 3) {
-                    this.uiService.postpone(2.5, () => {
+                    this.uiService.postpone(2, () => {
                         if (result.messages && result.messages.length) {
                             logItem = this.consoleService.log();
 
@@ -255,6 +255,14 @@ export class RiddleService {
                             subItem.space(3);
                             subItem.markdown(riddle.detail!.goals[nextGoal - 1]);
                         }
+                    });
+                }
+
+                let nextRiddle = this.evalQuizService.getNextRiddle(riddle);
+
+                if (nextRiddle && this.isAvailable(nextRiddle)) {
+                    this.uiService.postpone(2.5, () => {
+                        this.consoleService.log("The next riddle is available!").withContentClass('warning', 'move-in');
                     });
                 }
 

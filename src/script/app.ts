@@ -13,7 +13,7 @@ module.config(function ($mdThemingProvider: angular.material.IThemingProvider) {
     $mdThemingProvider
         .theme('default')
         .primaryPalette('indigo')
-        .accentPalette('orange')
+        .accentPalette('amber')
         .warnPalette('deep-orange')
         .backgroundPalette('grey');
 });

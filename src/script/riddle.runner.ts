@@ -42,7 +42,7 @@ export class RiddleRunner implements suite.Context {
     private suite: any;
     private testFns: (() => suite.Result | angular.IPromise<suite.Result | undefined> | undefined)[];
 
-    private score: number = 1;
+    private _score: number = 1;
     private messages: string[] = [];
 
     constructor(private $q: angular.IQService, private uiService: UIService, private consoleService: ConsoleService, private riddle: Riddle) {
@@ -102,7 +102,7 @@ export class RiddleRunner implements suite.Context {
         this.executeDeferred.resolve({
             riddle: this.riddle,
             canceled: false,
-            score: this.score,
+            score: this._score,
             messages: this.messages
         });
 
@@ -175,8 +175,8 @@ export class RiddleRunner implements suite.Context {
                 // quiet success
             }
             else if (result.success) {
-                if (result.score && result.score > this.score && this.score > 0) {
-                    this.score = result.score;
+                if (result.score && result.score > this._score && this._score > 0) {
+                    this._score = result.score;
                 }
 
                 if (result.message) {
@@ -184,7 +184,7 @@ export class RiddleRunner implements suite.Context {
                 }
             }
             else {
-                this.score = 0;
+                this._score = 0;
 
                 if (result.message) {
                     this.messages.push(result.message);
@@ -436,4 +436,17 @@ export class RiddleRunner implements suite.Context {
             }
         }
     }
+
+    isSucess(): boolean {
+        return this._score >= 1;
+    }
+
+    isFailure(): boolean {
+        return this._score < 1;
+    }
+
+    getScore(): number {
+        return this._score;
+    }
+
 }

@@ -1,10 +1,9 @@
 # TODO
 
-* The right card should blow up and scroll
-* The IE shows wierd scrollbars
+# Bugs
+
+* Exceptions and error do not stop the execution.
+* The stars are missing in the list of riddles.
 
 # Backlog
 
-* Prepare engine.js as TypeScript file
-* Add tests for each riddle
-* Add a console

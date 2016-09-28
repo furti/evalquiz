@@ -14,7 +14,7 @@ declare namespace suite {
         success: boolean;
 
         score?: number;
-        
+
         message?: string;
     }
 
@@ -47,7 +47,7 @@ declare namespace suite {
         markdown(s: string): JQuery;
 
         code(s: string): JQuery;
-        
+
     }
 
     export interface Context {
@@ -76,6 +76,11 @@ declare namespace suite {
 
         countOperators(...operators: string[]): number;
 
+        isSucess(): boolean;
+
+        isFailure(): boolean;
+
+        getScore(): number;
 
 
 

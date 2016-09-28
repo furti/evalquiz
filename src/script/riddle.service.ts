@@ -201,15 +201,17 @@ export class RiddleService {
                     logItem.markdown('Your code has passed all the tests.').addClass('move-in').attr('style', 'animation-delay: 1.5s');
                 }
 
+                this.uiService.postpone(1.5, () => {
+                    if (result.messages && result.messages.length) {
+                        let logItem = this.consoleService.log();
+
+                        result.messages.forEach(message => logItem.markdown(message).addClass('fade-in'));
+                    }
+                });
+
                 if (result.score < 3) {
                     this.uiService.postpone(2, () => {
-                        if (result.messages && result.messages.length) {
-                            logItem = this.consoleService.log();
-
-                            result.messages.forEach(message => logItem.markdown(message).addClass('fade-in'));
-                        }
-
-                        logItem = this.consoleService.log();
+                        let logItem = this.consoleService.log();
 
                         if (solved) {
                             if (result.score < 3) {

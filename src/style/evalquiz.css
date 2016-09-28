@@ -109,6 +109,10 @@ workbench {
     color: skyblue;
 }
 
+.console a {
+    color: gold;
+}
+
 .console > div.item {
     margin: 0 0.4em;
     padding: 0.4em 0 0.2em 0;

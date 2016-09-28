@@ -1,11 +1,25 @@
 {
   "goals": [
-    "Solve Carlies task.",
-    "Avoid any loops (for, while, do) to solve the riddle.",
-    "Avoid any multiplications (*, *=)."
+    "Solve Carly's task.",
+    "Avoid any loops (`for`, `while`, `do`).",
+    "**Poser Goal:** No multiplications (`*`, `*=`)."
   ],
   "description": "file: description.md",
-  "hints": null,
+  "hints": "file: hints.md",
+  "api": [
+    {
+      "name": "log",
+      "type": "void",
+      "description": "Writes logging output to the console.",
+      "params": [
+        {
+          "name": "message",
+          "type": "any",
+          "description": "The object to write."
+        }
+      ]
+    }
+  ],
   "member": {
     "name": "carly",
     "type": "number",
@@ -18,5 +32,5 @@
       }
     ]
   },
-  "engine": "file: engine.js"
+  "suite": "file: suite.js"
 }

@@ -1,22 +1,36 @@
 {
   "goals": [
     "Solve the task.",
-    "As single statement.",
-    "Avoid any conditions (if, switch, ?) to solve the riddle."
+    "As single statement with a simple condition.",
+    "Without a condition (`if`, `switch`, `?`)."
   ],
   "description": "file: description.md",
-  "hints": null,
+  "hints": "file: hints.md",
+  "api": [
+    {
+      "name": "write",
+      "type": "void",
+      "description": "Writes the string `s` into Nobby's notebook.",
+      "params": [
+        {
+          "name": "s",
+          "type": "string",
+          "description": "The string to write."
+        }
+      ]
+    }
+  ],
   "member": {
     "name": "dictate",
-    "type": "string",
-    "description": "Returns the string `\"Nothing\"`, if `s` is null or undefined, `s` otherwise.",
+    "type": "void",
+    "description": "Write `s` into the notebook or `\"Nothing\"`, if `s` is `null`.",
     "params": [
       {
         "name": "s",
         "type": "string",
-        "description": "The contents. May be null or undefined."
+        "description": "The contents. May be `null`."
       }
     ]
   },
-  "engine": "file: engine.js"
+  "suite": "file: suite.js"
 }

@@ -71,7 +71,7 @@ export class Suite {
         }
     }
 
-    write(deferred: angular.IDeferred<undefined>, seconds: number, logItem: suite.LogItem, ...texts: string[]): angular.IPromise<undefined> {
+    write(deferred: angular.IDeferred<void>, seconds: number, logItem: suite.LogItem, ...texts: string[]): angular.IPromise<void> {
         let text = texts.shift();
 
         if (!text) {
@@ -173,66 +173,6 @@ export class Suite {
 
         return deferred.promise;
     }
-
-
-
-
-
-    // testLarge(): angular.IPromise<suite.Result> {
-    //     return this.execute(16384, 49152, 65536);
-    // }
-
-    // testZero(): angular.IPromise<suite.Result> {
-    //     return this.execute(0, 0, 0);
-    // }
-
-    // testRandom(): angular.IPromise<suite.Result> {
-    //     let a = Math.round(Math.random() * 1000);
-    //     let b = Math.round(Math.random() * 1000);
-
-    //     return this.execute(a, b, a + b);
-    // }
-
-    // testStatenents(): suite.Result {
-    //     var statementCount = this.context.countStatements() + this.context.countVariableDeclarations();
-    //     var score: number | undefined = undefined;
-
-    //     if ((!this.failed) && (statementCount === 1)) {
-    //         let logItem = this.context.log();
-
-    //         logItem.write('The riddle was solved with only one statement.');
-    //         logItem.mark('ok');
-
-    //         score = 2;
-    //     }
-
-    //     return {
-    //         success: true,
-    //         score
-    //     };
-    // }
-
-    // testBonusGoal(): suite.Result {
-    //     var statementCount = this.context.countStatements() + this.context.countVariableDeclarations();
-    //     var plusCount = this.context.countOperators('+', '++', '+=');
-    //     var score: number | undefined = undefined;
-
-    //     if ((!this.failed) && (statementCount === 1) && (plusCount === 0)) {
-    //         let logItem = this.context.log();
-
-    //         logItem.write('Bonus goal: Solved without any additions.');
-    //         logItem.mark('ok');
-
-    //         score = 3;
-    //     }
-
-    //     return {
-    //         success: true,
-    //         score
-    //     };
-    // }
-
-
 }
 
 

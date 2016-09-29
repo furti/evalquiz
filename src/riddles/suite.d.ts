@@ -58,22 +58,75 @@ declare namespace suite {
 
         postpone<Any>(seconds: number, fn: () => Any | angular.IPromise<Any>): angular.IPromise<Any>;
 
+        sequence<Any>(...secondsOrStep: (number | (() => any | angular.IPromise<any>))[]): angular.IPromise<Any>;
+
         log(message?: any): LogItem;
 
+        /**
+         * Counts the specified types.
+         * 
+         * @param {...string[]} types the types
+         * @returns {number} the number of matching nodes
+         */
         countTypes(...types: string[]): number;
 
+        /**
+         * Counts 'ForStatement', 'WhileStatement', 'DoWhileStatement'.
+         * 
+         * @returns {number} the number of matching nodes
+         */
         countLoops(): number;
 
+        /**
+         * Counts 'IfStatement', 'SwitchStatement', 'ConditionalExpression'.
+         * 
+         * @returns {number} the number of matching nodes
+         */
         countConditions(): number;
 
+        /**
+         * Counts 'BinaryExpression', 'AssignmentExpression'.
+         * 
+         * @returns {number} the number of matching nodes
+         */
         countCalculations(): number;
 
+        /**
+         * Counts 'Identifier', including undefined and the 'Literal' null.
+         * 
+         * @param {...string[]} identifiers the identifiers to look for, or, if undefined, for all identifiers
+         * @returns {number} the number of matching nodes
+         */
+        countIdentifiers(...identifiers: string[]): number;
+
+        /**
+         * Counts 'LogicalExpression'.
+         * 
+         * @returns {number} the number of matching nodes
+         */
         countLogicals(): number;
 
+        /**
+         * 
+         * Counts 'ForStatement', 'WhileStatement', 'DoWhileStatement', 'IfStatement', 'SwitchStatement', 'ExpressionStatement', 'ReturnStatement'.
+         * 
+         * @returns {number} the number of matching nodes
+         */
         countStatements(): number;
 
+        /**
+         * Counts 'VariableDeclaration'.
+         * 
+         * @returns {number} the number of matching nodes
+         */
         countVariableDeclarations(): number;
 
+        /**
+         * Counts 'BinaryExpression', 'LogicalExpressions', 'UpdateExpression', 'AssignmentExpression'.
+         * 
+         * @param {...string[]} operators the operators to look for, or, if undefined, for all operators
+         * @returns {number} the number of matching nodes
+         */
         countOperators(...operators: string[]): number;
 
         isSucess(): boolean;
@@ -81,34 +134,5 @@ declare namespace suite {
         isFailure(): boolean;
 
         getScore(): number;
-
-
-
-
-
-
-
-
-
-        // canceled: boolean;
-
-
-        // log(message: string): void;
-
-        // logThinking(): void;
-
-        // logOk(): void;
-
-        // logError(): void;
-
-        // postpone(seconds: number, fn: () => void): void;
-
-        // cancel(): void;
-
-        // success(message?: string): void;
-
-        // failure(message?: string): void;
     }
-
-    // export function test(): (target: any, propertyKey: string, descriptor: PropertyDescriptor) => void;
 }

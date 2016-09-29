@@ -7,20 +7,20 @@
         "location": "intro"
     },
     {
+        "id": "defaultvalue",
+        "title": "Nobbys List",
+        "shortDescription": "Help Nobby to write his list.",
+        "minScoreToSolve": 2,
+        "location": "defaultvalue",
+        "dependsOn": ["intro"]
+    },
+    {
         "id": "gauss",
         "title": "Little Carly",
         "shortDescription": "Help litte Carly to solve his task.",
         "minScoreToSolve": 2,
         "location": "gauss",
-        "dependsOn": ["intro"]
-    },
-    {
-        "id": "defaultvalue",
-        "title": "Nobbys List",
-        "shortDescription": "Help Nobby to write his list.",
-        "minScoreToSolve": 3,
-        "location": "defaultvalue",
-        "dependsOn": ["gauss"]
+        "dependsOn": ["defaultvalue"]
     },
     {
         "id": "dwarfs",

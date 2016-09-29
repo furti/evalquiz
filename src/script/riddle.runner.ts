@@ -336,11 +336,58 @@ export class RiddleRunner implements suite.Context {
         return this.uiService.postpone(seconds, fn);
     }
 
+    sequence<Any>(...secondsOrStep: (number | (() => any | angular.IPromise<any>))[]): angular.IPromise<Any> {
+        this.checkRunning();
+
+        return this.sequenceStep<Any>(this.defer<Any>(), undefined, ...secondsOrStep);
+    }
+
+    private sequenceStep<Any>(deferred: angular.IDeferred<Any>, result: any, ...secondsOrStep: (number | (() => any | angular.IPromise<any>))[]): angular.IPromise<Any> {
+        try {
+            this.checkRunning();
+
+            let remaining = secondsOrStep.slice();
+            let item = remaining.shift();
+
+            if (item === undefined) {
+                deferred.resolve(result);
+                return deferred.promise;
+            }
+
+            if (typeof item === 'number') {
+                this.postpone(item as number, () => { }).then(() => this.sequenceStep(deferred, result, ...remaining), err => deferred.reject(err));
+                return deferred.promise;
+            }
+
+            result = item();
+
+            if (isPromise(result)) {
+                (result as angular.IPromise<any>).then(() => this.sequenceStep(deferred, result, ...remaining), err => deferred.reject(err));
+            }
+            else {
+                this.sequenceStep(deferred, result, ...remaining);
+            }
+        }
+        catch (err) {
+            if (err === CANCELED) {
+                deferred.reject(err);
+            }
+            else {
+                let message = `Unhandled error in sequence: ${err}`;
+                console.error(message, err);
+                this.log(message).withClass('error').withIcon('fa-times-circle');
+                deferred.reject(err);
+            }
+        }
+
+        return deferred.promise;
+    }
+
     log(message?: any): suite.LogItem {
         return this.consoleService.log(message);
     }
 
-    public countTypes(...types: string[]): number {
+    countTypes(...types: string[]): number {
         var count = 0;
 
         this.crawl(this.tree, (node: any) => {
@@ -352,36 +399,29 @@ export class RiddleRunner implements suite.Context {
         return count;
     }
 
-    public countLoops(): number {
+    countLoops(): number {
         return this.countTypes('ForStatement', 'WhileStatement', 'DoWhileStatement');
     }
 
-    public countConditions(): number {
+    countConditions(): number {
         return this.countTypes('IfStatement', 'SwitchStatement', 'ConditionalExpression');
     }
 
-    public countCalculations(): number {
+    countCalculations(): number {
         return this.countTypes('BinaryExpression', 'AssignmentExpression');
     }
 
-    public countLogicals(): number {
-        return this.countTypes('LogicalExpression');
-    }
-
-    public countStatements(): number {
-        return this.countTypes('ForStatement', 'WhileStatement', 'DoWhileStatement', 'IfStatement', 'SwitchStatement', 'ExpressionStatement', 'ReturnStatement');
-    }
-
-    public countVariableDeclarations(): number {
-        return this.countTypes('VariableDeclaration');
-    }
-
-    public countOperators(...operators: string[]): number {
+    countIdentifiers(...identifiers: string[]): number {
         var count = 0;
 
         this.crawl(this.tree, (node: any) => {
-            if ((node.type === 'BinaryExpression') || (node.type === 'UpdateExpression') || (node.type === 'AssignmentExpression')) {
-                if (operators.indexOf(node.operator) >= 0) {
+            if (node.type === 'Identifier') {
+                if (!identifiers.length || identifiers.indexOf(node.name) >= 0) {
+                    count++;
+                }
+            }
+            else if (node.type === 'Literal' && node.name === 'null') {
+                if (!identifiers.length || identifiers.indexOf(node.name) >= 0) {
                     count++;
                 }
             }
@@ -390,7 +430,33 @@ export class RiddleRunner implements suite.Context {
         return count;
     }
 
-    private crawl(node: any, callback: any): void {
+    countLogicals(): number {
+        return this.countTypes('LogicalExpression');
+    }
+
+    countStatements(): number {
+        return this.countTypes('ForStatement', 'WhileStatement', 'DoWhileStatement', 'IfStatement', 'SwitchStatement', 'ExpressionStatement', 'ReturnStatement');
+    }
+
+    countVariableDeclarations(): number {
+        return this.countTypes('VariableDeclaration');
+    }
+
+    countOperators(...operators: string[]): number {
+        var count = 0;
+
+        this.crawl(this.tree, (node: any) => {
+            if ((node.type === 'BinaryExpression') || (node.type === 'UpdateExpression') || (node.type === 'AssignmentExpression')) {
+                if (!operators.length || operators.indexOf(node.operator) >= 0) {
+                    count++;
+                }
+            }
+        });
+
+        return count;
+    }
+
+    private crawl(node: any, callback: (node: any) => void): void {
         if (node instanceof Array) {
             for (var i = 0; i < node.length; i++) {
                 this.crawl(node[i], callback);
@@ -398,6 +464,8 @@ export class RiddleRunner implements suite.Context {
         }
         else {
             callback(node);
+
+            // console.log(node);
 
             if (node.body) {
                 this.crawl(node.body, callback);

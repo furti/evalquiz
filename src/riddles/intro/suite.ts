@@ -48,7 +48,7 @@ export class Suite {
 
     testStatenents(): suite.Result {
         var statementCount = this.context.countStatements() + this.context.countVariableDeclarations();
-        var score: number | undefined = undefined;
+        var score: number | undefined;
 
         if ((!this.failed) && (statementCount === 1)) {
             let logItem = this.context.log();
@@ -68,7 +68,7 @@ export class Suite {
     testBonusGoal(): suite.Result {
         var statementCount = this.context.countStatements() + this.context.countVariableDeclarations();
         var plusCount = this.context.countOperators('+', '++', '+=');
-        var score: number | undefined = undefined;
+        var score: number | undefined;
 
         if ((!this.failed) && (statementCount === 1) && (plusCount === 0)) {
             let logItem = this.context.log();

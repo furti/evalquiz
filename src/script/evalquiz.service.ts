@@ -66,7 +66,7 @@ export class EvalQuizService {
             return;
         }
 
-        this.riddles = angular.copy(riddles);
+        this.riddles = riddles;
         this.riddleMap = {};
 
         riddles.forEach((riddle) => {

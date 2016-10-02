@@ -12,47 +12,36 @@ export class Suite {
         this.context.log(message);
     }
 
-    testInit(): angular.IPromise<suite.Result> {
-        let deferred = this.context.defer<suite.Result>();
-        let score = 0;
-        let message: string;
+    testInit(): angular.IPromise<void> {
+        let deferred = this.context.defer<void>();
         var loopCount = this.context.countTypes('ForStatement', 'WhileStatement', 'DoWhileStatement');
 
         if (loopCount > 0) {
-            score = 1;
+            this.context.score(1);
         }
         else {
             var multCount = this.context.countOperators('*', '*=');
 
             this.faster = true;
-
-            score = multCount > 0 ? 2 : 3;
+            this.context.score(multCount > 0 ? 2 : 3);
         }
 
-        this.context.postpone(0.3, () => {
+        return this.context.postpone(0.3, () => {
             this.context.log("Let's see if Carly can beat his teacher:");
 
-            return this.context.postpone(0.3, () => undefined);
-        }).then(() => {
-            deferred.resolve({
-                success: score > 0,
-                score,
-                message
-            });
+            return this.context.postpone<void>(0.3);
         });
-
-        return deferred.promise;
     }
 
-    testBasic(): angular.IPromise<suite.Result> {
+    testBasic(): angular.IPromise<void> {
         return this.execute(3, '1', ' + ', '2', ' + ', '3', ' = ');
     }
 
-    testEnhanced(): angular.IPromise<suite.Result> {
+    testEnhanced(): angular.IPromise<void> {
         return this.execute(10, '1', '+', '2', '+', '3', '+', '4', '+', '5', '+', '6', '+', '7', '+', '8', '+', '9', '+', '10', ' = ');
     }
 
-    testRandom(): angular.IPromise<suite.Result> {
+    testRandom(): angular.IPromise<void> {
         let random = Math.round(Math.random() * 99) * 100 + 10005;
         let texts = ['1', '+', '2', '+', '3', '+', '4', '+', '5', '+', '6', '+', ' .', '.', '.', '.', '.', '.', '.', '.', '.', '.', '. ', '+',
             (random - 2).toFixed(0), '+', (random - 1).toFixed(0), '+', (random).toFixed(0), ' = '];
@@ -60,14 +49,27 @@ export class Suite {
         return this.execute(random, ...texts);
     }
 
-    testFinish(): suite.Result | undefined {
-        if (this.context.getScore() > 1) {
-            return {
-                success: true,
-                message: 'The full name of little Carly is [Carl Friedrich Gauss](https://en.wikipedia.org/wiki/Carl_Friedrich_Gauss), ' +
-                'a mathematician from the 19th century. ' +
-                'At the age of nine he solved the task with a simple multiplication.'
-            };
+    testFinish(): void {
+        if (this.context.isWorking()) {
+            if (this.context.getScore() < 2) {
+                this.context.message({
+                    content: 'Think about simplifying your loop. Do you really need it?',
+                    type: 'markdown',
+                    icon: 'fa-info-circle',
+                    classname: 'warning'
+                });
+            }
+
+            if (this.context.getScore() >= 2) {
+                this.context.message({
+                    content: 'The full name of little Carly is [Carl Friedrich Gauss](https://en.wikipedia.org/wiki/Carl_Friedrich_Gauss), ' +
+                    'a mathematician from the 19th century. ' +
+                    'At the age of nine he solved the task with a simple multiplication.',
+                    type: 'markdown',
+                    icon: 'fa-info-circle',
+                    classname: 'info'
+                });
+            }
         }
     }
 
@@ -86,8 +88,8 @@ export class Suite {
         return deferred.promise;
     }
 
-    execute(n: number, ...texts: string[]): angular.IPromise<suite.Result> {
-        let deferred = this.context.defer();
+    execute(n: number, ...texts: string[]): angular.IPromise<void> {
+        let deferred = this.context.defer<void>();
         let logItem = this.context.log().withClass('large');
         let expected = Math.round((n + 1) * (n / 2));
         let sum: number;
@@ -145,11 +147,9 @@ export class Suite {
                                 }
                                 else {
                                     this.context.log('The teacher was faster and Carly was even wrong.').withIcon('fa-times-circle').withClass('error');
+                                    this.context.fails();
                                 }
-
-                                deferred.resolve({
-                                    success
-                                });
+                                deferred.resolve();
                             });
                         });
                     }
@@ -160,11 +160,9 @@ export class Suite {
                             }
                             else {
                                 this.context.log('Carly was faster, but wrong.').withIcon('fa-times-circle').withClass('error');
+                                this.context.fails();
                             }
-
-                            deferred.resolve({
-                                success
-                            });
+                            deferred.resolve();
                         });
                     }
                 });

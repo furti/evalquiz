@@ -72,7 +72,7 @@ export class Suite {
         );
     }
 
-    test(): angular.IPromise<suite.Result> {
+    test(): angular.IPromise<void> {
         let dwarfs: number[] = [];
 
         for (let i = 0; i < 8; i++) {
@@ -84,41 +84,73 @@ export class Suite {
         return this.execute(0.5, false, dwarfs);
     }
 
-    testSecondTake(): angular.IPromise<suite.Result> | undefined {
-        if (this.context.isFailure()) {
+    testSecondTake(): angular.IPromise<void> | undefined {
+        if (this.context.isFaulty()) {
             return;
         }
-        
-        this.context.log().markdown('The dragon couldn\'t believe, that the dwarfs solved his riddle. He decided to capture more dwarfs to try once more.');
 
-        let dwarfs: number[] = [];
+        return this.context.sequence<void>(() => {
+            this.context.log().markdown('The dragon could not believe, that the dwarfs solved this riddle. He decided to capture more dwarfs to try once more.');
+        }, 1, () => {
+            let dwarfs: number[] = [];
 
-        for (let i = 0; i < 64; i++) {
-            dwarfs.push(i % 8);
-        }
+            for (let i = 0; i < 64; i++) {
+                dwarfs.push(i % 8);
+            }
 
-        this.shuffle(dwarfs);
+            this.shuffle(dwarfs);
 
-        return this.execute(0.125, true, dwarfs);
+            return this.execute(0.125, true, dwarfs);
+        });
     }
 
-    
+    testScore(): void {
+        if (this.context.isFaulty()) {
+            return;
+        }
 
-    execute(delay: number, small: boolean, dwarfs: number[]): angular.IPromise<suite.Result> {
-        let deferred = this.context.defer<suite.Result>();
+        let loopCount = this.context.countLoops();
+
+        if (loopCount > 0) {
+            this.context.score(1);
+
+            this.context.message({
+                content: 'The [JavaScript array](https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Array) provides a lot of nice methods. ' +
+                'You can use these methods to avoid loops and simplify your code.',
+                type: 'markdown',
+                icon: 'fa-info-circle',
+                classname: 'info'
+            });
+
+            return;
+        }
+
+        let statementCount = this.context.countStatements();
+        let conditionCount = this.context.countConditions();
+
+        if (statementCount === 1 && conditionCount === 0) {
+            this.context.score(3);
+        }
+        else {
+            this.context.score(2);
+        }
+    }
+
+    execute(delay: number, small: boolean, dwarfs: number[]): angular.IPromise<void> {
+        let deferred = this.context.defer<void>();
         let line: number[] = [];
         let log = this.context.log();
         let content = log.content;
 
         this.context.map(dwarfs, dwarf => this.leaveCave(content, delay, small, dwarf!, line)).then((results: boolean[]) => {
+            deferred.resolve();
+
             let missing = results.indexOf(false) >= 0;
 
             if (missing) {
                 log.mark('not-ok');
                 this.context.log().withIcon('fa-times-circle').withClass('error').markdown("There are dwarfs missing in the line.");
-                deferred.resolve({
-                    success: false
-                });
+                this.context.fails();
                 return;
             }
 
@@ -128,16 +160,11 @@ export class Suite {
             if (failed) {
                 log.mark('not-ok');
                 this.context.log().withIcon('fa-times-circle').withClass('error').markdown("The dwarfs failed to line up correctly.");
-                deferred.resolve({
-                    success: false
-                });
+                this.context.fails();
                 return;
             }
 
             log.mark('ok');
-            deferred.resolve({
-                success: true
-            });
         }, err => deferred.reject(err));
 
         return deferred.promise;
@@ -150,7 +177,7 @@ export class Suite {
             let index = this.context.invokeFn(hats);
 
             if (!angular.equals(hats, originalHats)) {
-                this.context.addMessage('You are manipulation the hats array. This serves no purpose, as it will not reorder the dwarfs.')
+                this.context.message('You are manipulation the hats array. This serves no purpose, as it will not reorder the dwarfs.')
             }
 
             if (this.performAttack) {

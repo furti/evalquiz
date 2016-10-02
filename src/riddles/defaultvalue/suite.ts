@@ -11,7 +11,6 @@ export class Suite {
 
     private logItem: suite.LogItem;
     private written: any;
-    private success: boolean = true;
 
     constructor(private context: suite.Context) {
     }
@@ -21,14 +20,8 @@ export class Suite {
         this.written = s;
     }
 
-    testCode(): angular.IPromise<suite.Result> {
-        let deferred = this.context.defer();
-
-        this.next(this.context.defer<void>(), 0).then(() => deferred.resolve({
-            success: this.success
-        }), err => deferred.reject(err));
-
-        return deferred.promise;
+    testCode(): angular.IPromise<void> {
+        return this.context.postpone(1, () => this.next(this.context.defer<void>(), 0));
     }
 
     next(deferred: angular.IDeferred<void>, i: number): angular.IPromise<void> {
@@ -51,7 +44,7 @@ export class Suite {
                 if (expected !== this.written) {
                     this.logItem = this.context.log().withIcon('fa-times-circle').withClass('error');
                     this.logItem.write(`Nobby! Please concentrate! You should write down \'${expected}\'!`);
-                    this.success = false;
+                    this.context.fails();
                 }
             }).then(() => this.next(deferred, i + 1), err => deferred.reject(err));
         }
@@ -59,16 +52,23 @@ export class Suite {
         return deferred.promise;
     }
 
-    testStyle(): suite.Result {
+    testStyle(): void {
+        if (this.context.isFaulty()) {
+            return;
+        }
+
         var statementsCount = this.context.countStatements();
 
         if (statementsCount > 1) {
-            this.context.log('Your code has too many statements to get a better score.').withClass('warning', 'fade-in').withIcon('fa-info-circle');
+            this.context.message({
+                content: 'Your code has too many statements to get a better score. Doing _simple_ things inline helps readability.',
+                type: 'markdown',
+                icon: 'fa-info-circle',
+                classname: 'warning'
+            });
 
-            return {
-                success: true,
-                score: 1
-            };
+            this.context.score(1);
+            return;
         }
 
         var conditionsCount = this.context.countConditions();
@@ -77,23 +77,24 @@ export class Suite {
             var operatorsCount = this.context.countOperators();
 
             if (operatorsCount > 0) {
-                this.context.log('You may wish to simplify your condition.').withClass('warning', 'fade-in').withIcon('fa-info-circle');
+                this.context.message({
+                    content: 'You may wish to simplify your condition by checking for the [Falsy](https://developer.mozilla.org/en-US/docs/Glossary/Falsy) value.',
+                    type: 'markdown',
+                    icon: 'fa-info-circle',
+                    classname: 'warning'
+                });
+
+                this.context.score(1);
+                return;
             }
 
-
-            return {
-                success: true,
-                score: 2
-            };
+            this.context.score(2);
+            return;
         }
 
-        return {
-            success: true,
-            score: 3
-        };
+        this.context.score(3);
+        return;
     }
-
-
 }
 
 

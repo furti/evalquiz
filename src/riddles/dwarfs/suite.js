@@ -59,16 +59,45 @@ var Suite = (function () {
         return this.execute(0.5, false, dwarfs);
     };
     Suite.prototype.testSecondTake = function () {
-        if (this.context.isFailure()) {
+        var _this = this;
+        if (this.context.isFaulty()) {
             return;
         }
-        this.context.log().markdown('The dragon couldn\'t believe, that the dwarfs solved his riddle. He decided to capture more dwarfs to try once more.');
-        var dwarfs = [];
-        for (var i = 0; i < 64; i++) {
-            dwarfs.push(i % 8);
+        return this.context.sequence(function () {
+            _this.context.log().markdown('The dragon could not believe, that the dwarfs solved this riddle. He decided to capture more dwarfs to try once more.');
+        }, 1, function () {
+            var dwarfs = [];
+            for (var i = 0; i < 64; i++) {
+                dwarfs.push(i % 8);
+            }
+            _this.shuffle(dwarfs);
+            return _this.execute(0.125, true, dwarfs);
+        });
+    };
+    Suite.prototype.testScore = function () {
+        if (this.context.isFaulty()) {
+            return;
         }
-        this.shuffle(dwarfs);
-        return this.execute(0.125, true, dwarfs);
+        var loopCount = this.context.countLoops();
+        if (loopCount > 0) {
+            this.context.score(1);
+            this.context.message({
+                content: 'The [JavaScript array](https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Array) provides a lot of nice methods. ' +
+                    'You can use these methods to avoid loops and simplify your code.',
+                type: 'markdown',
+                icon: 'fa-info-circle',
+                classname: 'info'
+            });
+            return;
+        }
+        var statementCount = this.context.countStatements();
+        var conditionCount = this.context.countConditions();
+        if (statementCount === 1 && conditionCount === 0) {
+            this.context.score(3);
+        }
+        else {
+            this.context.score(2);
+        }
     };
     Suite.prototype.execute = function (delay, small, dwarfs) {
         var _this = this;
@@ -77,13 +106,12 @@ var Suite = (function () {
         var log = this.context.log();
         var content = log.content;
         this.context.map(dwarfs, function (dwarf) { return _this.leaveCave(content, delay, small, dwarf, line); }).then(function (results) {
+            deferred.resolve();
             var missing = results.indexOf(false) >= 0;
             if (missing) {
                 log.mark('not-ok');
                 _this.context.log().withIcon('fa-times-circle').withClass('error').markdown("There are dwarfs missing in the line.");
-                deferred.resolve({
-                    success: false
-                });
+                _this.context.fails();
                 return;
             }
             var blues = line.map(function (dwarf) { return dwarf < 4; });
@@ -91,15 +119,10 @@ var Suite = (function () {
             if (failed) {
                 log.mark('not-ok');
                 _this.context.log().withIcon('fa-times-circle').withClass('error').markdown("The dwarfs failed to line up correctly.");
-                deferred.resolve({
-                    success: false
-                });
+                _this.context.fails();
                 return;
             }
             log.mark('ok');
-            deferred.resolve({
-                success: true
-            });
         }, function (err) { return deferred.reject(err); });
         return deferred.promise;
     };
@@ -110,7 +133,7 @@ var Suite = (function () {
             var originalHats = hats.slice();
             var index = _this.context.invokeFn(hats);
             if (!angular.equals(hats, originalHats)) {
-                _this.context.addMessage('You are manipulation the hats array. This serves no purpose, as it will not reorder the dwarfs.');
+                _this.context.message('You are manipulation the hats array. This serves no purpose, as it will not reorder the dwarfs.');
             }
             if (_this.performAttack) {
                 _this.performAttack = false;

@@ -18,8 +18,8 @@ export class ConsoleService {
         angular.element('#console').empty();
     }
 
-    public log(message?: any): ConsoleLogItem {
-        let id = 'console-block-' + (this.index++);
+    public log(message?: string | suite.Message): ConsoleLogItem {
+        let id = 'console-log-item-' + (this.index++);
         let consoleElement: JQuery = angular.element('#console');
         let itemElement: JQuery = angular.element('<div></div>').attr({ id }).addClass('item');
         let iconElement: JQuery = angular.element('<div></div>').addClass('icon');
@@ -28,13 +28,43 @@ export class ConsoleService {
         itemElement.append(iconElement, contentElement);
         consoleElement.append(itemElement);
 
-        let block: ConsoleLogItem = new ConsoleLogItem(this.uiService, consoleElement, itemElement, iconElement, contentElement);
+        let logItem: ConsoleLogItem = new ConsoleLogItem(this.uiService, consoleElement, itemElement, iconElement, contentElement);
 
-        if (message) {
-            block.write(message);
+        if (message && typeof message === 'string') {
+            logItem.markdown(message);
+        }
+        else if (message) {
+            switch ((message as suite.Message).type || 'plain') {
+                case 'plain':
+                    logItem.write((message as suite.Message).content);
+                    break;
+
+                case 'markdown':
+                    logItem.markdown((message as suite.Message).content);
+                    break;
+
+                case 'html':
+                    logItem.html((message as suite.Message).content);
+                    break;
+
+                case 'code':
+                    logItem.code((message as suite.Message).content);
+                    break;
+
+                default:
+                    throw new Error('Unsupported message type: ' + (message as suite.Message).type);
+            }
+
+            if ((message as suite.Message).icon) {
+                logItem.withIcon((message as suite.Message).icon);
+            }
+
+            if ((message as suite.Message).classname) {
+                logItem.withContentClass((message as suite.Message).classname);
+            }
         }
 
-        return block;
+        return logItem;
     }
 }
 
@@ -45,11 +75,11 @@ export class ConsoleLogItem implements suite.LogItem {
     constructor(private uiService: UIService, private consoleElement: JQuery, private itemElement: JQuery, private iconElement: JQuery, protected contentElement: JQuery) {
     }
 
-    withClass(...classnames: string[]): this {
+    withClass(classname?: string): this {
         this.itemElement.attr('class', 'item');
 
-        if (classnames) {
-            classnames.forEach(classname => this.itemElement.addClass(classname));
+        if (classname) {
+            this.itemElement.addClass(classname);
         }
 
         return this;
@@ -65,11 +95,11 @@ export class ConsoleLogItem implements suite.LogItem {
         return this;
     }
 
-    withContentClass(...classnames: string[]): this {
+    withContentClass(classname?: string): this {
         this.contentElement.attr('class', '');
 
-        if (classnames) {
-            classnames.forEach(classname => this.contentElement.addClass(classname));
+        if (classname) {
+            this.contentElement.addClass(classname);
         }
 
         return this;
@@ -96,6 +126,7 @@ export class ConsoleLogItem implements suite.LogItem {
         let contentElement: JQuery = angular.element('<div></div>').addClass('content');
 
         itemElement.append(iconElement, contentElement);
+
         this.contentElement.append(itemElement);
 
         let block: ConsoleLogItem = new ConsoleLogItem(this.uiService, this.consoleElement, itemElement, iconElement, contentElement);

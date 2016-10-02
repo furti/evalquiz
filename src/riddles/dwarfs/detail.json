@@ -2,7 +2,7 @@
     "goals": [
         "Solve the riddle.",
         "Without any loops (`for`, `while`, `do`).",
-        "**The Wizard's Toe:** As one-liner."
+        "**The Wizard's Toe:** One statement, no coditions (`if`, `switch`, `?`)."
     ],
     "description": "file: description.md",
     "hints": "file: hints.md",

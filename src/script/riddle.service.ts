@@ -163,18 +163,13 @@ export class RiddleService {
                 let passed: boolean = result.score > 0;
 
                 if (!passed) {
-                    let logItem = this.consoleService.log().withContentClass('center ', 'fade-in');
-
-                    logItem.markdown('## Tests failed\n\nYour code did not pass all tests.').addClass('error');
+                    this.consoleService.log().withContentClass('center fade-in').markdown('## Tests failed\n\nYour code did not pass all tests.').addClass('error');
 
                     if (result.messages && result.messages.length) {
-                        logItem = this.consoleService.log();
-
-                        result.messages.forEach(message => logItem.markdown(message).addClass('fade-in'));
+                        result.messages.forEach(message => this.consoleService.log(message));
                     }
 
-                    logItem = this.consoleService.log();
-                    logItem.markdown('Refine your code and try again. Good luck.');
+                    this.consoleService.log().markdown('Refine your code and try again. Good luck.');
 
                     deferred.resolve(result);
                     return;
@@ -203,9 +198,7 @@ export class RiddleService {
 
                 this.uiService.postpone(1.5, () => {
                     if (result.messages && result.messages.length) {
-                        let logItem = this.consoleService.log();
-
-                        result.messages.forEach(message => logItem.markdown(message).addClass('fade-in'));
+                        result.messages.forEach(message => this.consoleService.log(message));
                     }
                 });
 
@@ -247,7 +240,7 @@ export class RiddleService {
                         let nextGoal = result.score + 1;
 
                         if (nextGoal <= 3) {
-                            let subItem = logItem.sub().withContentClass('layout-row', 'layout-baseline', 'fade-in');
+                            let subItem = logItem.sub().withContentClass('layout-row layout-baseline fade-in');
 
                             subItem.icon(nextGoal >= 1 ? 'fa-star' : 'fa-star-o').addClass('warning');
                             subItem.space();
@@ -264,7 +257,7 @@ export class RiddleService {
 
                 if (nextRiddle && this.isAvailable(nextRiddle)) {
                     this.uiService.postpone(2.5, () => {
-                        this.consoleService.log("The next riddle is available!").withContentClass('warning', 'move-in');
+                        this.consoleService.log("The next riddle is available!").withContentClass('warning move-in');
                     });
                 }
 

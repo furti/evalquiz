@@ -96,23 +96,27 @@ export class UIService {
             .cancel(cancel));
     }
 
-    postpone<Any>(seconds: number, fn: () => Any | angular.IPromise<Any>): angular.IPromise<Any> {
+    postpone<Any>(seconds: number, fn?: () => Any | angular.IPromise<Any>): angular.IPromise<Any> {
         let deferred: angular.IDeferred<Any> = this.$q.defer<Any>();
 
         this.$timeout(() => {
-            let result = fn();
+            try {
+                let result = fn ? fn() : undefined;
 
-            if (isPromise(result)) {
-                (result as angular.IPromise<Any>).then(obj => deferred.resolve(obj), err => deferred.reject(err));
+                if (isPromise(result)) {
+                    (result as angular.IPromise<Any>).then(obj => deferred.resolve(obj), err => deferred.reject(err));
+                }
+                else {
+                    deferred.resolve(result);
+                }
             }
-            else {
-                deferred.resolve(result);
+            catch (err) {
+                let message = `Unhandled error in postpone: ${err}`;
+                console.error(message, err);
+                deferred.reject(err);
             }
         }, seconds * MILLIS_MULTIPLIER);
 
         return deferred.promise;
     }
-
-
-
 }

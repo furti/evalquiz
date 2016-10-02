@@ -11,28 +11,19 @@ var Suite = (function () {
     Suite.prototype.testInit = function () {
         var _this = this;
         var deferred = this.context.defer();
-        var score = 0;
-        var message;
         var loopCount = this.context.countTypes('ForStatement', 'WhileStatement', 'DoWhileStatement');
         if (loopCount > 0) {
-            score = 1;
+            this.context.score(1);
         }
         else {
             var multCount = this.context.countOperators('*', '*=');
             this.faster = true;
-            score = multCount > 0 ? 2 : 3;
+            this.context.score(multCount > 0 ? 2 : 3);
         }
-        this.context.postpone(0.3, function () {
+        return this.context.postpone(0.3, function () {
             _this.context.log("Let's see if Carly can beat his teacher:");
-            return _this.context.postpone(0.3, function () { return undefined; });
-        }).then(function () {
-            deferred.resolve({
-                success: score > 0,
-                score: score,
-                message: message
-            });
+            return _this.context.postpone(0.3);
         });
-        return deferred.promise;
     };
     Suite.prototype.testBasic = function () {
         return this.execute(3, '1', ' + ', '2', ' + ', '3', ' = ');
@@ -47,13 +38,25 @@ var Suite = (function () {
         return this.execute.apply(this, [random].concat(texts));
     };
     Suite.prototype.testFinish = function () {
-        if (this.context.getScore() > 1) {
-            return {
-                success: true,
-                message: 'The full name of little Carly is [Carl Friedrich Gauss](https://en.wikipedia.org/wiki/Carl_Friedrich_Gauss), ' +
-                    'a mathematician from the 19th century. ' +
-                    'At the age of nine he solved the task with a simple multiplication.'
-            };
+        if (this.context.isWorking()) {
+            if (this.context.getScore() < 2) {
+                this.context.message({
+                    content: 'Think about simplifying your loop. Do you really need it?',
+                    type: 'markdown',
+                    icon: 'fa-info-circle',
+                    classname: 'warning'
+                });
+            }
+            if (this.context.getScore() >= 2) {
+                this.context.message({
+                    content: 'The full name of little Carly is [Carl Friedrich Gauss](https://en.wikipedia.org/wiki/Carl_Friedrich_Gauss), ' +
+                        'a mathematician from the 19th century. ' +
+                        'At the age of nine he solved the task with a simple multiplication.',
+                    type: 'markdown',
+                    icon: 'fa-info-circle',
+                    classname: 'info'
+                });
+            }
         }
     };
     Suite.prototype.write = function (deferred, seconds, logItem) {
@@ -126,10 +129,9 @@ var Suite = (function () {
                                 }
                                 else {
                                     _this.context.log('The teacher was faster and Carly was even wrong.').withIcon('fa-times-circle').withClass('error');
+                                    _this.context.fails();
                                 }
-                                deferred.resolve({
-                                    success: success
-                                });
+                                deferred.resolve();
                             });
                         });
                     }
@@ -140,10 +142,9 @@ var Suite = (function () {
                             }
                             else {
                                 _this.context.log('Carly was faster, but wrong.').withIcon('fa-times-circle').withClass('error');
+                                _this.context.fails();
                             }
-                            deferred.resolve({
-                                success: success
-                            });
+                            deferred.resolve();
                         });
                     }
                 });

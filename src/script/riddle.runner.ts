@@ -12,7 +12,7 @@ export interface XXX {
     riddle: Riddle;
     canceled: boolean;
     score: number;
-    messages: string[];
+    messages: suite.Message[];
 }
 
 
@@ -40,10 +40,12 @@ export class RiddleRunner implements suite.Context {
 
     private executeDeferred: angular.IDeferred<XXX> | null;
     private suite: any;
-    private testFns: (() => suite.Result | angular.IPromise<suite.Result | undefined> | undefined)[];
+    private testFns: (() => void | angular.IPromise<void>)[];
 
+    private _failed: boolean = false;
+    private _aborted: boolean = false;
     private _score: number = 1;
-    private messages: string[] = [];
+    private messages: suite.Message[] = [];
 
     constructor(private $q: angular.IQService, private uiService: UIService, private consoleService: ConsoleService, private riddle: Riddle) {
 
@@ -163,6 +165,11 @@ export class RiddleRunner implements suite.Context {
      * @memberOf RiddleRunner
      */
     private executeNextTestFn(): void {
+        if (this.isAborted()) {
+            this.finish();
+            return;
+        }
+
         let testFn = this.testFns.shift();
 
         if (testFn === undefined) {
@@ -170,31 +177,7 @@ export class RiddleRunner implements suite.Context {
             return;
         }
 
-        this.invokeTestFn(testFn).then(result => {
-            if (result === undefined) {
-                // quiet success
-            }
-            else if (result.success) {
-                if (result.score && result.score > this._score && this._score > 0) {
-                    this._score = result.score;
-                }
-
-                if (result.message) {
-                    this.addMessage(result.message);
-                }
-            }
-            else {
-                this._score = 0;
-
-                if (result.message) {
-                    this.addMessage(result.message);
-                }
-            }
-
-            this.uiService.postpone(SECONDS_BETWEEN_TESTS, () => this.executeNextTestFn());
-        }, err => {
-            this.cancel();
-        });
+        this.invokeTestFn(testFn).then(() => this.uiService.postpone(SECONDS_BETWEEN_TESTS, () => this.executeNextTestFn()), err => this.cancel());
     }
 
     private prepare(): void {
@@ -238,14 +221,11 @@ export class RiddleRunner implements suite.Context {
      * tests should continue with the next test function. If the returned promise gets rejected, the 
      * tests should be aborted. 
      * 
-     * @private
-     * @param {(() => suite.Result | angular.IPromise<suite.Result | undefined> | undefined)} testFn the test function
-     * @returns {angular.IPromise<suite.Result>} a promise for the result
-     * 
-     * @memberOf RiddleRunner
+     * @param {(() => void | angular.IPromise<void>)} testFn testFn the test function
+     * @returns {angular.IPromise<void>} a promise for the result
      */
-    private invokeTestFn(testFn: () => suite.Result | angular.IPromise<suite.Result | undefined> | undefined): angular.IPromise<suite.Result> {
-        let deferred = this.$q.defer<suite.Result>();
+    private invokeTestFn(testFn: () => void | angular.IPromise<void>): angular.IPromise<void> {
+        let deferred = this.$q.defer<void>();
 
         try {
             this.checkRunning();
@@ -255,12 +235,10 @@ export class RiddleRunner implements suite.Context {
             this.checkRunning();
 
             if (isPromise(result)) {
-                (result as angular.IPromise<suite.Result>).then(result => deferred.resolve(result), err => deferred.reject(err));
+                (result as angular.IPromise<void>).then(result => deferred.resolve(result), err => deferred.reject(err));
             }
             else if ((result === undefined) || (result === null)) {
-                deferred.resolve({
-                    success: true
-                });
+                deferred.resolve();
             }
             else {
                 deferred.resolve(result);
@@ -324,25 +302,77 @@ export class RiddleRunner implements suite.Context {
         }
     }
 
+    fails(): void {
+        this._failed = true;
+        this._score = 0;
+    }
+
+    abort(): void {
+        this.fails();
+        this._aborted = true;
+    }
+
+    isWorking(): boolean {
+        return !this._failed;
+    }
+    
+    isFaulty(): boolean {
+        return this._failed;
+    }
+
+    isAborted(): boolean {
+        return this._aborted;
+    }
+
+    score(score: number): void {
+        if (!this._failed) {
+            this._score = score;
+        }
+    }
+
+    getScore(): number {
+        return this._score;
+    }
+
+    message(message: string | suite.Message): void {
+        if (typeof message === 'string') {
+            message = {
+                content: message
+            };
+        }
+
+        if (this.messages.filter(m => (message as suite.Message).content === m.content).length > 0) {
+            return;
+        }
+
+        this.messages.push(message);
+    }
+
+    log(message?: string | suite.Message): suite.LogItem {
+        this.checkRunning();
+
+        return this.consoleService.log(message);
+    }
+
     defer<Any>(): angular.IDeferred<Any> {
         this.checkRunning();
 
         return this.$q.defer();
     }
 
-    postpone<Any>(seconds: number, fn: () => Any | angular.IPromise<Any>): angular.IPromise<Any> {
+    postpone<Any>(seconds: number, fn?: () => Any | angular.IPromise<Any>): angular.IPromise<Any> {
         this.checkRunning();
 
         return this.uiService.postpone(seconds, fn);
     }
 
     sequence<Any>(...secondsOrStep: (number | (() => any | angular.IPromise<any>))[]): angular.IPromise<Any> {
-        this.checkRunning();
-
         return this.sequenceStep<Any>(this.defer<Any>(), undefined, ...secondsOrStep);
     }
 
     private sequenceStep<Any>(deferred: angular.IDeferred<Any>, result: any, ...secondsOrStep: (number | (() => any | angular.IPromise<any>))[]): angular.IPromise<Any> {
+        this.checkRunning();
+
         try {
             this.checkRunning();
 
@@ -409,6 +439,8 @@ export class RiddleRunner implements suite.Context {
     }
 
     private mapStep<Item, Result>(deferred: angular.IDeferred<(Result | undefined | null)[]>, source: (Item | undefined | null)[], sourceIndex: number, target: (Result | undefined | null)[], fn: (item: Item | undefined | null) => angular.IPromise<Result> | Result | undefined | null): void {
+        this.checkRunning();
+
         if (sourceIndex >= source.length) {
             deferred.resolve(target);
             return;
@@ -439,10 +471,6 @@ export class RiddleRunner implements suite.Context {
                 deferred.reject(err);
             }
         }
-    }
-
-    log(message?: any): suite.LogItem {
-        return this.consoleService.log(message);
     }
 
     countTypes(...types: string[]): number {
@@ -561,24 +589,6 @@ export class RiddleRunner implements suite.Context {
                 this.crawl(node.declaration, callback);
             }
         }
-    }
-
-    addMessage(message: string): void {
-        if (this.messages.indexOf(message) < 0) {
-            this.messages.push(message);
-        }
-    }
-
-    isSucess(): boolean {
-        return this._score >= 1;
-    }
-
-    isFailure(): boolean {
-        return this._score < 1;
-    }
-
-    getScore(): number {
-        return this._score;
     }
 
 }

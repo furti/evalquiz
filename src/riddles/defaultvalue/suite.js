@@ -8,7 +8,6 @@ var Suite = (function () {
             'Scythes! Who needs scythes in the city?', 'Tea from the Counterweight Continent', null, 'Very Old Peculiar Brandy from Bentinck\'s',
             'Watermelons (square shaped)', 'Xiguas', 'Ziziphus trees'
         ];
-        this.success = true;
     }
     Suite.prototype.write = function (s) {
         this.logItem.write(s);
@@ -16,11 +15,7 @@ var Suite = (function () {
     };
     Suite.prototype.testCode = function () {
         var _this = this;
-        var deferred = this.context.defer();
-        this.next(this.context.defer(), 0).then(function () { return deferred.resolve({
-            success: _this.success
-        }); }, function (err) { return deferred.reject(err); });
-        return deferred.promise;
+        return this.context.postpone(1, function () { return _this.next(_this.context.defer(), 0); });
     };
     Suite.prototype.next = function (deferred, i) {
         var _this = this;
@@ -39,36 +34,45 @@ var Suite = (function () {
                 if (expected !== _this.written) {
                     _this.logItem = _this.context.log().withIcon('fa-times-circle').withClass('error');
                     _this.logItem.write("Nobby! Please concentrate! You should write down '" + expected + "'!");
-                    _this.success = false;
+                    _this.context.fails();
                 }
             }).then(function () { return _this.next(deferred, i + 1); }, function (err) { return deferred.reject(err); });
         }
         return deferred.promise;
     };
     Suite.prototype.testStyle = function () {
+        if (this.context.isFaulty()) {
+            return;
+        }
         var statementsCount = this.context.countStatements();
         if (statementsCount > 1) {
-            this.context.log('Your code has too many statements to get a better score.').withClass('warning', 'fade-in').withIcon('fa-info-circle');
-            return {
-                success: true,
-                score: 1
-            };
+            this.context.message({
+                content: 'Your code has too many statements to get a better score. Doing _simple_ things inline helps readability.',
+                type: 'markdown',
+                icon: 'fa-info-circle',
+                classname: 'warning'
+            });
+            this.context.score(1);
+            return;
         }
         var conditionsCount = this.context.countConditions();
         if (conditionsCount > 0) {
             var operatorsCount = this.context.countOperators();
             if (operatorsCount > 0) {
-                this.context.log('You may wish to simplify your condition.').withClass('warning', 'fade-in').withIcon('fa-info-circle');
+                this.context.message({
+                    content: 'You may wish to simplify your condition by checking for the [Falsy](https://developer.mozilla.org/en-US/docs/Glossary/Falsy) value.',
+                    type: 'markdown',
+                    icon: 'fa-info-circle',
+                    classname: 'warning'
+                });
+                this.context.score(1);
+                return;
             }
-            return {
-                success: true,
-                score: 2
-            };
+            this.context.score(2);
+            return;
         }
-        return {
-            success: true,
-            score: 3
-        };
+        this.context.score(3);
+        return;
     };
     return Suite;
 }());

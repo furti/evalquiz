@@ -2,20 +2,14 @@
 
 declare namespace suite {
 
+    export interface Message {
+        content: any;
 
-    /**
-     * A result returned by a test function.
-     * 
-     * @export
-     * @interface Result
-     */
-    export interface Result {
+        type?: 'plain' | 'markdown' | 'html' | 'code';
 
-        success: boolean;
+        classname?: string;
 
-        score?: number;
-
-        message?: string;
+        icon?: string;
     }
 
     export interface LogItem {
@@ -51,12 +45,40 @@ declare namespace suite {
         html(s: string): JQuery;
 
         code(s: string): JQuery;
-
     }
 
     export interface Context {
 
         invokeFn(...fnParams: any[]): any;
+
+        fails(): void;
+
+        abort(): void;
+
+        isWorking(): boolean;
+
+        isFaulty(): boolean;
+
+        isAborted(): boolean;
+
+        score(score: number): void;
+
+        getScore(): number;
+
+        /**
+         * Adds the specified message to final message tips. Never adds a message twice. 
+         * 
+         * @param {string} message the message
+         */
+        message(message: string | Message): void;
+
+        /**
+         * Logs a messages. If the message is a string, it handles the message as Markdown.
+         * 
+         * @param {(string | Message)} [message] the message
+         * @returns {LogItem} the log item
+         */
+        log(message?: string | Message): LogItem;
 
         defer<Any>(): angular.IDeferred<Any>;
 
@@ -69,8 +91,7 @@ declare namespace suite {
          * @param {(() => Result | angular.IPromise<Result>)} fn the function
          * @returns {angular.IPromise<Result>} the promise
          */
-        postpone<Result>(seconds: number, fn: () => Result | angular.IPromise<Result>): angular.IPromise<Result>;
-
+        postpone<Result>(seconds: number, fn?: () => Result | angular.IPromise<Result>): angular.IPromise<Result>;
 
         /**
          * Executes a sequence of postponed steps. The array may contain
@@ -96,8 +117,6 @@ declare namespace suite {
          * @returns {angular.IPromise<Result[]>} a promise for the result
          */
         map<Item, Result>(source: (Item | undefined | null)[] | undefined | null, fn: (item: Item | undefined | null) => angular.IPromise<Result> | Result | undefined | null): angular.IPromise<(Result | undefined | null)[] | undefined | null>;
-
-        log(message?: any): LogItem;
 
         /**
          * Counts the specified types.
@@ -166,17 +185,5 @@ declare namespace suite {
          */
         countOperators(...operators: string[]): number;
 
-        /**
-         * Adds the specified message to final message tips. Never adds a message twice. 
-         * 
-         * @param {string} message the message
-         */
-        addMessage(message: string): void;
-
-        isSucess(): boolean;
-
-        isFailure(): boolean;
-
-        getScore(): number;
     }
 }

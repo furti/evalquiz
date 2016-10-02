@@ -20,6 +20,8 @@ declare namespace suite {
 
     export interface LogItem {
 
+        content: JQuery;
+
         withClass(...classname: string[]): this;
 
         withIcon(icon?: string): this;
@@ -46,6 +48,8 @@ declare namespace suite {
 
         markdown(s: string): JQuery;
 
+        html(s: string): JQuery;
+
         code(s: string): JQuery;
 
     }
@@ -56,9 +60,42 @@ declare namespace suite {
 
         defer<Any>(): angular.IDeferred<Any>;
 
-        postpone<Any>(seconds: number, fn: () => Any | angular.IPromise<Any>): angular.IPromise<Any>;
+        /**
+         * Postponses the invocation of the specified function 
+         * and returns a promise for the result.
+         * 
+         * @template Result the type of result
+         * @param {number} seconds the delay in seconds
+         * @param {(() => Result | angular.IPromise<Result>)} fn the function
+         * @returns {angular.IPromise<Result>} the promise
+         */
+        postpone<Result>(seconds: number, fn: () => Result | angular.IPromise<Result>): angular.IPromise<Result>;
 
-        sequence<Any>(...secondsOrStep: (number | (() => any | angular.IPromise<any>))[]): angular.IPromise<Any>;
+
+        /**
+         * Executes a sequence of postponed steps. The array may contain
+         * numbers and functions. Numbers are interpreted as seconds to delay
+         * the execution and functions will be invoked. The functions may
+         * themself return promises. The method returns the 
+         * result of the last invokation that was not undefined as result.
+         * 
+         * @template Result the type of result
+         * @param {(...(number | (() => any | angular.IPromise<any>))[])} secondsOrStep the array of seconds and functions
+         * @returns {angular.IPromise<Result>} the result of the last invocation, that was not undefined
+         */
+        sequence<Result>(...secondsOrStep: (number | (() => any | angular.IPromise<any>))[]): angular.IPromise<Result>;
+
+        /**
+         * Transforms the array using the specified function. The function may 
+         * return a promise to delay the execution.
+         * 
+         * @template Item the type of the source array
+         * @template Result the type of the targer array
+         * @param {Item[]} array the array
+         * @param {((item: Item) => Result | angular.IPromise<Result>)} fn the function, may return a promise
+         * @returns {angular.IPromise<Result[]>} a promise for the result
+         */
+        map<Item, Result>(source: (Item | undefined | null)[] | undefined | null, fn: (item: Item | undefined | null) => angular.IPromise<Result> | Result | undefined | null): angular.IPromise<(Result | undefined | null)[] | undefined | null>;
 
         log(message?: any): LogItem;
 
@@ -128,6 +165,13 @@ declare namespace suite {
          * @returns {number} the number of matching nodes
          */
         countOperators(...operators: string[]): number;
+
+        /**
+         * Adds the specified message to final message tips. Never adds a message twice. 
+         * 
+         * @param {string} message the message
+         */
+        addMessage(message: string): void;
 
         isSucess(): boolean;
 

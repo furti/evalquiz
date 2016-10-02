@@ -180,14 +180,14 @@ export class RiddleRunner implements suite.Context {
                 }
 
                 if (result.message) {
-                    this.messages.push(result.message);
+                    this.addMessage(result.message);
                 }
             }
             else {
                 this._score = 0;
 
                 if (result.message) {
-                    this.messages.push(result.message);
+                    this.addMessage(result.message);
                 }
             }
 
@@ -359,7 +359,11 @@ export class RiddleRunner implements suite.Context {
                 return deferred.promise;
             }
 
-            result = item();
+            let itemResult = item();
+
+            if (itemResult !== undefined) {
+                result = itemResult;
+            }
 
             if (isPromise(result)) {
                 (result as angular.IPromise<any>).then(() => this.sequenceStep(deferred, result, ...remaining), err => deferred.reject(err));
@@ -381,6 +385,60 @@ export class RiddleRunner implements suite.Context {
         }
 
         return deferred.promise;
+    }
+
+    map<Item, Result>(source: (Item | undefined | null)[] | undefined | null, fn: (item: Item | undefined | null) => angular.IPromise<Result> | Result | undefined | null): angular.IPromise<(Result | undefined | null)[] | undefined | null> {
+        let deferred = this.defer<(Result | undefined | null)[] | undefined | null>();
+
+        if (source === undefined) {
+            deferred.resolve(undefined);
+        }
+        else if (source === null) {
+            deferred.resolve(null);
+        }
+        else if (!source.length) {
+            deferred.resolve([]);
+        }
+        else {
+            let target: Result[] = [];
+
+            this.mapStep(deferred, source, 0, target, fn);
+        }
+
+        return deferred.promise;
+    }
+
+    private mapStep<Item, Result>(deferred: angular.IDeferred<(Result | undefined | null)[]>, source: (Item | undefined | null)[], sourceIndex: number, target: (Result | undefined | null)[], fn: (item: Item | undefined | null) => angular.IPromise<Result> | Result | undefined | null): void {
+        if (sourceIndex >= source.length) {
+            deferred.resolve(target);
+            return;
+        }
+
+        try {
+            let result = fn(source[sourceIndex]);
+
+            if (isPromise(result)) {
+                (result as angular.IPromise<Result>).then(r => {
+                    target.push(r);
+                    this.mapStep(deferred, source, sourceIndex + 1, target, fn);
+                }, err => deferred.reject(err));
+            }
+            else {
+                target.push(result as (Result | undefined | null));
+                this.mapStep(deferred, source, sourceIndex + 1, target, fn);
+            }
+        }
+        catch (err) {
+            if (err === CANCELED) {
+                deferred.reject(err);
+            }
+            else {
+                let message = `Unhandled error in map: ${err}`;
+                console.error(message, err);
+                this.log(message).withClass('error').withIcon('fa-times-circle');
+                deferred.reject(err);
+            }
+        }
     }
 
     log(message?: any): suite.LogItem {
@@ -502,6 +560,12 @@ export class RiddleRunner implements suite.Context {
             if (node.declaration) {
                 this.crawl(node.declaration, callback);
             }
+        }
+    }
+
+    addMessage(message: string): void {
+        if (this.messages.indexOf(message) < 0) {
+            this.messages.push(message);
         }
     }
 

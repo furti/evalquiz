@@ -1,42 +1,43 @@
 {
     "goals": [
         "Solve the riddle.",
-        "Do not exceed an average of 8 checkColor() calls per dwarf.",
-        "Avoid any loops (for, while, do)."
+        "Without any loops (`for`, `while`, `do`).",
+        "**The Wizard's Toe:** As one-liner."
     ],
     "description": "file: description.md",
-    "hints": null,
+    "hints": "file: hints.md",
+    "api": [
+        {
+            "name": "log",
+            "type": "void",
+            "description": "Writes logging output to the console.",
+            "params": [
+                {
+                    "name": "message",
+                    "type": "any",
+                    "description": "The object to write."
+                }
+            ]
+        },
+        {
+            "name": "attack",
+            "type": "void",
+            "description": "Let's the dwarf attack the dragon.",
+            "params": []
+        }
+    ],
     "member": {
         "name": "join",
         "type": "number",
-        "description": "Returns the index where to place the next dwarf.",
+        "description": "Returns the index, where to place the next dwarf.",
         "explanation": "file: explanation.md",
         "params": [
             {
-                "name": "row",
-                "type": "object",
-                "description": "The row of dwarfs, offering two functions.",
-                "properties": [
-                    {
-                        "name": "checkColor",
-                        "type": "string",
-                        "description": "Returns the color ('red' or 'blue') of the dwarfs hat at the position as a string.",
-                        "params": [
-                            {
-                                "name": "position",
-                                "type": "number",
-                                "description": "The position, zero-based."
-                            }
-                        ]
-                    },
-                    {
-                        "name": "getLength",
-                        "type": "number",
-                        "description": "Returns the number of dwarfs in the row."
-                    }
-                ]
+                "name": "hats",
+                "type": "string[]",
+                "description": "An array of strings with the colors of the hats (either `\"red\"` or `\"blue\"`)."
             }
         ]
     },
-    "engine": "file: engine.js"
+    "suite": "file: suite.js"
 }

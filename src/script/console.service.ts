@@ -75,6 +75,9 @@ export class ConsoleLogItem implements suite.LogItem {
         return this;
     }
 
+    get content(): JQuery {
+        return this.contentElement;
+    }
 
     private append(element: JQuery): JQuery {
         this.lastElement = element;
@@ -107,7 +110,7 @@ export class ConsoleLogItem implements suite.LogItem {
     space(count: number = 1): JQuery {
         let npsps = '';
 
-        for (let i=0; i<count; i++) {
+        for (let i = 0; i < count; i++) {
             npsps += '&nbsp;';
         }
 
@@ -160,6 +163,10 @@ export class ConsoleLogItem implements suite.LogItem {
         }
 
         return this.append(angular.element('<div></div>').text("WHAT IS A " + typeof obj));
+    }
+
+    html(s: string): JQuery {
+        return this.append(angular.element(s));
     }
 
     markdown(s: string): JQuery {

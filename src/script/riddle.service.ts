@@ -94,7 +94,12 @@ export class RiddleService {
             member.properties.forEach(property => {
                 this.processMember(location, property);
 
-                property.signatureDescription = `Property \`${property.signature}\` - ${property.description}`;
+                if (property.signature!.indexOf('(') >= 0) {
+                    property.signatureDescription = `Function \`${property.signature}\` - ${property.description}`;
+                }
+                else {
+                    property.signatureDescription = `Property \`${property.signature}\` - ${property.description}`;
+                }
             });
         }
 

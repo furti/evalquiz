@@ -43,17 +43,22 @@ export class RiddleRunner implements suite.Context {
     private testFns: (() => void | angular.IPromise<void>)[];
 
     private _failed: boolean = false;
-    private _aborted: boolean = false;
-    private _score: number = 1;
+    private _stopped: boolean = false;
+    private _score: number = 3;
     private messages: suite.Message[] = [];
 
     constructor(private $q: angular.IQService, private uiService: UIService, private consoleService: ConsoleService, private riddle: Riddle) {
-
         let code = riddle.state.code;
         let detail = riddle.detail!;
 
         this.suiteFactory = new Function('var exports = {};\n' + detail.suite + '\nreturn exports;');
-        this.fnWrapperArgs = detail.api.map(member => member.name);
+        this.fnWrapperArgs = [];
+
+        detail.api.forEach(member => {
+            if (this.fnWrapperArgs.indexOf(member.name) < 0) {
+                this.fnWrapperArgs.push(member.name)
+            }
+        });
 
         let args = this.fnWrapperArgs.slice();
 
@@ -165,7 +170,7 @@ export class RiddleRunner implements suite.Context {
      * @memberOf RiddleRunner
      */
     private executeNextTestFn(): void {
-        if (this.isAborted()) {
+        if (this.isStopped()) {
             this.finish();
             return;
         }
@@ -183,13 +188,19 @@ export class RiddleRunner implements suite.Context {
     private prepare(): void {
         try {
             let exports: { [key: string]: any } = this.suiteFactory();
-            let keys = Object.keys(exports);
+            let suiteClass = exports['Suite'];
 
-            if (keys.length !== 1) {
-                throw new Error('Expected one class in suite');
+            if (!suiteClass) {
+                let keys = Object.keys(exports);
+
+                if (keys.length < 1) {
+                    throw new Error('Expected at least one class in suite');
+                }
+
+                suiteClass = exports[keys[0]];
             }
 
-            this.suite = new (exports[keys[0]])(this);
+            this.suite = new (suiteClass)(this);
         }
         catch (err) {
             let message = `Failed to instantiate suite of riddle "${this.riddle.id}".`;
@@ -273,15 +284,13 @@ export class RiddleRunner implements suite.Context {
         let fnParams: any[] = [];
 
         for (let fnWrapperArg of this.fnWrapperArgs) {
-            let fnParam = (...args: any[]) => this.suite[fnWrapperArg].apply(this.suite, args);
-
-            if (fnParam === undefined) {
+            if (this.suite[fnWrapperArg] === undefined) {
                 let message = `API reference "${fnWrapperArg}" of riddle "${this.riddle.id}" is missing in suite.`;
                 console.error(message);
                 throw new Error(message);
             }
 
-            fnParams.push(fnParam);
+            fnParams.push((...args: any[]) => this.suite[fnWrapperArg].apply(this.suite, args));
         }
 
         fnParams = fnParams.concat(params);
@@ -302,36 +311,30 @@ export class RiddleRunner implements suite.Context {
         }
     }
 
-    fails(): void {
+    fail(): void {
         this._failed = true;
+        this._stopped = true;
         this._score = 0;
     }
 
-    abort(): void {
-        this.fails();
-        this._aborted = true;
-    }
-
-    isWorking(): boolean {
-        return !this._failed;
-    }
-    
     isFaulty(): boolean {
         return this._failed;
     }
 
-    isAborted(): boolean {
-        return this._aborted;
+    stop(): void {
+        this._stopped = true;
     }
 
-    score(score: number): void {
-        if (!this._failed) {
-            this._score = score;
-        }
+    isStopped(): boolean {
+        return this._stopped;
     }
 
-    getScore(): number {
+    get score(): number {
         return this._score;
+    }
+
+    set score(score: number) {
+        this._score = Math.min(this._score, score);
     }
 
     message(message: string | suite.Message): void {

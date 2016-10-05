@@ -13,7 +13,10 @@ export class Suite {
     }
 
     log(message: any): void {
-        this.context.log(message);
+        this.context.log({
+            content: message,
+            type: 'plain'
+        });
     }
 
     attack(): void {
@@ -94,8 +97,8 @@ export class Suite {
         }, 1, () => {
             let dwarfs: number[] = [];
 
-            for (let i = 0; i < 64; i++) {
-                dwarfs.push(i % 8);
+            for (let i = 0; i < Math.floor(Math.random() * 32) + 48; i++) {
+                dwarfs.push(Math.floor(Math.random() * 8));
             }
 
             this.shuffle(dwarfs);
@@ -112,7 +115,7 @@ export class Suite {
         let loopCount = this.context.countLoops();
 
         if (loopCount > 0) {
-            this.context.score(1);
+            this.context.score = 1;
 
             this.context.message({
                 content: 'The [JavaScript array](https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Array) provides a lot of nice methods. ' +
@@ -129,10 +132,10 @@ export class Suite {
         let conditionCount = this.context.countConditions();
 
         if (statementCount === 1 && conditionCount === 0) {
-            this.context.score(3);
+            this.context.score = 3;
         }
         else {
-            this.context.score(2);
+            this.context.score = 2;
         }
     }
 
@@ -150,7 +153,7 @@ export class Suite {
             if (missing) {
                 log.mark('not-ok');
                 this.context.log().withIcon('fa-times-circle').withClass('error').markdown("There are dwarfs missing in the line.");
-                this.context.fails();
+                this.context.score = 0;
                 return;
             }
 
@@ -160,7 +163,7 @@ export class Suite {
             if (failed) {
                 log.mark('not-ok');
                 this.context.log().withIcon('fa-times-circle').withClass('error').markdown("The dwarfs failed to line up correctly.");
-                this.context.fails();
+                this.context.score = 0;
                 return;
             }
 

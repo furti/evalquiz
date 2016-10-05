@@ -20,6 +20,20 @@
                 <div flex layout="column" class="lined-top">
                     <div flex class="scrolls md-padding">
                         <div btf-markdown="$ctrl.riddle.detail.description"></div>
+
+                        <p ng-if="$ctrl.riddle.minScoreToSolve == 2">
+                            <i class="fa fa-exclamation-circle"></i> 
+                            You need at least two stars 
+                            (<i class="fa fa-star"></i>&nbsp;<i class="fa fa-star"></i>&nbsp;<i class="fa fa-star-o lightest"></i>)
+                            to solve the riddle!
+                        </p>
+
+                        <p ng-if="$ctrl.riddle.minScoreToSolve == 3">
+                            <i class="fa fa-exclamation-circle"></i>
+                            You need all three stars 
+                            (<i class="fa fa-star">&nbsp;</i><i class="fa fa-star"></i>&nbsp;<i class="fa fa-star"></i>)
+                            to solve the riddle!
+                        </p>
                     </div>
 
                     <div class="md-headline md-padding layout-no-resize lined-top">
@@ -44,14 +58,6 @@
                                 </tr>
                             </tbody>
                         </table>
-
-                        <p ng-if="$ctrl.riddle.minScoreToSolve == 2">
-                            You need at least two stars (<i class="fa fa-star"></i>&nbsp;<i class="fa fa-star"></i>&nbsp;<i class="fa fa-star-o lightest"></i>) in order to solve the riddle.
-                        </p>
-
-                        <p ng-if="$ctrl.riddle.minScoreToSolve == 3">
-                            You need all three stars (<i class="fa fa-star">&nbsp;</i><i class="fa fa-star"></i>&nbsp;<i class="fa fa-star"></i>) in order to solve the riddle.
-                        </p>
                     </div>
                 </div>
             </md-tab>

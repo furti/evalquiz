@@ -9,7 +9,10 @@ export class Suite {
     }
 
     log(message: any): void {
-        this.context.log(message);
+        this.context.log({
+            content: message,
+            type: 'plain'
+        });
     }
 
     testInit(): angular.IPromise<void> {
@@ -17,13 +20,13 @@ export class Suite {
         var loopCount = this.context.countTypes('ForStatement', 'WhileStatement', 'DoWhileStatement');
 
         if (loopCount > 0) {
-            this.context.score(1);
+            this.context.score = 1;
         }
         else {
             var multCount = this.context.countOperators('*', '*=');
 
             this.faster = true;
-            this.context.score(multCount > 0 ? 2 : 3);
+            this.context.score = multCount > 0 ? 2 : 3;
         }
 
         return this.context.postpone(0.3, () => {
@@ -50,26 +53,23 @@ export class Suite {
     }
 
     testFinish(): void {
-        if (this.context.isWorking()) {
-            if (this.context.getScore() < 2) {
-                this.context.message({
-                    content: 'Think about simplifying your loop. Do you really need it?',
-                    type: 'markdown',
-                    icon: 'fa-info-circle',
-                    classname: 'warning'
-                });
-            }
-
-            if (this.context.getScore() >= 2) {
-                this.context.message({
-                    content: 'The full name of little Carly is [Carl Friedrich Gauss](https://en.wikipedia.org/wiki/Carl_Friedrich_Gauss), ' +
-                    'a mathematician from the 19th century. ' +
-                    'At the age of nine he solved the task with a simple multiplication.',
-                    type: 'markdown',
-                    icon: 'fa-info-circle',
-                    classname: 'info'
-                });
-            }
+        if (this.context.score >= 2) {
+            this.context.message({
+                content: 'The full name of little Carly is [Carl Friedrich Gauss](https://en.wikipedia.org/wiki/Carl_Friedrich_Gauss), ' +
+                'a mathematician from the 19th century. ' +
+                'At the age of nine he solved the task with a simple multiplication.',
+                type: 'markdown',
+                icon: 'fa-info-circle',
+                classname: 'info'
+            });
+        }
+        else if (this.context.score > 0) {
+            this.context.message({
+                content: 'Think about simplifying your loop. Do you really need it?',
+                type: 'markdown',
+                icon: 'fa-info-circle',
+                classname: 'warning'
+            });
         }
     }
 
@@ -147,7 +147,7 @@ export class Suite {
                                 }
                                 else {
                                     this.context.log('The teacher was faster and Carly was even wrong.').withIcon('fa-times-circle').withClass('error');
-                                    this.context.fails();
+                                    this.context.score = 0;
                                 }
                                 deferred.resolve();
                             });
@@ -160,7 +160,7 @@ export class Suite {
                             }
                             else {
                                 this.context.log('Carly was faster, but wrong.').withIcon('fa-times-circle').withClass('error');
-                                this.context.fails();
+                                this.context.score = 0;
                             }
                             deferred.resolve();
                         });

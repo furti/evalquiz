@@ -6,19 +6,22 @@ var Suite = (function () {
         this.correct = false;
     }
     Suite.prototype.log = function (message) {
-        this.context.log(message);
+        this.context.log({
+            content: message,
+            type: 'plain'
+        });
     };
     Suite.prototype.testInit = function () {
         var _this = this;
         var deferred = this.context.defer();
         var loopCount = this.context.countTypes('ForStatement', 'WhileStatement', 'DoWhileStatement');
         if (loopCount > 0) {
-            this.context.score(1);
+            this.context.score = 1;
         }
         else {
             var multCount = this.context.countOperators('*', '*=');
             this.faster = true;
-            this.context.score(multCount > 0 ? 2 : 3);
+            this.context.score = multCount > 0 ? 2 : 3;
         }
         return this.context.postpone(0.3, function () {
             _this.context.log("Let's see if Carly can beat his teacher:");
@@ -38,25 +41,23 @@ var Suite = (function () {
         return this.execute.apply(this, [random].concat(texts));
     };
     Suite.prototype.testFinish = function () {
-        if (this.context.isWorking()) {
-            if (this.context.getScore() < 2) {
-                this.context.message({
-                    content: 'Think about simplifying your loop. Do you really need it?',
-                    type: 'markdown',
-                    icon: 'fa-info-circle',
-                    classname: 'warning'
-                });
-            }
-            if (this.context.getScore() >= 2) {
-                this.context.message({
-                    content: 'The full name of little Carly is [Carl Friedrich Gauss](https://en.wikipedia.org/wiki/Carl_Friedrich_Gauss), ' +
-                        'a mathematician from the 19th century. ' +
-                        'At the age of nine he solved the task with a simple multiplication.',
-                    type: 'markdown',
-                    icon: 'fa-info-circle',
-                    classname: 'info'
-                });
-            }
+        if (this.context.score >= 2) {
+            this.context.message({
+                content: 'The full name of little Carly is [Carl Friedrich Gauss](https://en.wikipedia.org/wiki/Carl_Friedrich_Gauss), ' +
+                    'a mathematician from the 19th century. ' +
+                    'At the age of nine he solved the task with a simple multiplication.',
+                type: 'markdown',
+                icon: 'fa-info-circle',
+                classname: 'info'
+            });
+        }
+        else if (this.context.score > 0) {
+            this.context.message({
+                content: 'Think about simplifying your loop. Do you really need it?',
+                type: 'markdown',
+                icon: 'fa-info-circle',
+                classname: 'warning'
+            });
         }
     };
     Suite.prototype.write = function (deferred, seconds, logItem) {
@@ -129,7 +130,7 @@ var Suite = (function () {
                                 }
                                 else {
                                     _this.context.log('The teacher was faster and Carly was even wrong.').withIcon('fa-times-circle').withClass('error');
-                                    _this.context.fails();
+                                    _this.context.score = 0;
                                 }
                                 deferred.resolve();
                             });
@@ -142,7 +143,7 @@ var Suite = (function () {
                             }
                             else {
                                 _this.context.log('Carly was faster, but wrong.').withIcon('fa-times-circle').withClass('error');
-                                _this.context.fails();
+                                _this.context.score = 0;
                             }
                             deferred.resolve();
                         });

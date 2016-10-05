@@ -105,16 +105,16 @@
         this.id = id;
     }
 
-    Engine.prototype.setupBags = function () {
-        var bags = [];
+    Engine.prototype.setupSacks = function () {
+        var sacks = [];
 
         for (var i = 1; i <= 10; i++) {
-            bags.push(new Bag(i));
+            sacks.push(new Sack(i));
         }
 
         return {
-            badBag: Math.floor(Math.random() * 11),
-            bags: bags
+            badSack: Math.floor(Math.random() * 11),
+            sacks: sacks
         };
     };
 

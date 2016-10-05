@@ -4,16 +4,16 @@
     }
 
     Engine.prototype.init = function () {
-        this.bags = this.setupBags();
+        this.sacks = this.setupSacks();
         this.alreadyWeighed = false;
     };
 
     Engine.prototype.solvedMessage = function() {
-        return 'You found the bag that is to light.';
+        return 'You found the sack that is to light.';
     };
 
     Engine.prototype.failedMessage = function () {
-        return 'You selected bag ' + this.selectedBag + '. But the bad one was ' + this.bags.badBag + '.';
+        return 'You selected sack ' + this.selectedSack + '. But the bad one was ' + this.sacks.badSack + '.';
     };
 
     Engine.prototype.run = function (find, syntax) {
@@ -26,7 +26,7 @@
 
             var weight = 0;
             coins.forEach(function (coin) {
-                if (coin.bag === engine.bags.badBag) {
+                if (coin.sack === engine.sacks.badSack) {
                     weight += 9;
                 }
                 else {
@@ -39,33 +39,33 @@
             return weight;
         }
 
-        engine.selectedBag = find(scale, engine.bags.bags);
+        engine.selectedSack = find(scale, engine.sacks.sacks);
 
-        if (engine.selectedBag !== engine.bags.badBag) {
+        if (engine.selectedSack !== engine.sacks.badSack) {
             return 0;
         }
 
         return 1;
     };
 
-    Engine.prototype.setupBags = function () {
-        var bags = [];
+    Engine.prototype.setupSacks = function () {
+        var sacks = [];
 
         for (var i = 1; i <= 10; i++) {
-            bags.push(new Bag(i));
+            sacks.push(new Sack(i));
         }
 
         return {
-            badBag: Math.floor(Math.random() * 11),
-            bags: bags
+            badSack: Math.floor(Math.random() * 11),
+            sacks: sacks
         };
     };
 
-    function Bag(id) {
+    function Sack(id) {
         this.id = id;
     }
 
-    Bag.prototype.getCoins = function (ammount) {
+    Sack.prototype.getCoins = function (ammount) {
         if (ammount < 1 || ammount > 10) {
             throw 'You have to select between 1 and 10 coins';
         }
@@ -73,7 +73,7 @@
         var coins = [];
 
         for (var i = 0; i < ammount; i++) {
-            coins.push({bag: this.id});
+            coins.push({sack: this.id});
         }
 
         return coins;

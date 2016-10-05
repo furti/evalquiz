@@ -8,7 +8,10 @@ var Suite = (function () {
         this.correct = false;
     }
     Suite.prototype.log = function (message) {
-        this.context.log(message);
+        this.context.log({
+            content: message,
+            type: 'plain'
+        });
     };
     Suite.prototype.attack = function () {
         this.performAttack = true;
@@ -67,8 +70,8 @@ var Suite = (function () {
             _this.context.log().markdown('The dragon could not believe, that the dwarfs solved this riddle. He decided to capture more dwarfs to try once more.');
         }, 1, function () {
             var dwarfs = [];
-            for (var i = 0; i < 64; i++) {
-                dwarfs.push(i % 8);
+            for (var i = 0; i < Math.floor(Math.random() * 32) + 48; i++) {
+                dwarfs.push(Math.floor(Math.random() * 8));
             }
             _this.shuffle(dwarfs);
             return _this.execute(0.125, true, dwarfs);
@@ -80,7 +83,7 @@ var Suite = (function () {
         }
         var loopCount = this.context.countLoops();
         if (loopCount > 0) {
-            this.context.score(1);
+            this.context.score = 1;
             this.context.message({
                 content: 'The [JavaScript array](https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Array) provides a lot of nice methods. ' +
                     'You can use these methods to avoid loops and simplify your code.',
@@ -93,10 +96,10 @@ var Suite = (function () {
         var statementCount = this.context.countStatements();
         var conditionCount = this.context.countConditions();
         if (statementCount === 1 && conditionCount === 0) {
-            this.context.score(3);
+            this.context.score = 3;
         }
         else {
-            this.context.score(2);
+            this.context.score = 2;
         }
     };
     Suite.prototype.execute = function (delay, small, dwarfs) {
@@ -111,7 +114,7 @@ var Suite = (function () {
             if (missing) {
                 log.mark('not-ok');
                 _this.context.log().withIcon('fa-times-circle').withClass('error').markdown("There are dwarfs missing in the line.");
-                _this.context.fails();
+                _this.context.score = 0;
                 return;
             }
             var blues = line.map(function (dwarf) { return dwarf < 4; });
@@ -119,7 +122,7 @@ var Suite = (function () {
             if (failed) {
                 log.mark('not-ok');
                 _this.context.log().withIcon('fa-times-circle').withClass('error').markdown("The dwarfs failed to line up correctly.");
-                _this.context.fails();
+                _this.context.score = 0;
                 return;
             }
             log.mark('ok');

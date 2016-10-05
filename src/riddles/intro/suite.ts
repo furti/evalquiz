@@ -6,7 +6,10 @@ export class Suite {
     }
 
     log(message: any): void {
-        this.context.log(message);
+        this.context.log({
+            content: message,
+            type: 'plain'
+        });
     }
 
     testInit(): angular.IPromise<undefined> {
@@ -56,7 +59,7 @@ export class Suite {
                     }
                     else {
                         logItem.mark("not-ok");
-                        this.context.fails();
+                        this.context.score = 0;
                     }
 
                     deferred.resolve();
@@ -80,8 +83,9 @@ export class Suite {
 
             logItem.write('The riddle was solved with only one statement.');
             logItem.mark('ok');
-
-            this.context.score(2);
+        }
+        else {
+            this.context.score = 1;
         }
     }
 
@@ -99,9 +103,9 @@ export class Suite {
 
             logItem.write('Bonus goal: Solved without any additions.');
             logItem.mark('ok');
-
-            this.context.score(3);
         }
+        else
+            this.context.score = 2;
     }
 }
 

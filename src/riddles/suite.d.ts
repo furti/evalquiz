@@ -51,19 +51,21 @@ declare namespace suite {
 
         invokeFn(...fnParams: any[]): any;
 
-        fails(): void;
-
-        abort(): void;
-
-        isWorking(): boolean;
+        fail(): void;
 
         isFaulty(): boolean;
 
-        isAborted(): boolean;
+        stop(): void;
 
-        score(score: number): void;
+        isStopped(): boolean;
 
-        getScore(): number;
+        /**
+         * Returns the (maximum) score. When setting this variable, 
+         * it will never get more that it is.
+         * 
+         * @type {number} the (maximum) score
+         */
+        score: number;
 
         /**
          * Adds the specified message to final message tips. Never adds a message twice. 

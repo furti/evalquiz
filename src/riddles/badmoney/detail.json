@@ -1,46 +1,68 @@
 {
   "goals": [
-    "Solve the riddle."
+    "Find the sack with the gold.",
+    "Weight only once.",
+    "Solve it for `n` sacks (`n` < 100)."
   ],
   "description": "file: description.md",
-  "hints": null,
+  "hints": "file: hints.md",
+  "api": [
+    {
+      "name": "weight",
+      "type": "number",
+      "description": "Returns the weight of the `Sack` objects.",
+      "params": [
+        {
+          "name": "sacks",
+          "type": "Sack | Sack[]",
+          "description": "A single `Sack` object or an array of `Sack` objects to weight."
+        }
+      ]
+    },
+    {
+      "name": "weight",
+      "type": "number",
+      "description": "Returns the weight of the `Coin` objects.",
+      "params": [
+        {
+          "name": "coins",
+          "type": "Coin | Coin[]",
+          "description": "A single `Coin` object or an array of `Coin` objects to weight."
+        }
+      ]
+    },
+    {
+      "name": "log",
+      "type": "void",
+      "description": "Writes logging output to the console.",
+      "params": [
+        {
+          "name": "message",
+          "type": "any",
+          "description": "The object to write."
+        }
+      ]
+    }
+  ],
   "member": {
     "name": "find",
-    "type": "number",
-    "description": "Returns the number of the bag with the bad money.",
+    "type": "Sack",
+    "description": "Returns the `Sack` object with the gold.",
     "params": [
       {
-        "name": "scale",
-        "type": "number",
-        "description": "A function that takes an array of coins as a parameter and returns the weight of the coins.",
-        "params": [
-          {
-            "name": "coins",
-            "type": "array",
-            "description": "An array of coins."
-          }
-        ]
-      },
-      {
-        "name": "bags",
-        "type": "array",
-        "description": "An array of bags. Each bag is an object with two functions.",
+        "name": "sacks",
+        "type": "Sack[]",
+        "description": "An array of `Sack` objects. Each `Sack` offers one function:",
         "properties": [
           {
-            "name": "id",
-            "type": "number",
-            "description": "The unique id of the bag. You have to return the id of the bad bag.",
-            "params": []
-          },
-          {
             "name": "getCoins",
-            "type": "array",
-            "description": "Takes a number of coinsout of the bag and returns a array of coins.",
+            "type": "Coin[]",
+            "description": "Retuns an array of `Coin` objects from the `Sack`.",
             "params": [
               {
                 "name": "numberOfCoins",
                 "type": "number",
-                "description": "The number of coins to take out of the bag."
+                "description": "The number of `Coin` objects to take out of the sack."
               }
             ]
           }
@@ -48,5 +70,5 @@
       }
     ]
   },
-  "engine": "file: engine.js"
+  "suite": "file: suite.js"
 }

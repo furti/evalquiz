@@ -31,20 +31,12 @@
         "dependsOn": ["defaultvalue"]
     },
     {
-        "id": "subsetsum",
-        "title": "Altitude Differences",
-        "shortDescription": "Know where your blisters come from.",
-        "minScoreToSolve": 2,
-        "location": "subsetsum",
-        "dependsOn": ["dwarfs"]
-    },
-    {
         "id": "badmoney",
         "title": "Bad Money",
         "shortDescription": "All that glitters is not gold.",
-        "minScoreToSolve": 1,
+        "minScoreToSolve": 2,
         "location": "badmoney",
-        "dependsOn": ["subsetsum"]
+        "dependsOn": ["dwarfs"]
     },
     {
         "id": "badmoney2",
@@ -61,5 +53,13 @@
         "minScoreToSolve": 2,
         "location": "dogs",
         "dependsOn": ["badmoney2"]
+    },
+    {
+        "id": "subsetsum",
+        "title": "Altitude Differences",
+        "shortDescription": "Know where your blisters come from.",
+        "minScoreToSolve": 2,
+        "location": "subsetsum",
+        "dependsOn": ["dogs"]
     }
 ]

@@ -1,4 +1,4 @@
-After the last riddle you are left with a broken weighting scale and a bag with good and bad coins. 
+After the last riddle you are left with a broken weighting scale and a sack with good and bad coins. 
 
 Remember, good coins weight 10 gram each, the bad ones weight 9 gram. They all look exactly the same.
 

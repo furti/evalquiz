@@ -7,6 +7,7 @@
 let module = angular.module('evalquiz', ['ngRoute', 'ngMaterial', 'ui.codemirror', 'LocalStorageModule', 'btford.markdown']);
 
 import {EvalQuizService} from './evalquiz.service';
+import './overview.component';
 import './page.component';
 
 module.config(function ($mdThemingProvider: angular.material.IThemingProvider) {

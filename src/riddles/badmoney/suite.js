@@ -138,7 +138,7 @@ var Suite = (function () {
     Suite.prototype.test = function () {
         var _this = this;
         var deferred = this.context.defer();
-        var numberOfSacks = 10;
+        var numberOfSacks = 25;
         var index = this.prepare(numberOfSacks, 100);
         this.logItem = this.context.log();
         this.logItem.markdown("Captain Coppercranium places **" + numberOfSacks + " sacks** infront of you.");

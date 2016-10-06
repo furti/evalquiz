@@ -19,17 +19,17 @@ import { Component, DialogService } from './utils';
 class Controller {
     static $inject = ['evalQuizService', 'riddleService', 'creditsDialog', 'riddleListDialog'];
 
-    protected riddles: Riddle[];
-    protected selectedRiddle: Riddle;
+    riddles: Riddle[];
+    selectedRiddle: Riddle;
 
-    constructor(protected evalQuizService: EvalQuizService, protected riddleService: RiddleService, protected creditsDialog: DialogService, protected riddleListDialog: DialogService) {
+    constructor(private evalQuizService: EvalQuizService, private riddleService: RiddleService, private creditsDialog: DialogService, private riddleListDialog: DialogService) {
     }
 
-    protected get solved(): boolean {
+    get solved(): boolean {
         return this.selectedRiddle && this.riddleService.isSolved(this.selectedRiddle);
     }
 
-    protected get nextRiddleId(): string | undefined {
+    get nextRiddleId(): string | undefined {
         if (!this.selectedRiddle) {
             return undefined;
         }
@@ -37,7 +37,7 @@ class Controller {
         return this.evalQuizService.getNextRiddleId(this.selectedRiddle.id);
     }
 
-    protected get nextAvailable(): boolean {
+    get nextAvailable(): boolean {
         if (!this.solved) {
             return false;
         }
@@ -49,22 +49,30 @@ class Controller {
         return !!this.evalQuizService.getRiddle(this.nextRiddleId);
     }
 
-    protected get running(): boolean {
+    get running(): boolean {
         return this.riddleService.running;
     }
     
-    protected gotoRiddle(riddleId: string): void {
+    gotoRiddle(riddleId: string): void {
         this.evalQuizService.gotoRiddle(riddleId);
     }
 
-    public showRiddleListDialog($event: any): void {
+    showOverview(): void {
+        this.evalQuizService.gotoOverview();
+    }
+
+    showRiddleListDialog(): void {
         this.riddleListDialog.show({
             riddles: this.riddles,
             selectedRiddle: this.selectedRiddle
         });
     }
 
-    public showCreditsDialog($event: any): void {
+    showCreditsDialog(): void {
         this.creditsDialog.show();
+    }
+
+    get totalScore(): number {
+        return this.evalQuizService.totalScore;
     }
 }

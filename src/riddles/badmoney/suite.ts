@@ -182,7 +182,7 @@ export class Suite {
 
     test(): angular.IPromise<void> {
         let deferred = this.context.defer<void>();
-        let numberOfSacks = 10;
+        let numberOfSacks = 25;
         let index = this.prepare(numberOfSacks, 100);
 
         this.logItem = this.context.log();

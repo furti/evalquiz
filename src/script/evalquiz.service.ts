@@ -13,6 +13,7 @@ export class EvalQuizService {
     protected _initialized: boolean = false;
     protected _initializeCallbacks: (() => void)[] = [];
     protected _selectedRiddleId: string;
+    protected _totalScore: number = 0;
 
     protected riddles: Riddle[];
     protected riddleMap: { [id: string]: Riddle };
@@ -89,6 +90,8 @@ export class EvalQuizService {
             }
         }
 
+        this.updateStatistics();
+
         this._initialized = true;
         this._initializeCallbacks.forEach(fn => fn());
     }
@@ -137,6 +140,10 @@ export class EvalQuizService {
         this.selectedRiddleId = riddleId;
     }
 
+    gotoOverview(): void {
+        this.$location.path('/overview');
+    }
+
     getRiddles(): Riddle[] {
         return this.riddles;
     }
@@ -171,8 +178,16 @@ export class EvalQuizService {
 
     saveRiddle(...riddles: Riddle[]): void {
         this.storageService.save(...riddles);
+        this.updateStatistics();
     }
 
+    updateStatistics(): void {
+        this._totalScore = this.riddles.map(riddle => riddle.state.score).reduce((a, b) => a + b, 0)
+    }
+
+    get totalScore(): number {
+        return this._totalScore;
+    }
 }
 
 

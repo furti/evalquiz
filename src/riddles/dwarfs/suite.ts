@@ -115,7 +115,7 @@ export class Suite {
         let loopCount = this.context.countLoops();
 
         if (loopCount > 0) {
-            this.context.score = 1;
+            this.context.maxScore = 1;
 
             this.context.message({
                 content: 'The [JavaScript array](https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Array) provides a lot of nice methods. ' +
@@ -132,10 +132,10 @@ export class Suite {
         let conditionCount = this.context.countConditions();
 
         if (statementCount === 1 && conditionCount === 0) {
-            this.context.score = 3;
+            this.context.maxScore = 3;
         }
         else {
-            this.context.score = 2;
+            this.context.maxScore = 2;
         }
     }
 
@@ -153,7 +153,7 @@ export class Suite {
             if (missing) {
                 log.mark('not-ok');
                 this.context.log().withIcon('fa-times-circle').withClass('error').markdown("There are dwarfs missing in the line.");
-                this.context.score = 0;
+                this.context.maxScore = 0;
                 return;
             }
 
@@ -163,7 +163,7 @@ export class Suite {
             if (failed) {
                 log.mark('not-ok');
                 this.context.log().withIcon('fa-times-circle').withClass('error').markdown("The dwarfs failed to line up correctly.");
-                this.context.score = 0;
+                this.context.maxScore = 0;
                 return;
             }
 

@@ -2,7 +2,7 @@
   "goals": [
     "Find the sack with the gold.",
     "Weight only once.",
-    "Solve it for `n` sacks (`n` < 100)."
+    "Solve it for `n` sacks."
   ],
   "description": "file: description.md",
   "hints": "file: hints.md",
@@ -10,24 +10,12 @@
     {
       "name": "weight",
       "type": "number",
-      "description": "Returns the weight of the `Sack` objects.",
+      "description": "Returns the weight of the thing you put on it.",
       "params": [
         {
-          "name": "sacks",
-          "type": "Sack | Sack[]",
-          "description": "A single `Sack` object or an array of `Sack` objects to weight."
-        }
-      ]
-    },
-    {
-      "name": "weight",
-      "type": "number",
-      "description": "Returns the weight of the `Coin` objects.",
-      "params": [
-        {
-          "name": "coins",
-          "type": "Coin | Coin[]",
-          "description": "A single `Coin` object or an array of `Coin` objects to weight."
+          "name": "thing",
+          "type": "any",
+          "description": "One or more sacks and/or one or more coins."
         }
       ]
     },

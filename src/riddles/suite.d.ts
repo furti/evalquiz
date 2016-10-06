@@ -65,7 +65,7 @@ declare namespace suite {
          * 
          * @type {number} the (maximum) score
          */
-        score: number;
+        maxScore: number;
 
         /**
          * Adds the specified message to final message tips. Never adds a message twice. 

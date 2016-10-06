@@ -83,7 +83,7 @@ var Suite = (function () {
         }
         var loopCount = this.context.countLoops();
         if (loopCount > 0) {
-            this.context.score = 1;
+            this.context.maxScore = 1;
             this.context.message({
                 content: 'The [JavaScript array](https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Array) provides a lot of nice methods. ' +
                     'You can use these methods to avoid loops and simplify your code.',
@@ -96,10 +96,10 @@ var Suite = (function () {
         var statementCount = this.context.countStatements();
         var conditionCount = this.context.countConditions();
         if (statementCount === 1 && conditionCount === 0) {
-            this.context.score = 3;
+            this.context.maxScore = 3;
         }
         else {
-            this.context.score = 2;
+            this.context.maxScore = 2;
         }
     };
     Suite.prototype.execute = function (delay, small, dwarfs) {
@@ -114,7 +114,7 @@ var Suite = (function () {
             if (missing) {
                 log.mark('not-ok');
                 _this.context.log().withIcon('fa-times-circle').withClass('error').markdown("There are dwarfs missing in the line.");
-                _this.context.score = 0;
+                _this.context.maxScore = 0;
                 return;
             }
             var blues = line.map(function (dwarf) { return dwarf < 4; });
@@ -122,7 +122,7 @@ var Suite = (function () {
             if (failed) {
                 log.mark('not-ok');
                 _this.context.log().withIcon('fa-times-circle').withClass('error').markdown("The dwarfs failed to line up correctly.");
-                _this.context.score = 0;
+                _this.context.maxScore = 0;
                 return;
             }
             log.mark('ok');

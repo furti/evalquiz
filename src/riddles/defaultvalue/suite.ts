@@ -44,7 +44,7 @@ export class Suite {
                 if (expected !== this.written) {
                     this.logItem = this.context.log().withIcon('fa-times-circle').withClass('error');
                     this.logItem.write(`Nobby! Please concentrate! You should write down \'${expected}\'!`);
-                    this.context.score = 0;
+                    this.context.maxScore = 0;
                 }
             }).then(() => this.next(deferred, i + 1), err => deferred.reject(err));
         }
@@ -67,7 +67,7 @@ export class Suite {
                 classname: 'warning'
             });
 
-            this.context.score = 1;
+            this.context.maxScore = 1;
             return;
         }
 
@@ -84,15 +84,15 @@ export class Suite {
                     classname: 'warning'
                 });
 
-                this.context.score = 1;
+                this.context.maxScore = 1;
                 return;
             }
 
-            this.context.score = 2;
+            this.context.maxScore = 2;
             return;
         }
 
-        this.context.score = 3;
+        this.context.maxScore = 3;
         return;
     }
 }

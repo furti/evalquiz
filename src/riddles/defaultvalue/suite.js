@@ -34,7 +34,7 @@ var Suite = (function () {
                 if (expected !== _this.written) {
                     _this.logItem = _this.context.log().withIcon('fa-times-circle').withClass('error');
                     _this.logItem.write("Nobby! Please concentrate! You should write down '" + expected + "'!");
-                    _this.context.score = 0;
+                    _this.context.maxScore = 0;
                 }
             }).then(function () { return _this.next(deferred, i + 1); }, function (err) { return deferred.reject(err); });
         }
@@ -52,7 +52,7 @@ var Suite = (function () {
                 icon: 'fa-info-circle',
                 classname: 'warning'
             });
-            this.context.score = 1;
+            this.context.maxScore = 1;
             return;
         }
         var conditionsCount = this.context.countConditions();
@@ -65,13 +65,13 @@ var Suite = (function () {
                     icon: 'fa-info-circle',
                     classname: 'warning'
                 });
-                this.context.score = 1;
+                this.context.maxScore = 1;
                 return;
             }
-            this.context.score = 2;
+            this.context.maxScore = 2;
             return;
         }
-        this.context.score = 3;
+        this.context.maxScore = 3;
         return;
     };
     return Suite;

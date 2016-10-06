@@ -181,21 +181,43 @@ export class Suite {
     }
 
     test(): angular.IPromise<void> {
-        let deferred = this.context.defer<void>();
-        let numberOfSacks = 25;
-        let index = this.prepare(numberOfSacks, 100);
-
         this.logItem = this.context.log();
-        this.logItem.markdown(`Captain Coppercranium places **${numberOfSacks} sacks** infront of you.`);
+        this.logItem.markdown(`Captain Coppercranium places **10 sacks** infront of you.`);
+
+        return this.execute(10, 100, false);
+    }
+
+    test2(): angular.IPromise<void> {
+        this.logItem = this.context.log();
+        this.logItem.markdown(`But he suspects, that you have just been lucky. He places another **10 sacks** infront of you.`);
+
+        return this.execute(10, 100, false);
+    }
+
+    test3(): angular.IPromise<void> | undefined {
+        if (this.context.maxScore < 3) {
+            return;
+        }
+        
+        this.logItem = this.context.log();
+        this.logItem.markdown(`He has one last test for you. For one extra star he want's you to solve the riddle with more and uneven sacks.`);
+
+        return this.execute(Math.floor(Math.random() * 15 + 10), undefined, true);
+    }
+
+    execute(numberOfSacks: number, numberOfCoins: number | undefined, bonusTest: boolean): angular.IPromise<void> {
+        let deferred = this.context.defer<void>();
+        let index = this.prepare(numberOfSacks, numberOfCoins);
 
         return this.context.sequence<void>(0.5, () => {
             return this.context.map(this.sacks, sack => {
                 return this.context.postpone(0.125, () => {
+                    let width = 32 * this.getCoinsOfSack(sack).length / 100;
                     if (this.isGoldSack(sack)) {
-                        this.logItem.html('<img src="/riddles/badmoney/sack.svg" class="move-in">');
+                        this.logItem.html(`<img src="/riddles/badmoney/sack.svg" style="width: ${width}px" class="move-in">`);
                     }
                     else {
-                        this.logItem.html('<img src="/riddles/badmoney/bad_sack.svg" class="move-in">');
+                        this.logItem.html(`<img src="/riddles/badmoney/bad_sack.svg" style="width: ${width}px" class="move-in">`);
                     }
                 });
             });
@@ -212,19 +234,15 @@ export class Suite {
                 });
             });
         }, 0.5, () => {
-            this.verify(this.selected, this.weightings);
+            this.verify(this.selected, this.weightings, bonusTest);
         });
-
-
-        // let selectedSack = this.context.invokeFn(this.sacks);
-
-        // this.verify(selectedSack);
     }
 
-    prepare(numberOfSacks: number, numberOfCoins: number): number {
+    prepare(numberOfSacks: number, numberOfCoins: number | undefined): number {
         let index = Math.floor(Math.random() * (numberOfSacks - 2)) + 1;
 
         this.weightings = 0;
+        this.weightingLogs = [];
         this.sacks = [];
         this.leadSacks = [];
         this.coinsOfSacks = [];
@@ -235,7 +253,7 @@ export class Suite {
         for (let i = 0; i < numberOfSacks; i++) {
             let coins: Coin[] = [];
 
-            for (let j = 0; j < numberOfCoins; j++) {
+            for (let j = (numberOfCoins || Math.floor(Math.random() * 150 + 100)); j > 0; j--) {
                 coins.push(new Coin());
             }
 
@@ -287,19 +305,32 @@ export class Suite {
         return index;
     }
 
-    verify(selected: any, weightings: number): void {
+    verify(selected: any, weightings: number, bonusTest: boolean): void {
         let set = this.isolate(selected);
 
         if (set.sacks.length === 1 && set.goldSacks.length === 1) {
-            if (set.coins.length > 1 || set.others.length > 1) {
-                this.context.log({
-                    content: 'You have choosen the right sack, but took other things, too. Captain Coppercranium respects your curiosity and just cuts off ears.',
-                    type: 'markdown',
-                    icon: 'fa-error-circle',
-                    classname: 'error'
-                });
+            let id = this.sacks.indexOf(set.goldSacks[0]) + 1;
+            let goldCoins = this.getCoinsOfSack(set.goldSacks[0]);
 
-                this.context.fail();
+            if (set.coins.length > 1 || set.others.length > 1) {
+                if (bonusTest) {
+                    this.context.log({
+                        content: `You have failed the bonus test. You have choosen sack #${id}, the one with the gold! But you took other things, too. Captain Coppercranium won't offer you a star extra.`,
+                        type: 'markdown',
+                        icon: 'fa-error-circle',
+                        classname: 'error'
+                    });
+                    this.context.maxScore = 2;
+                }
+                else {
+                    this.context.log({
+                        content: `You have choosen sack #${id}, the one with the gold! But you took other things, too. Captain Coppercranium respects your curiosity and just cuts off ears.`,
+                        type: 'markdown',
+                        icon: 'fa-error-circle',
+                        classname: 'error'
+                    });
+                    this.context.fail();
+                }
                 return;
             }
 
@@ -316,28 +347,58 @@ export class Suite {
             }
 
             if (weightings === 1) {
+                if (bonusTest) {
+                    this.context.log({
+                        content: `**You have choosen sack #${id}, the one with the gold! And you did it with just one weighing.**\n\nCaptain Coppercranium admires your skill. You have earned **${goldCoins.length} coins and a star extra**.`,
+                        type: 'markdown',
+                        icon: 'fa-thumbs-up',
+                        classname: 'warning'
+                    });
+                    this.context.maxScore = 3;
+                }
+                else {
+                    this.context.log({
+                        content: `**You have choosen sack #${id}, the one with the gold! And you did it with just one weighing.**\n\nCaptain Coppercranium admires your skill. You have earned **${goldCoins.length} coins**.`,
+                        type: 'markdown',
+                        icon: 'fa-thumbs-up',
+                        classname: 'warning'
+                    });
+                    this.context.maxScore = 3;
+                }
+                return;
+            }
+
+            if (bonusTest) {
                 this.context.log({
-                    content: '**You choose the right sack with only one weighing.**\n\nCaptain Coppercranium admires your skill.',
+                    content: `**You have choosen sack #${id}, the one with the gold!**\n\nBut it took you **${weightings} weightings**. You will not get a star extra for this.`,
                     type: 'markdown',
                     icon: 'fa-thumbs-up',
                     classname: 'warning'
                 });
-
-                this.context.score = 3;
-                return;
+                this.context.maxScore = 2;
             }
-
-            this.context.log({
-                content: `**You choose the right sack.**\n\nBut it took you **${weightings} weightings**. Captain Coppercranium respects your endurance, but he will not let you go.`,
-                type: 'markdown',
-                icon: 'fa-thumbs-up',
-                classname: 'warning'
-            });
-
-            this.context.score = 1;
-            this.context.stop();
+            else {
+                this.context.log({
+                    content: `**You have choosen sack #${id}, the one with the gold!**\n\nBut it took you **${weightings} weightings**. Captain Coppercranium respects your endurance, but he will not let you go.`,
+                    type: 'markdown',
+                    icon: 'fa-thumbs-up',
+                    classname: 'warning'
+                });
+                this.context.maxScore = 1;
+            }
             return;
 
+        }
+
+        if (bonusTest) {
+            this.context.log({
+                content: 'You failed to choose the right sack in the bonus test.',
+                type: 'markdown',
+                icon: 'fa-error-circle',
+                classname: 'error'
+            });
+            this.context.maxScore = 2;
+            return;
         }
 
         if (set.sacks.length === 0 && set.coins.length === 0 && set.others.length === 0) {
@@ -347,7 +408,6 @@ export class Suite {
                 icon: 'fa-error-circle',
                 classname: 'error'
             });
-
             this.context.fail();
             return;
         }
@@ -359,7 +419,6 @@ export class Suite {
                 icon: 'fa-error-circle',
                 classname: 'error'
             });
-
             this.context.fail();
             return;
         }
@@ -371,7 +430,6 @@ export class Suite {
                 icon: 'fa-error-circle',
                 classname: 'error'
             });
-
             this.context.fail();
             return;
         }
@@ -383,7 +441,6 @@ export class Suite {
                 icon: 'fa-error-circle',
                 classname: 'error'
             });
-
             this.context.fail();
             return;
         }
@@ -395,7 +452,6 @@ export class Suite {
                 icon: 'fa-error-circle',
                 classname: 'error'
             });
-
             this.context.fail();
             return;
         }
@@ -406,7 +462,6 @@ export class Suite {
             icon: 'fa-error-circle',
             classname: 'error'
         });
-
         this.context.fail();
     }
 }

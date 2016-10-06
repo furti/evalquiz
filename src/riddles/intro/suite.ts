@@ -59,7 +59,7 @@ export class Suite {
                     }
                     else {
                         logItem.mark("not-ok");
-                        this.context.score = 0;
+                        this.context.maxScore = 0;
                     }
 
                     deferred.resolve();
@@ -85,7 +85,7 @@ export class Suite {
             logItem.mark('ok');
         }
         else {
-            this.context.score = 1;
+            this.context.maxScore = 1;
         }
     }
 
@@ -105,7 +105,7 @@ export class Suite {
             logItem.mark('ok');
         }
         else
-            this.context.score = 2;
+            this.context.maxScore = 2;
     }
 }
 

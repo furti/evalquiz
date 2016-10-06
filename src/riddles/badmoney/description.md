@@ -19,10 +19,9 @@ weights 11 gram**.
 
 **Your task is, to find the sack with the gold.**
 
-Captain Ironbeard is no fiend. You will get a scale. You can take the coins out 
-of the sacks and weight them, either one by one or more of them together. The 
-sack you choose does not need to contain all one hundred coins, but any missing
-coins is your personal loss.
+Captain Ironbeard is no fiend. You will get a scale. You can weight one or more sacks
+and you can take coins out of the sacks and weight them, too. The sack you choose does 
+not need to contain all one hundred coins, but any missing coins is your personal loss.
 
 **Good luck!**
 

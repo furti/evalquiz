@@ -44,7 +44,7 @@ export class RiddleRunner implements suite.Context {
 
     private _failed: boolean = false;
     private _stopped: boolean = false;
-    private _score: number = 3;
+    private _maxScore: number = 3;
     private messages: suite.Message[] = [];
 
     constructor(private $q: angular.IQService, private uiService: UIService, private consoleService: ConsoleService, private riddle: Riddle) {
@@ -109,7 +109,7 @@ export class RiddleRunner implements suite.Context {
         this.executeDeferred.resolve({
             riddle: this.riddle,
             canceled: false,
-            score: this._score,
+            score: this._maxScore,
             messages: this.messages
         });
 
@@ -314,7 +314,7 @@ export class RiddleRunner implements suite.Context {
     fail(): void {
         this._failed = true;
         this._stopped = true;
-        this._score = 0;
+        this._maxScore = 0;
     }
 
     isFaulty(): boolean {
@@ -329,12 +329,12 @@ export class RiddleRunner implements suite.Context {
         return this._stopped;
     }
 
-    get score(): number {
-        return this._score;
+    get maxScore(): number {
+        return this._maxScore;
     }
 
-    set score(score: number) {
-        this._score = Math.min(this._score, score);
+    set maxScore(maxScore: number) {
+        this._maxScore = Math.min(this._maxScore, maxScore);
     }
 
     message(message: string | suite.Message): void {

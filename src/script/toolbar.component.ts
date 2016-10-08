@@ -52,13 +52,13 @@ class Controller {
     get running(): boolean {
         return this.riddleService.running;
     }
-    
+
     gotoRiddle(riddleId: string): void {
         this.evalQuizService.gotoRiddle(riddleId);
     }
 
     showOverview(): void {
-        this.evalQuizService.gotoOverview();
+        this.evalQuizService.goto('/overview');
     }
 
     showRiddleListDialog(): void {

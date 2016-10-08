@@ -2,13 +2,14 @@
 
 let module = angular.module('evalquiz');
 
-import {Riddle, RiddleState} from './riddle';
-import {Injectable} from './utils';
+import { Riddle, RiddleState } from './riddle';
+import { Injectable } from './utils';
 
 export type RiddleStateMap = { [riddleId: string]: RiddleState };
 
 const STATE_KEY = 'evalQuiz.state';
-const SELECTED_RIDDLE_ID_KEY = 'evalQuiz.selectedRiddleId';
+const PATH_KEY = 'evalQuiz.path';
+const LAST_RIDDLE_ID_KEY = 'evalQuiz.lastRiddleId';
 
 @Injectable(module, 'storageService')
 export class StorageService {
@@ -60,26 +61,47 @@ export class StorageService {
     }
 
     /**
-     * Loads the id of the last started riddle.
+     * Loads the last path
      * 
-     * @returns {string} the id of the riddle
+     * @returns {string} the path
      * 
      * @memberOf StorageService
      */
-    public loadSelectedRiddleId(): string {
-        return this.storage.get<string>(SELECTED_RIDDLE_ID_KEY) || 'intro';
+    public loadPath(): string {
+        return this.storage.get<string>(PATH_KEY) || '/riddles/' + this.loadLastRiddleId();
     }
 
     /**
-     * Save the id of the last started riddle so we can restart it when the page is opened again.
+     * Save the path so we can restart it when the page is opened again.
      * 
-     * @param {string} riddleId the id of the riddle
+     * @param {string} path the path
      * 
      * @memberOf StorageService
      */
-    public saveSelectedRiddleId(riddleId: string): void {
-        this.storage.set(SELECTED_RIDDLE_ID_KEY, riddleId);
+    public savePath(path: string): void {
+        this.storage.set(PATH_KEY, path);
     }
 
+    /**
+     * Loads the last riddleId
+     * 
+     * @returns {string} the id of the last riddle
+     * 
+     * @memberOf StorageService
+     */
+    public loadLastRiddleId(): string {
+        return this.storage.get<string>(LAST_RIDDLE_ID_KEY) || 'intro';
+    }
+
+    /**
+     * Save the lastRiddleId so we can restart it when the page is opened again.
+     * 
+     * @param {string} lastRiddleId the id of the last riddle
+     * 
+     * @memberOf StorageService
+     */
+    public saveLastRiddleId(lastRiddleId: string): void {
+        this.storage.set(LAST_RIDDLE_ID_KEY, lastRiddleId);
+    }
 
 }

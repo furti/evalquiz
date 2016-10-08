@@ -12,7 +12,8 @@ export class EvalQuizService {
 
     protected _initialized: boolean = false;
     protected _initializeCallbacks: (() => void)[] = [];
-    protected _selectedRiddleId: string;
+    protected _path: string;
+    protected _lastRiddleId: string;
     protected _totalScore: number = 0;
 
     protected riddles: Riddle[];
@@ -30,7 +31,7 @@ export class EvalQuizService {
         let deferred = this.$q.defer();
 
         this._initialized = false;
-        this._selectedRiddleId;
+        this._path = '';
 
         this.riddles = [];
         this.riddleMap = {};
@@ -115,33 +116,48 @@ export class EvalQuizService {
         }
 
         this.initialize().then(() => {
-            this.gotoRiddle('intro');
+            this.goto('/riddles/intro');
         });
     }
 
-    get selectedRiddleId(): string {
-        if (!this._selectedRiddleId) {
-            this._selectedRiddleId = this.storageService.loadSelectedRiddleId() || 'intro';
-
+    get path(): string {
+        if (!this._path) {
+            this._path = this.storageService.loadPath();
         }
 
-        return this._selectedRiddleId;
+        return this._path;
     }
 
-    set selectedRiddleId(selectedRiddleId: string) {
-        if (this._selectedRiddleId !== selectedRiddleId) {
-            this._selectedRiddleId = selectedRiddleId;
-            this.storageService.saveSelectedRiddleId(selectedRiddleId);
+    set path(path: string) {
+        if (this._path !== path) {
+            this._path = path;
+            this.storageService.savePath(path);
+        }
+    }
+
+    goto(path: string): void {
+        this.$location.path(path);
+        this.path = path;
+    }
+
+    get lastRiddleId(): string {
+        if (!this._lastRiddleId) {
+            this._lastRiddleId = this.storageService.loadLastRiddleId();
+        }
+
+        return this._lastRiddleId;
+    }
+
+    set lastRiddleId(lastRiddleId: string) {
+        if (this._lastRiddleId !== lastRiddleId) {
+            this._lastRiddleId = lastRiddleId;
+            this.storageService.saveLastRiddleId(lastRiddleId);
         }
     }
 
     gotoRiddle(riddleId: string): void {
-        this.$location.path('/riddles/' + riddleId);
-        this.selectedRiddleId = riddleId;
-    }
-
-    gotoOverview(): void {
-        this.$location.path('/overview');
+        this.lastRiddleId = riddleId;
+        this.goto('/riddles/' + riddleId);
     }
 
     getRiddles(): Riddle[] {
@@ -182,7 +198,7 @@ export class EvalQuizService {
     }
 
     updateStatistics(): void {
-        this._totalScore = this.riddles.map(riddle => riddle.state.score).reduce((a, b) => a + b, 0)
+        this._totalScore = this.riddles.map(riddle => riddle.state.score).reduce((a, b) => a + b, 0);
     }
 
     get totalScore(): number {

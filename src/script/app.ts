@@ -22,7 +22,7 @@ module.config(function ($mdThemingProvider: angular.material.IThemingProvider) {
 module.run(['evalQuizService', (evalQuizService: EvalQuizService) => {
     evalQuizService.initialize().then(() => {
         // initially redirect to saved selected riddle
-        evalQuizService.gotoRiddle(evalQuizService.selectedRiddleId);
+        evalQuizService.goto(evalQuizService.path);
     });
 }]);
 

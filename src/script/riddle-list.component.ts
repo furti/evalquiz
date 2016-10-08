@@ -2,10 +2,10 @@
 
 let module = angular.module('evalquiz');
 
-import {EvalQuizService} from './evalquiz.service';
-import {RiddleService} from './riddle.service';
-import {Riddle} from './riddle';
-import {Component} from './utils';
+import { EvalQuizService } from './evalquiz.service';
+import { RiddleService } from './riddle.service';
+import { Riddle } from './riddle';
+import { Component } from './utils';
 
 @Component(module, 'riddleList', {
     template: require('./riddle-list.component.html'),
@@ -30,7 +30,7 @@ class Controller {
     isAvailable(riddle: Riddle): boolean {
         return this.riddleService.isAvailable(riddle);
     }
-    
+
     gotoRiddle(riddleId: string): void {
         this.$timeout(() => {
             this.$mdDialog.hide();

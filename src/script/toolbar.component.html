@@ -12,14 +12,13 @@
 
         <div class="md-toolbar-item">
             <md-button ng-click="$ctrl.showOverview()" class="md-raised" ng-disabled="!$ctrl.riddles || $ctrl.running">
-                Total Score <i class="fa fa-star"></i> {{$ctrl.totalScore}}
+                Score:&nbsp;&nbsp;<i class="fa fa-star"></i> {{$ctrl.totalScore}}
             </md-button>
         </div>
 
         <div class="md-toolbar-item">
             <md-button ng-click="$ctrl.showRiddleListDialog()" class="md-raised" ng-disabled="!$ctrl.riddles || $ctrl.running">
-                <i class="fa fa-bars separated" aria-hidden="true"></i>
-                List of Riddles
+                <i class="fa fa-bars separated" aria-hidden="true"></i> List of Riddles
             </md-button>
         </div>
 

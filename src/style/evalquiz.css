@@ -187,7 +187,7 @@ workbench {
 
 .console .move-in {
     opacity: 0;
-    animation: move-in 0.5s ease-in forwards;    
+    animation: move-in 0.5s ease-in forwards;
 }
 
 
@@ -275,6 +275,59 @@ workbench {
     border: none;
 }
 
+
+/* Overview */
+
+.overview {
+    max-width: 45em;
+    padding: 1em 4em 4em 4em;
+    margin: auto;
+    background-color: white;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.24);
+}
+
+.overview .buttons {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    padding: 24px;
+    z-index: 65536;
+}
+
+@media print {
+    .overview .buttons {
+        display: none;
+    }
+}
+
+.overview .solution {
+    display: flex;
+    align-items: top;
+    margin: 0.5em 0;
+    overflow: hidden;
+}
+
+@media print {
+    .overview .solution {
+        page-break-inside: avoid;
+    }
+}
+
+.overview .solution stars {
+    flex: 0 0 auto;
+    margin: 0.4em 0.2em 0 0;
+}
+
+.overview .solution highlighter {
+    flex: 1 1 auto;
+}
+
+.overview .solution highlighter .CodeMirror {
+    height: auto;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+
 /* Layout Helpers */
 
 .layout-row {
@@ -295,6 +348,10 @@ workbench {
     flex-grow: 0;
 }
 
+.layout-grow {
+    flex-grow: 1;
+}
+
 .layout-no-resize {
     flex-shrink: 0;
     flex-grow: 0;
@@ -306,6 +363,13 @@ workbench {
 
 .layout-baseline {
     align-items: baseline;
+}
+
+.container {
+    border-radius: 4px;
+    transition: 0.02s padding cubic-bezier(0.35, 0, 0.25, 1);
+    position: relative;
+    padding-bottom: 0;
 }
 
 .scrolls {
@@ -349,6 +413,15 @@ workbench {
     margin: 16px 0;
 }
 
+.md-fab md-icon .fa {
+    font-size: 30px;
+    margin: 0;
+    left: -2px;
+    top: -8px;
+    display: inline-block;
+    position: relative;
+}
+
 /**
  * markdown fix 
  */
@@ -364,6 +437,7 @@ pre {
 pre code {
     padding: 0;
 }
+
 
 /**
  * Toolbar

@@ -1,1 +1,37 @@
-asdf
+<div class="overview md-body-1">
+    <div class="layout-row layout-baseline">
+        <h1 class="layout-grow"><code>eval(Quiz)</code> Solutions</h1>
+        <span>Score: <i class="fa fa-star"></i> {{$ctrl.totalScore}}</span>
+    </div>
+
+    <p>
+        <a href="http://furti.github.io/evalquiz/" target="_blank">http://furti.github.io/evalquiz/</a>
+    </p>
+
+    <div class="buttons">
+        <md-button class="md-fab md-primary">
+            <md-icon ng-click="$ctrl.print()"><i class="fa fa-print"></i></md-icon>
+        </md-button>
+
+        <br />
+
+        <md-button class="md-fab md-accent">
+            <md-icon ng-click="$ctrl.back()"><i class="fa fa-arrow-left"></i></md-icon>
+        </md-button>
+    </div>
+
+    <div ng-repeat="riddle in $ctrl.riddles" ng-if="$ctrl.isSolved(riddle)">
+        <h2>
+            <i class="layout-no-resize fa" ng-class="{'fa-square-o': !$ctrl.isSolved(riddle), 'fa-check-square-o': $ctrl.isSolved(riddle)}"></i>&nbsp;
+            <span class="lighter">Level {{riddle.level}}:</span>&nbsp;<span>{{riddle.title}}</span>&nbsp;
+            <stars count="riddle.state.score"></stars>
+        </h2>
+
+        <p class="markdown" btf-markdown="riddle.shortDescription"></p>
+
+        <div ng-repeat="(score, code) in $ctrl.code(riddle)" class="solution">
+            <stars count="score"></stars>
+            <highlighter code="code"></highlighter>
+        </div>
+    </div>
+</div>

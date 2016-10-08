@@ -18,7 +18,7 @@
         <md-tabs flex md-selected="$ctrl.selectedTab" class="lined-top">
             <md-tab label="Info" class="info-tab">
                 <div flex layout="column" class="lined-top">
-                    <div flex class="scrolls md-padding">
+                    <div flex class="scrolls md-padding md-body-1">
                         <div btf-markdown="$ctrl.riddle.detail.description"></div>
 
                         <p ng-if="$ctrl.riddle.minScoreToSolve == 2">
@@ -40,7 +40,7 @@
                         <i class="fa fa-bullseye"></i>&nbsp;Goals
                     </div>
 
-                    <div class="md-padding layout-no-resize">
+                    <div class="md-padding layout-no-resize md-body-1">
                         <table>
                             <tbody>
                                 <tr ng-repeat="goal in $ctrl.riddle.detail.goals track by $index" ng-if="$index <= $ctrl.riddle.state.score">
@@ -64,7 +64,7 @@
 
             <md-tab label="API">
                 <div flex layout="column" class="no-scroll lined-top">
-                    <div flex class="scrolls">
+                    <div flex class="scrolls md-body-1">
                         <api-info api="$ctrl.riddle.detail.api" />
                     </div>
                 </div>
@@ -79,7 +79,7 @@
 
             <md-tab label="Hints" class="hints-tab" ng-if="$ctrl.riddle.detail.hints">
                 <div flex layout="column" class="lined-top">
-                    <div flex class="scrolls md-padding">
+                    <div flex class="scrolls md-padding md-body-1">
                         <div btf-markdown="$ctrl.riddle.detail.hints"></div>
                     </div>
                 </div>
@@ -101,7 +101,7 @@
             </md-card-title-text>
         </md-card-title>
 
-        <md-card-content class="members lined-top layout-no-resize">
+        <md-card-content class="members lined-top layout-no-resize md-body-1">
             <div btf-markdown="$ctrl.riddle.detail.member.explanation"></div>
             <member-info member="$ctrl.riddle.detail.member"></member-info>
         </md-card-content>

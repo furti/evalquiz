@@ -414,6 +414,10 @@ workbench {
     margin: 16px 0;
 }
 
+.float-left {
+    float: left;
+}
+
 .float-right {
     float: right;
 }
@@ -426,6 +430,7 @@ workbench {
     display: inline-block;
     position: relative;
 }
+
 
 /**
  * markdown fix 

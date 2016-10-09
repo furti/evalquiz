@@ -31,12 +31,20 @@
         "dependsOn": ["defaultvalue"]
     },
     {
+        "id": "dogs",
+        "title": "Two dogs",
+        "shortDescription": "Bark! Bark!",
+        "minScoreToSolve": 2,
+        "location": "dogs",
+        "dependsOn": ["dwarfs"]
+    },
+    {
         "id": "badmoney",
         "title": "Bad Money",
         "shortDescription": "All that glitters is not gold.",
         "minScoreToSolve": 2,
         "location": "badmoney",
-        "dependsOn": ["dwarfs"]
+        "dependsOn": ["dogs"]
     },
     {
         "id": "badmoney2",
@@ -47,19 +55,11 @@
         "dependsOn": ["badmoney"]
     },
     {
-        "id": "dogs",
-        "title": "Two dogs",
-        "shortDescription": "Bark! Bark!",
-        "minScoreToSolve": 2,
-        "location": "dogs",
-        "dependsOn": ["badmoney2"]
-    },
-    {
         "id": "subsetsum",
         "title": "Altitude Differences",
         "shortDescription": "Know where your blisters come from.",
         "minScoreToSolve": 2,
         "location": "subsetsum",
-        "dependsOn": ["dogs"]
+        "dependsOn": ["badmoney2"]
     }
 ]

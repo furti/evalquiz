@@ -28,7 +28,7 @@ class PageComponent {
                 this.riddleService.prepare(riddle).then(r => {
                     this.selectedRiddle = r;
                 }, (err: any) => {
-                    console.error(`Failed to load riddle "${riddleId}": %o`, err);
+                    console.error(`Failed to load riddle "${riddleId}":`, err);
 
                     this.uiService.alert('Error', `Failed to load riddle: ${riddleId}`).then(() => {
                         this.evalQuizService.gotoRiddle('intro');

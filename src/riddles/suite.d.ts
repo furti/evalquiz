@@ -49,15 +49,21 @@ declare namespace suite {
 
     export interface Context {
 
-        invokeFn(...fnParams: any[]): any;
+        isRunning(): boolean;
 
         fail(): void;
 
-        isFaulty(): boolean;
+        isSkipped(): boolean;
 
-        stop(): void;
+        skip(fail?: boolean): void;
 
-        isStopped(): boolean;
+        optional: boolean;
+
+        quiet: boolean;
+
+        check(): void;
+
+        invokeFn(...fnParams: any[]): any;
 
         /**
          * Returns the (maximum) score. When setting this variable, 

@@ -41,7 +41,7 @@ var Suite = (function () {
         return deferred.promise;
     };
     Suite.prototype.testStyle = function () {
-        if (this.context.isFaulty()) {
+        if (this.context.maxScore < 1) {
             return;
         }
         var statementsCount = this.context.countStatements();

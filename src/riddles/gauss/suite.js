@@ -2,6 +2,7 @@
 var Suite = (function () {
     function Suite(context) {
         this.context = context;
+        this.quiet = false;
         this.faster = false;
         this.correct = false;
     }
@@ -35,10 +36,20 @@ var Suite = (function () {
         return this.execute(10, '1', '+', '2', '+', '3', '+', '4', '+', '5', '+', '6', '+', '7', '+', '8', '+', '9', '+', '10', ' = ');
     };
     Suite.prototype.testRandom = function () {
-        var random = Math.round(Math.random() * 99) * 100 + 10005;
+        this.quiet = true;
+        var n = 10005 + Math.round(Math.random() * 1000);
+        for (var i = 0; i < 1000; i++) {
+            var expected = Math.round((n + 1) * (n / 2));
+            var result = this.context.invokeFn(n);
+            if (expected !== result) {
+                break;
+            }
+            n += 19;
+        }
+        this.quiet = false;
         var texts = ['1', '+', '2', '+', '3', '+', '4', '+', '5', '+', '6', '+', ' .', '.', '.', '.', '.', '.', '.', '.', '.', '.', '. ', '+',
-            (random - 2).toFixed(0), '+', (random - 1).toFixed(0), '+', (random).toFixed(0), ' = '];
-        return this.execute.apply(this, [random].concat(texts));
+            (n - 2).toFixed(0), '+', (n - 1).toFixed(0), '+', (n).toFixed(0), ' = '];
+        return this.execute.apply(this, [n].concat(texts));
     };
     Suite.prototype.testFinish = function () {
         if (this.context.maxScore >= 2) {

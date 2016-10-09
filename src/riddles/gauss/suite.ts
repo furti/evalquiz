@@ -2,6 +2,7 @@
 
 export class Suite {
 
+    private quiet = false;
     private faster = false;
     private correct = false;
 
@@ -45,11 +46,27 @@ export class Suite {
     }
 
     testRandom(): angular.IPromise<void> {
-        let random = Math.round(Math.random() * 99) * 100 + 10005;
-        let texts = ['1', '+', '2', '+', '3', '+', '4', '+', '5', '+', '6', '+', ' .', '.', '.', '.', '.', '.', '.', '.', '.', '.', '. ', '+',
-            (random - 2).toFixed(0), '+', (random - 1).toFixed(0), '+', (random).toFixed(0), ' = '];
+        this.quiet = true;
 
-        return this.execute(random, ...texts);
+        let n = 10005 + Math.round(Math.random() * 1000);
+
+        for (let i = 0; i < 1000; i++) {
+            let expected = Math.round((n + 1) * (n / 2));
+            let result = this.context.invokeFn(n);
+
+            if (expected !== result) {
+                break;
+            }
+
+            n += 19;
+        }
+
+        this.quiet = false;
+
+        let texts = ['1', '+', '2', '+', '3', '+', '4', '+', '5', '+', '6', '+', ' .', '.', '.', '.', '.', '.', '.', '.', '.', '.', '. ', '+',
+            (n - 2).toFixed(0), '+', (n - 1).toFixed(0), '+', (n).toFixed(0), ' = '];
+
+        return this.execute(n, ...texts);
     }
 
     testFinish(): void {

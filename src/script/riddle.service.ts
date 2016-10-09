@@ -65,7 +65,7 @@ export class RiddleService {
         if (text && text.indexOf('file:') === 0) {
             this.$http.get(`riddles/${location}/${text.substring(5).trim()}`).then(
                 response => obj[key] = response.data,
-                err => console.error(`Failed to resolve text reference "${text}": %o`, err)
+                err => console.error(`Failed to resolve text reference "${text}":`, err)
             );
 
             obj[key] = '...';
@@ -159,8 +159,7 @@ export class RiddleService {
             this.runner.execute().then((result: XXX) => {
                 this.runner = null;
 
-                if (result.canceled) {
-                    this.consoleService.log('Execution canceled.').withIcon('fa-exclamation-triangle').withClass('warning');
+                if (result.aborted) {
                     deferred.resolve(result);
                     return;
                 }
@@ -198,7 +197,7 @@ export class RiddleService {
                     logItem.markdown('You\'ve sovled the riddle!').addClass('move-in').attr('style', 'animation-delay: 1.5s');
                 }
                 else {
-                    logItem.markdown('Your code has passed all the tests.').addClass('move-in').attr('style', 'animation-delay: 1.5s');
+                    logItem.markdown('Your code has passed the tests.').addClass('move-in').attr('style', 'animation-delay: 1.5s');
                 }
 
                 this.uiService.postpone(1.5, () => {
@@ -293,7 +292,7 @@ export class RiddleService {
 
     abort(): void {
         if (this.runner) {
-            this.runner.cancel();
+            this.runner.abort();
         }
     }
 }

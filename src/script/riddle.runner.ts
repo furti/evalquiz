@@ -6,29 +6,15 @@ import { isPromise } from './utils';
 import { UIService } from './ui.service';
 import { MILLIS_MULTIPLIER } from './utils';
 
-export const CANCELED = "Execution canceled.";
+export const ABORTED = "Execution aborted.";
+export const SKIPPED = "Test skipped.";
 
 export interface XXX {
     riddle: Riddle;
-    canceled: boolean;
+    aborted: boolean;
     score: number;
     messages: suite.Message[];
 }
-
-
-// export class RiddleTestResult implements suite.Result {
-
-//     static success(message?: string): suite.Result {
-//         return new RiddleTestResult(true, message);
-//     }
-
-//     static failure(message?: string): suite.Result {
-//         return new RiddleTestResult(false, message);
-//     }
-
-//     constructor(public success: boolean, public message?: string) {
-//     }
-// }
 
 const SECONDS_BETWEEN_TESTS: number = 0.25;
 
@@ -38,13 +24,17 @@ export class RiddleRunner implements suite.Context {
     private fnWrapper: Function;
     private tree: ESTree.Program;
 
-    private executeDeferred: angular.IDeferred<XXX> | null;
+    private executeDeferred: angular.IDeferred<XXX> | undefined;
     private suite: any;
     private testFns: (() => void | angular.IPromise<void>)[];
 
-    private _failed: boolean = false;
-    private _stopped: boolean = false;
+    private _aborted: boolean = false;
+    private _skipped: boolean = false;
+    private _optional: boolean = true;
+    private _quiet: boolean = false;
     private _maxScore: number = 3;
+    private _lastSkipped: boolean = false;
+    private _lastMaxScore: number = 3;
     private messages: suite.Message[] = [];
 
     constructor(private $q: angular.IQService, private uiService: UIService, private consoleService: ConsoleService, private riddle: Riddle) {
@@ -73,33 +63,16 @@ export class RiddleRunner implements suite.Context {
     }
 
     /**
-     * Returns true if the test are currently running.
+     * Returns true if the suite is still running
      * 
-     * @readonly
-     * @type {boolean}
-     * @memberOf RiddleRunner
+     * @returns {boolean} true if running
      */
-    get running(): boolean {
-        return !!this.executeDeferred;
+    isRunning(): boolean {
+        return this.executeDeferred !== undefined;
     }
 
     /**
-     * Checks if the tests are still running
-     * 
-     * @memberOf RiddleRunner
-     */
-    checkRunning(): void {
-        if (!this.running) {
-            throw CANCELED;
-        }
-    }
-
-    /**
-     * Resolves the promise returned by the execute method.
-     * 
-     * @private
-     * 
-     * @memberOf RiddleRunner
+     * Finished the execution of the suite. Resolves the promise returned by the execute method.
      */
     finish(): void {
         if (!this.executeDeferred) {
@@ -108,43 +81,31 @@ export class RiddleRunner implements suite.Context {
 
         this.executeDeferred.resolve({
             riddle: this.riddle,
-            canceled: false,
+            aborted: this._aborted,
             score: this._maxScore,
             messages: this.messages
         });
 
-        this.executeDeferred = null;
+        this.executeDeferred = undefined;
     }
 
     /**
-     * Resolved the promise returned by the execute method.
-     * 
-     * @memberOf RiddleRunner
+     * Aborts the execution of the suite. Resolves the promise returned by the execute method.
      */
-    cancel(): void {
-        if (!this.executeDeferred) {
-            return;
-        }
+    abort(): void {
+        this._aborted = true;
+        this._maxScore = 0;
 
-        this.executeDeferred.resolve({
-            riddle: this.riddle,
-            canceled: true,
-            score: 0,
-            messages: this.messages
-        });
-
-        this.executeDeferred = null;
+        this.finish();
     }
 
     /**
      * Executes the test suite.
      * 
      * @returns {angular.IPromise<XXX>}
-     * 
-     * @memberOf RiddleRunner
      */
     execute(): angular.IPromise<XXX> {
-        if (this.running) {
+        if (this.isRunning()) {
             throw new Error('Already running.');
         }
 
@@ -160,29 +121,6 @@ export class RiddleRunner implements suite.Context {
         this.executeNextTestFn();
 
         return this.executeDeferred.promise;
-    }
-
-    /**
-     * Executes the next next, if there is any. 
-     * 
-     * @private
-     * 
-     * @memberOf RiddleRunner
-     */
-    private executeNextTestFn(): void {
-        if (this.isStopped()) {
-            this.finish();
-            return;
-        }
-
-        let testFn = this.testFns.shift();
-
-        if (testFn === undefined) {
-            this.finish();
-            return;
-        }
-
-        this.invokeTestFn(testFn).then(() => this.uiService.postpone(SECONDS_BETWEEN_TESTS, () => this.executeNextTestFn()), err => this.cancel());
     }
 
     private prepare(): void {
@@ -203,9 +141,8 @@ export class RiddleRunner implements suite.Context {
             this.suite = new (suiteClass)(this);
         }
         catch (err) {
-            let message = `Failed to instantiate suite of riddle "${this.riddle.id}".`;
-            console.error(message, err);
-            throw new Error(message);
+            console.error(`Failed to instantiate suite of riddle "${this.riddle.id}":`, err);
+            throw err;
         }
 
         try {
@@ -215,9 +152,8 @@ export class RiddleRunner implements suite.Context {
                 .filter(fn => typeof fn === 'function');
         }
         catch (err) {
-            let message = `Failed to detect test functions of riddle "${this.riddle.id}".`;
-            console.error(message, err);
-            throw new Error(message);
+            console.error(`Failed to detect test functions of riddle "${this.riddle.id}":`, err);
+            throw err;
         }
 
         if (this.testFns.length <= 0) {
@@ -225,6 +161,80 @@ export class RiddleRunner implements suite.Context {
             console.error(message);
             throw new Error(message);
         }
+    }
+
+    /**
+     * Aborts the execution of the suite. Resolves the promise returned by the execute method.
+     */
+    fail(): void {
+        if (this.optional) {
+            this.skip();
+        }
+        else {
+            this.abort();
+        }
+    }
+
+
+    skip(): void {
+        this._skipped = true;
+        this._maxScore = 0;
+    }
+
+    isSkipped(): boolean {
+        return this._skipped;
+    }
+
+    get optional(): boolean {
+        return this._optional;
+    }
+
+    set optional(optional: boolean) {
+        if (this._optional === optional) {
+            return;
+        }
+
+        if (!this._optional) {
+            this._lastSkipped = this._skipped;
+            this._lastMaxScore = this._maxScore;
+        }
+
+        this._optional = optional;
+
+        if (!optional) {
+            this._skipped = this._lastSkipped;
+            this._maxScore = this._lastMaxScore;
+        }
+    }
+
+    get quiet(): boolean {
+        return this._quiet;
+    }
+
+    set quiet(quiet: boolean) {
+        this._quiet = quiet;
+    }
+
+    /**
+     * Executes the next next, if there is any. 
+     * 
+     * @private
+     * 
+     * @memberOf RiddleRunner
+     */
+    private executeNextTestFn(): void {
+        this._skipped = false;
+        this._optional = false;
+        this._quiet = false;
+
+        let testFn = this.testFns.shift();
+
+        if (testFn === undefined) {
+            this.finish();
+            return;
+        }
+
+        this.invokeTestFn(testFn).then(() => this.uiService.postpone(SECONDS_BETWEEN_TESTS, () => this.executeNextTestFn()), err => this.fail());
     }
 
     /**
@@ -236,38 +246,71 @@ export class RiddleRunner implements suite.Context {
      * @returns {angular.IPromise<void>} a promise for the result
      */
     private invokeTestFn(testFn: () => void | angular.IPromise<void>): angular.IPromise<void> {
-        let deferred = this.$q.defer<void>();
+        let deferred: angular.IDeferred<void> = this.$q.defer<void>();
 
         try {
-            this.checkRunning();
+            this.check();
 
             let result = testFn.apply(this.suite);
 
-            this.checkRunning();
+            this.check();
 
             if (isPromise(result)) {
-                (result as angular.IPromise<void>).then(result => deferred.resolve(result), err => deferred.reject(err));
-            }
-            else if ((result === undefined) || (result === null)) {
-                deferred.resolve();
+                (result as angular.IPromise<void>).then(() => deferred.resolve(), err => this.handleInvokeTestFnError(err, deferred));
             }
             else {
-                deferred.resolve(result);
+                deferred.resolve();
             }
         }
         catch (err) {
-            if (err === CANCELED) {
-                deferred.reject(err);
-            }
-            else {
-                let message = `Unhandled error in test: ${err}`;
-                console.error(message, err);
-                this.log(message).withClass('error').withIcon('fa-times-circle');
-                deferred.reject(err);
-            }
+            this.handleInvokeTestFnError(err, deferred);
         }
 
         return deferred.promise;
+    }
+
+    private handleInvokeTestFnError(err: any, deferred: angular.IDeferred<void>) {
+        if (err === ABORTED) {
+            this.log({
+                content: 'Execution aborted.',
+                type: 'markdown',
+                classname: 'error',
+                icon: 'fa-times-circle'
+            });
+            deferred.reject(err);
+        }
+        else if (err === SKIPPED) {
+            this.log({
+                content: 'Test skipped.',
+                type: 'markdown',
+                classname: 'warning',
+                icon: 'fa-exclamation-triangle'
+            });
+            deferred.resolve();
+        }
+        else {
+            console.error('Unhandled error in test', err);
+            this.log({
+                content: `Unhandled error in test: ${err}`,
+                type: 'markdown',
+                classname: 'error',
+                icon: 'fa-times-circle'
+            });
+            deferred.reject(err);
+        }
+    }
+
+    /**
+     * Checks if the tests are still running and throws error if not.
+     */
+    check(): void {
+        if (this._aborted) {
+            throw ABORTED;
+        }
+
+        if (this._skipped) {
+            throw SKIPPED;
+        }
     }
 
     /**
@@ -279,7 +322,7 @@ export class RiddleRunner implements suite.Context {
      * @memberOf RiddleRunner
      */
     invokeFn(...params: any[]): any {
-        this.checkRunning();
+        this.check();
 
         let fnParams: any[] = [];
 
@@ -290,7 +333,34 @@ export class RiddleRunner implements suite.Context {
                 throw new Error(message);
             }
 
-            fnParams.push((...args: any[]) => this.suite[fnWrapperArg].apply(this.suite, args));
+            fnParams.push((...args: any[]) => {
+
+                try {
+                    this.check();
+
+                    let result = this.suite[fnWrapperArg].apply(this.suite, args);
+
+                    this.check();
+
+                    return result;
+                }
+                catch (err) {
+                    if (err === ABORTED || err === SKIPPED) {
+                        throw err;
+                    }
+                    else {
+                        let message = `Unhandled error in API function "${fnWrapperArg}": `;
+                        console.error(message, err);
+
+                        if (!this.quiet) {
+                            this.log(message + err).withClass('error').withIcon('fa-times-circle');
+                        }
+
+                        this.fail();
+                        throw err;
+                    }
+                }
+            });
         }
 
         fnParams = fnParams.concat(params);
@@ -299,34 +369,24 @@ export class RiddleRunner implements suite.Context {
             return this.fnWrapper.apply(this.fnWrapper, fnParams);
         }
         catch (err) {
-            if (err === CANCELED) {
+            if (err === ABORTED || err === SKIPPED) {
                 throw err;
             }
             else {
-                let message = `Unhandled error in riddle function: ${err}`;
+                let message = `Unhandled error in riddle function: `;
                 console.error(message, err);
-                this.log(message).withClass('error').withIcon('fa-times-circle');
-                throw new Error(message);
+
+                if (!this.quiet) {
+                    this.log(message + err).withClass('error').withIcon('fa-times-circle');
+                }
+
+                this.fail();
+                throw err;
             }
         }
-    }
-
-    fail(): void {
-        this._failed = true;
-        this._stopped = true;
-        this._maxScore = 0;
-    }
-
-    isFaulty(): boolean {
-        return this._failed;
-    }
-
-    stop(): void {
-        this._stopped = true;
-    }
-
-    isStopped(): boolean {
-        return this._stopped;
+        finally {
+            this.check();
+        }
     }
 
     get maxScore(): number {
@@ -352,19 +412,17 @@ export class RiddleRunner implements suite.Context {
     }
 
     log(message?: string | suite.Message): suite.LogItem {
-        this.checkRunning();
-
-        return this.consoleService.log(message);
+        return this.consoleService.log(message, this.quiet);
     }
 
     defer<Any>(): angular.IDeferred<Any> {
-        this.checkRunning();
+        this.check();
 
         return this.$q.defer();
     }
 
     postpone<Any>(seconds: number, fn?: () => Any | angular.IPromise<Any>): angular.IPromise<Any> {
-        this.checkRunning();
+        this.check();
 
         return this.uiService.postpone(seconds, fn);
     }
@@ -374,10 +432,10 @@ export class RiddleRunner implements suite.Context {
     }
 
     private sequenceStep<Any>(deferred: angular.IDeferred<Any>, result: any, ...secondsOrStep: (number | (() => any | angular.IPromise<any>))[]): angular.IPromise<Any> {
-        this.checkRunning();
+        this.check();
 
         try {
-            this.checkRunning();
+            this.check();
 
             let remaining = secondsOrStep.slice();
             let item = remaining.shift();
@@ -406,7 +464,7 @@ export class RiddleRunner implements suite.Context {
             }
         }
         catch (err) {
-            if (err === CANCELED) {
+            if (err === ABORTED || err === SKIPPED) {
                 deferred.reject(err);
             }
             else {
@@ -442,7 +500,7 @@ export class RiddleRunner implements suite.Context {
     }
 
     private mapStep<Item, Result>(deferred: angular.IDeferred<(Result | undefined | null)[]>, source: (Item | undefined | null)[], sourceIndex: number, target: (Result | undefined | null)[], fn: (item: Item | undefined | null) => angular.IPromise<Result> | Result | undefined | null): void {
-        this.checkRunning();
+        this.check();
 
         if (sourceIndex >= source.length) {
             deferred.resolve(target);
@@ -464,7 +522,7 @@ export class RiddleRunner implements suite.Context {
             }
         }
         catch (err) {
-            if (err === CANCELED) {
+            if (err === ABORTED || err === SKIPPED) {
                 deferred.reject(err);
             }
             else {

@@ -41,7 +41,7 @@ export class StorageService {
 
         riddles.forEach((riddle) => {
             if (!riddle.state) {
-                console.error("Riddle is missing state: %o", riddle);
+                console.error("Riddle is missing state:", riddle);
                 return;
             }
 

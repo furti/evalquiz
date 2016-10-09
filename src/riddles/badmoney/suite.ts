@@ -43,6 +43,9 @@ export class Suite {
         let set = this.isolate(thing);
         let what: string[] = [];
 
+        this.verifyNoDuplicates(set.sacks);
+        this.verifyNoDuplicates(set.coins);
+
         if (set.sacks.length > 1) {
             what.push(set.sacks.length + ' sacks');
         }
@@ -198,11 +201,11 @@ export class Suite {
         if (this.context.maxScore < 3) {
             return;
         }
-        
+
         this.logItem = this.context.log();
         this.logItem.markdown(`He has one last test for you. For one extra star he want's you to solve the riddle with more and uneven sacks.`);
 
-        return this.execute(Math.floor(Math.random() * 15 + 10), undefined, true);
+        return this.execute(Math.floor(Math.random() * 5) * 2 + 15, undefined, true);
     }
 
     execute(numberOfSacks: number, numberOfCoins: number | undefined, bonusTest: boolean): angular.IPromise<void> {
@@ -307,6 +310,9 @@ export class Suite {
 
     verify(selected: any, weightings: number, bonusTest: boolean): void {
         let set = this.isolate(selected);
+
+        this.verifyNoDuplicates(set.sacks);
+        this.verifyNoDuplicates(set.coins);
 
         if (set.sacks.length === 1 && set.goldSacks.length === 1) {
             let id = this.sacks.indexOf(set.goldSacks[0]) + 1;
@@ -463,5 +469,25 @@ export class Suite {
             classname: 'error'
         });
         this.context.fail();
+    }
+
+    verifyNoDuplicates(things: any[]): any[] {
+        for (let i = 0; i < things.length; i++) {
+            for (let j = i + 1; j < things.length; j++) {
+                if (things[i] === things[j]) {
+                    this.context.log({
+                        content: 'You have duplicate objects in your array! Captain Coppercranium respects your distraction of the universe and just cuts off you family tree.',
+                        type: 'markdown',
+                        icon: 'fa-error-circle',
+                        classname: 'error'
+                    });
+                    this.context.fail();
+
+                    return things;
+                }
+            }
+        }
+
+        return things;
     }
 }

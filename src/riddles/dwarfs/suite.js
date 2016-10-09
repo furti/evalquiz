@@ -63,7 +63,7 @@ var Suite = (function () {
     };
     Suite.prototype.testSecondTake = function () {
         var _this = this;
-        if (this.context.isFaulty()) {
+        if (this.context.maxScore < 1) {
             return;
         }
         return this.context.sequence(function () {
@@ -78,7 +78,7 @@ var Suite = (function () {
         });
     };
     Suite.prototype.testScore = function () {
-        if (this.context.isFaulty()) {
+        if (this.context.maxScore < 1) {
             return;
         }
         var loopCount = this.context.countLoops();

@@ -71,7 +71,7 @@ export class Suite {
     }
 
     testStatements(): void {
-        if (this.context.isFaulty()) {
+        if (this.context.maxScore < 3) {
             return;
         }
 
@@ -90,7 +90,7 @@ export class Suite {
     }
 
     testBonusGoal(): void {
-        if (this.context.isFaulty()) {
+        if (this.context.maxScore < 3) {
             return;
         }
 

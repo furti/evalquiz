@@ -103,6 +103,7 @@ workbench {
     overflow: auto;
     background-color: #004d00;
     color: white;
+    padding: 2em 1em;
 }
 
 .console h1, .console h2, .console h3, .console h4, .console h5, .console h6 {
@@ -411,6 +412,10 @@ workbench {
 .member-info {
     padding: 0 0 0 16px;
     margin: 16px 0;
+}
+
+.float-right {
+    float: right;
 }
 
 .md-fab md-icon .fa {

@@ -53,7 +53,7 @@ export class Suite {
     }
 
     testStyle(): void {
-        if (this.context.isFaulty()) {
+        if (this.context.maxScore < 1) {
             return;
         }
 

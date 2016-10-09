@@ -18,7 +18,7 @@ export class ConsoleService {
         angular.element('#console').empty();
     }
 
-    public log(message?: string | suite.Message): ConsoleLogItem {
+    public log(message?: string | suite.Message, dummy: boolean = false): ConsoleLogItem {
         let id = 'console-log-item-' + (this.index++);
         let consoleElement: JQuery = angular.element('#console');
         let itemElement: JQuery = angular.element('<div></div>').attr({ id }).addClass('item');
@@ -26,7 +26,10 @@ export class ConsoleService {
         let contentElement: JQuery = angular.element('<div></div>').addClass('content');
 
         itemElement.append(iconElement, contentElement);
-        consoleElement.append(itemElement);
+
+        if (!dummy) {
+            consoleElement.append(itemElement);
+        }
 
         let logItem: ConsoleLogItem = new ConsoleLogItem(this.uiService, consoleElement, itemElement, iconElement, contentElement);
 
@@ -114,7 +117,7 @@ export class ConsoleLogItem implements suite.LogItem {
         this.contentElement.append(element);
 
         this.consoleElement.animate({
-            scrollTop: element.offset().top,
+            scrollTop: this.consoleElement.prop('scrollHeight'),
         }, 0);
 
         return element;

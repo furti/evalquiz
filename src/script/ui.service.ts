@@ -111,8 +111,7 @@ export class UIService {
                 }
             }
             catch (err) {
-                let message = `Unhandled error in postpone: ${err}`;
-                console.error(message, err);
+                console.error('Unhandled error in postpone:', err);
                 deferred.reject(err);
             }
         }, seconds * MILLIS_MULTIPLIER);

@@ -88,7 +88,7 @@ export class Suite {
     }
 
     testSecondTake(): angular.IPromise<void> | undefined {
-        if (this.context.isFaulty()) {
+        if (this.context.maxScore < 1) {
             return;
         }
 
@@ -108,7 +108,7 @@ export class Suite {
     }
 
     testScore(): void {
-        if (this.context.isFaulty()) {
+        if (this.context.maxScore < 1) {
             return;
         }
 

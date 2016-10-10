@@ -210,5 +210,9 @@ export class ConsoleLogItem implements suite.LogItem {
     code(s: string): JQuery {
         return this.append(angular.element('<pre></pre>').addClass('code').text(s));
     }
+
+    element(element: HTMLElement): JQuery {
+        return this.append(angular.element(element));
+    }
 }
 

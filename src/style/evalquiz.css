@@ -345,6 +345,10 @@ workbench {
     flex-shrink: 0;
 }
 
+.layout-shrink {
+    flex-shrink: 1;
+}
+
 .layout-no-grow {
     flex-grow: 0;
 }
@@ -420,6 +424,10 @@ workbench {
 
 .float-right {
     float: right;
+}
+
+.full-width {
+    width: 100%;
 }
 
 .md-fab md-icon .fa {

@@ -45,6 +45,8 @@ declare namespace suite {
         html(s: string): JQuery;
 
         code(s: string): JQuery;
+
+        element(element: HTMLElement): JQuery;
     }
 
     export interface Context {

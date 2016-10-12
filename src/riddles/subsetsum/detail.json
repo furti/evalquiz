@@ -5,7 +5,21 @@
         "Avoid any conditional statements (if, switch, ?)"
     ],
     "description": "file: description.md",
-    "hints": null,
+    "hints": "file: hints.md",
+    "api": [
+        {
+            "name": "log",
+            "type": "void",
+            "description": "Writes logging output to the console.",
+            "params": [
+                {
+                    "name": "message",
+                    "type": "any",
+                    "description": "The object to write."
+                }
+            ]
+        }
+    ],
     "member": {
         "name": "maxSum",
         "type": "number",
@@ -14,28 +28,10 @@
         "params": [
             {
                 "name": "data",
-                "type": "object",
-                "properties": [
-                    {
-                        "name": "get",
-                        "type": "number",
-                        "description": "Returns the altitude difference at the specified index.",
-                        "params": [
-                            {
-                                "name": "index",
-                                "type": "number",
-                                "description": "The index"
-                            }
-                        ]
-                    },
-                    {
-                        "name": "length",
-                        "type": "number",
-                        "description": "Returns the number of available altitude difference values."
-                    }
-                ]
+                "type": "number[]",
+                "description": "An array holding altitude differences."
             }
         ]
     },
-    "engine": "file: engine.js"
+    "suite": "file: suite.js"
 }

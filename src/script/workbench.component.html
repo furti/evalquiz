@@ -1,6 +1,6 @@
 <md-content class="text" flex="50" layout="column" class="layout-stretch">
 	<md-card flex class="riddle-left-card">
-		<img src="/riddles/{{$ctrl.riddle.location}}/icon.svg" class="riddle-icon" />
+		<img ng-src="/riddles/{{$ctrl.riddle.location}}/icon.svg" class="riddle-icon" />
 
 		<md-card-title>
 
@@ -101,7 +101,7 @@
 			</md-card-title-text>
 		</md-card-title>
 
-		<md-card-content class="members lined-top layout-no-resize md-body-1">
+		<md-card-content class="members layout-no-resize md-body-1">
 			<div btf-markdown="$ctrl.riddle.detail.member.explanation"></div>
 			<member-info member="$ctrl.riddle.detail.member"></member-info>
 		</md-card-content>

@@ -218,14 +218,15 @@ export class Suite {
         });
     }
 
-    shuffle(a) {
-        var j, x, i;
-        for (i = a.length; i; i--) {
-            j = Math.floor(Math.random() * i);
-            x = a[i - 1];
-            a[i - 1] = a[j];
-            a[j] = x;
+    shuffle<Any>(array: Any[]): Any[] {
+        for (let i = array.length; i > 0; i--) {
+            let j = Math.floor(Math.random() * i);
+            let tmp = array[i - 1];
+            array[i - 1] = array[j];
+            array[j] = tmp;
         }
+
+        return array;
     }
 
 }

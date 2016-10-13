@@ -126,7 +126,7 @@ declare namespace suite {
          * @param {((item: Item) => Result | angular.IPromise<Result>)} fn the function, may return a promise
          * @returns {angular.IPromise<Result[]>} a promise for the result
          */
-        map<Item, Result>(source: (Item | undefined | null)[] | undefined | null, fn: (item: Item | undefined | null) => angular.IPromise<Result> | Result | undefined | null): angular.IPromise<(Result | undefined | null)[] | undefined | null>;
+        map<Item, Result>(source: Item[], fn: (item: Item) => angular.IPromise<Result> | Result): angular.IPromise<Result[] | void>;
 
         /**
          * Counts the specified types.

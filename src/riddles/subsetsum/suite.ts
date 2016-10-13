@@ -1,37 +1,55 @@
 /// <reference path="./../index.d.ts" />
 
 interface Config {
-    count: number,
-    maximum: number
+    count: number;
+    maximum: number;
+    step: number;
 }
 
 const DAYS = 7;
+const DAY_NAMES = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 const CONFIG: Config[] = [{
-    count: 4,
-    maximum: 100
-}, {
     count: 8,
-    maximum: 300
+    maximum: 100,
+    step: 10
+}, {
+    count: 12,
+    maximum: 200,
+    step: 10
 }, {
     count: 16,
-    maximum: 500
+    maximum: 400,
+    step: 10
 }, {
     count: 32,
-    maximum: 500
+    maximum: 600,
+    step: 10
 }, {
-    count: 32,
-    maximum: 500
+    count: 64,
+    maximum: 600,
+    step: 10
 }, {
-    count: 32,
-    maximum: 500
+    count: 256,
+    maximum: 200,
+    step: 5
 }, {
-    count: 32,
-    maximum: 500
+    count: 1024,
+    maximum: 100,
+    step: 1
 }];
+const MAX_LENGTH = 24;
+
+interface Day {
+    index: number;
+    data: number[];
+    maximum: number;
+    start: number;
+    end: number;
+}
 
 export class Suite {
 
-    private samples: number[][];
+    private days: Day[];
     private logItem: suite.LogItem;
 
     constructor(private context: suite.Context) {
@@ -47,23 +65,16 @@ export class Suite {
     testInit(): void {
         let count = 0;
 
-        this.samples = [];
+        this.days = [];
 
-        for (let day = 0; day < DAYS; day++) {
-            this.samples[day] = [];
+        for (let i = 0; i < DAYS; i++) {
+            this.days[i] = this.create(i, CONFIG[i]);
 
-            let max = Math.round(Math.random() * CONFIG[day].maximum / 20) * 10 + CONFIG[day].maximum / 2;
-
-            for (var i = 0; i < CONFIG[day].count; i++) {
-                this.samples[day][i] = -max + Math.round(max * 2 * i / (CONFIG[day].count - 1) / 10) * 10;
-                count++;
-            }
-
-            this.shuffle(this.samples[day]);
+            count += this.days[i].data.length;
         }
 
         this.context.log({
-            content: `Peter and Jürgen collected ${count} values during ${DAYS} days.`,
+            content: `Peter and Jürgen collected ${count} values during ${DAYS} days in Austria.`,
             type: 'markdown',
             classname: 'info',
             icon: 'fa-info-circle'
@@ -71,89 +82,156 @@ export class Suite {
     }
 
     test1(): angular.IPromise<void> {
-        return this.execute(1);
+        return this.execute(this.days[0]);
     }
 
     test2(): angular.IPromise<void> {
-        return this.execute(2);
+        return this.execute(this.days[1]);
     }
 
     test3(): angular.IPromise<void> {
-        return this.execute(3);
+        return this.execute(this.days[2]);
     }
 
     test4(): angular.IPromise<void> {
-        return this.execute(4);
+        return this.execute(this.days[3]);
     }
 
     test5(): angular.IPromise<void> {
-        return this.execute(5);
+        return this.execute(this.days[4]);
     }
 
     test6(): angular.IPromise<void> {
-        return this.execute(6);
+        return this.execute(this.days[5]);
     }
 
     test7(): angular.IPromise<void> {
-        return this.execute(7);
+        return this.execute(this.days[6]);
     }
 
-    execute(day: number): angular.IPromise<void> {
-        let data = this.samples[day - 1];
-        let maximum: number = 0;
-        let current: number = 0;
-        let start: number | undefined;
-        let end: number | undefined;
+    create(index: number, config: Config): Day {
+        let range = Math.round(Math.random() * config.maximum / (config.step * 2)) * config.step + config.maximum / 2;
+        let data: number[] = [];
 
-        for (let i = 0; i < data.length; i++) {
-            if (maximum + data[i] > maximum) {
-                maximum += data[i];
-                start = start || i;
-                end = i;
-            }
-            else {
-                if (data[i] > 0) {
-                    start = end = i;
-                    maximum = data[i];
+        for (let i = 0; i < config.count; i++) {
+            data.push(-range + Math.round(range * 2 * i / (config.count - 1) / config.step) * config.step);
+        }
+
+        while (true) {
+            this.shuffle(data);
+
+            let maximum: number = 0;
+            let current: number = 0;
+            let start: number = 0;
+            let nextStart: number = 0;
+            let end: number = 0;
+
+            for (let i = 0; i < data.length; i++) {
+                current = Math.max(0, current + data[i]);
+
+                if (current <= 0) {
+                    nextStart = i + 1;
                 }
-                else {
-                    maximum = 0;
+
+                if (current > maximum) {
+                    maximum = current;
+                    start = nextStart;
+                    end = i;
                 }
             }
+
+            if (start > 0 && end < data.length - 1 && end - start > config.count / 4) {
+                return { index, data, maximum, start, end };
+            }
         }
+    }
 
-        console.log(`start: ${start}, end: ${end}`);
-
-        let texts = data.map(v => v.toString());
-
-        texts[start!] = '!' + texts[start!];
-        texts[end!] = '!' + texts[end!];
-
-        if (texts.length > 40) {
-            texts.splice(32, texts.length - 36, ' ...');
-        }
-
-        for (let i = texts.length - 1; i > 0; i--) {
-            texts.splice(i, 0, ', ');
-        }
-
-        texts.push('.');
-        // texts[texts.length - 1] = data[data.length - 1] + '.';
-
+    execute(day: Day): angular.IPromise<void> {
         return this.context.sequence<void>(() => {
             this.logItem = this.context.log();
-            this.logItem.markdown(`Day ${day}: ${data.length} values`).addClass('large');
-        }, 0.5, () => this.context.map(texts, text => {
-            return this.context.postpone(1 / 16, () => {
-                if (text!.indexOf('!') === 0) {
-                    this.logItem.write(text!.substring(1)).addClass('warning fade-in');
-                }
-                else {
-                    this.logItem.write(text).addClass('info fade-in');
-                }
+            this.logItem.markdown(`${DAY_NAMES[day.index]}: ${day.data.length} values`).addClass('large');
+        },
+            0.5, () => this.write(day),
+            0.5, () => {
+                let result = this.context.invokeFn(day.data.slice());
+
+                this.logItem.markdown(`Your result: ${result}`);
+                this.logItem.markdown(`TODO`).addClass('error');;
             });
-        }));
     }
+
+    write(day: Day): angular.IPromise<void> {
+        let visuals = day.data.map(v => {
+            return {
+                text: v.toString(),
+                highlight: false
+            }
+        });
+
+        let visualStart = day.start;
+        let visualEnd = day.end;
+
+        visuals[day.start].highlight = true;
+        visuals[day.end].highlight = true;
+
+        if (visuals.length > MAX_LENGTH && visualStart > 4) {
+            let cutLength = Math.min(visualStart - 2, visuals.length - MAX_LENGTH);
+
+            visualStart -= cutLength;
+            visualEnd -= cutLength;
+            visuals.splice(0, cutLength,
+                {
+                    text: '... ',
+                    highlight: false
+                }
+            );
+        }
+
+        if (visuals.length > MAX_LENGTH && visualEnd < visuals.length - 4) {
+            let cutStart = Math.max(visualEnd + 4, MAX_LENGTH);
+
+            visuals.splice(cutStart, visuals.length - cutStart,
+                {
+                    text: '... ',
+                    highlight: false
+                }
+            );
+        }
+
+        if (visuals.length > MAX_LENGTH) {
+            let cutLength = Math.min(visualEnd - visualStart - 4, visuals.length - MAX_LENGTH);
+
+            visuals.splice(Math.floor((visualStart + visualEnd - cutLength) / 2), cutLength, {
+                text: '... ',
+                highlight: false
+            });
+        }
+
+        for (let i = visuals.length - 1; i > 0; i--) {
+            visuals.splice(i, 0, {
+                text: ', ',
+                highlight: false
+            });
+        }
+
+        visuals.push({
+            text: '.',
+            highlight: false
+        });
+
+        return this.context.map(visuals, visual => {
+            return this.context.postpone(1 / 16, () => {
+                let element = this.logItem.write(visual!.text);
+
+                if (!visual!.highlight) {
+                    element.addClass('info');
+                }
+
+                element.addClass('fade-in');
+            });
+        });
+    }
+
 
     shuffle<Any>(array: Any[]): Any[] {
         for (let i = array.length; i > 0; i--) {

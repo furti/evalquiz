@@ -478,7 +478,7 @@ export class RiddleRunner implements suite.Context {
         return deferred.promise;
     }
 
-    map<Item, Result>(source: (Item | undefined | null)[] | undefined | null, fn: (item: Item | undefined | null) => angular.IPromise<Result> | Result | undefined | null): angular.IPromise<(Result | undefined | null)[] | undefined | null> {
+    map<Item, Result>(source: Item[], fn: (item: Item) => angular.IPromise<Result> | Result): angular.IPromise<Result[]> {
         let deferred = this.defer<(Result | undefined | null)[] | undefined | null>();
 
         if (source === undefined) {

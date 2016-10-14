@@ -153,10 +153,22 @@ export class Suite {
         },
             0.5, () => this.write(day),
             0.5, () => {
+                this.logItem.markdown(`Expected result: ${day.maximum} ft`);
+            },
+            0.5, () => {
                 let result = this.context.invokeFn(day.data.slice());
+                let element = this.logItem.write(`Your result: ${result} ft`);
 
-                this.logItem.markdown(`Your result: ${result}`);
-                this.logItem.markdown(`TODO`).addClass('error');;
+                if (result === day.maximum) {
+                    element.addClass('success');
+                    this.logItem.mark('ok');
+                    this.context.maxScore = 3;
+                }
+                else { 
+                    element.addClass('error');
+                    this.logItem.mark('not-ok');
+                    this.context.maxScore = 0;
+                }
             });
     }
 

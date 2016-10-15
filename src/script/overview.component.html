@@ -21,7 +21,7 @@
 	</div>
 
 	<div ng-repeat="riddle in $ctrl.riddles" ng-if="$ctrl.isSolved(riddle)">
-		<img ng-src="/riddles/{{riddle.location}}/icon.svg" class="riddle-icon-small float-right" />
+		<img ng-src="riddles/{{riddle.location}}/icon.svg" class="riddle-icon-small float-right" />
 		<h2>
 			<i class="layout-no-resize fa" ng-class="{'fa-square-o': !$ctrl.isSolved(riddle), 'fa-check-square-o': $ctrl.isSolved(riddle)}"></i>&nbsp;
 			<span class="lighter">Level {{riddle.level}}:</span>&nbsp;<span>{{riddle.title}}</span>&nbsp;

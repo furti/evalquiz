@@ -9,14 +9,14 @@ But if they fail the dragon will eat them all.
 
 Each dwarf wears a hat - there are blue ones and read ones. 
 
-![Red Dwarf](/riddles/dwarfs/dwarf_5.svg) 
-![Blue Dwarf](/riddles/dwarfs/dwarf_1.svg)
-![Blue Dwarf](/riddles/dwarfs/dwarf_0.svg) 
-![Red Dwarf](/riddles/dwarfs/dwarf_4.svg) 
-![Blue Dwarf](/riddles/dwarfs/dwarf_2.svg) 
-![Blue Dwarf](/riddles/dwarfs/dwarf_3.svg) 
-![Red Dwarf](/riddles/dwarfs/dwarf_7.svg) 
-![Red Dwarf](/riddles/dwarfs/dwarf_6.svg) 
+![Red Dwarf](riddles/dwarfs/dwarf_5.svg) 
+![Blue Dwarf](riddles/dwarfs/dwarf_1.svg)
+![Blue Dwarf](riddles/dwarfs/dwarf_0.svg) 
+![Red Dwarf](riddles/dwarfs/dwarf_4.svg) 
+![Blue Dwarf](riddles/dwarfs/dwarf_2.svg) 
+![Blue Dwarf](riddles/dwarfs/dwarf_3.svg) 
+![Red Dwarf](riddles/dwarfs/dwarf_7.svg) 
+![Red Dwarf](riddles/dwarfs/dwarf_6.svg) 
 
 The dwarfs should leave the cave, one-by-one, and line up in a row.
 _"All the dwarfs with a red hat shall stand on one side"_, the dragon shouts, 

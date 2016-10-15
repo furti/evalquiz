@@ -3,16 +3,16 @@ Captain Coppercranium offers you a **sack with one hundred gold coins** for you 
 But there's a catch. You have to **choose one sack out of ten**. Only one sack contains
 the gold. All the other sacks just contain gilded lead coins.
 
-![Sack](/riddles/badmoney/sack.svg)
-![Sack](/riddles/badmoney/sack.svg)
-![Sack](/riddles/badmoney/sack.svg)
-![Sack](/riddles/badmoney/sack.svg)
-![Sack](/riddles/badmoney/sack.svg)
-![Sack](/riddles/badmoney/sack.svg)
-![Sack](/riddles/badmoney/sack.svg)
-![Sack](/riddles/badmoney/sack.svg)
-![Sack](/riddles/badmoney/sack.svg)
-![Sack](/riddles/badmoney/sack.svg)
+![Sack](riddles/badmoney/sack.svg)
+![Sack](riddles/badmoney/sack.svg)
+![Sack](riddles/badmoney/sack.svg)
+![Sack](riddles/badmoney/sack.svg)
+![Sack](riddles/badmoney/sack.svg)
+![Sack](riddles/badmoney/sack.svg)
+![Sack](riddles/badmoney/sack.svg)
+![Sack](riddles/badmoney/sack.svg)
+![Sack](riddles/badmoney/sack.svg)
+![Sack](riddles/badmoney/sack.svg)
 
 The coins all look the same, but **a lead coin weights 10 gram** while **a gold coin
 weights 11 gram**. 

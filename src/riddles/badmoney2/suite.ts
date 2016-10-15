@@ -177,14 +177,14 @@ export class Suite {
         let maxCoins = numberOfCoins > 20 ? 10 : 5;
 
         if (numberOfCoins > maxCoins) {
-            this.logItem.html(`<img src="/riddles/badmoney2/coin${maxCoins}.svg" class="move-in"/>`);
+            this.logItem.html(`<img src="riddles/badmoney2/coin${maxCoins}.svg" class="move-in"/>`);
             this.context.postpone(0.05, () => this.showCoins(deferred, numberOfCoins - maxCoins).catch(err => deferred.reject(err))).catch(err => deferred.reject(err));
 
             return deferred.promise;
         }
 
         if (numberOfCoins > 0) {
-            this.logItem.html(`<img src="/riddles/badmoney2/coin${numberOfCoins}.svg" class="move-in" />`);
+            this.logItem.html(`<img src="riddles/badmoney2/coin${numberOfCoins}.svg" class="move-in" />`);
         }
 
         deferred.resolve();

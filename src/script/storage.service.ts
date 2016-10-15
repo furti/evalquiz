@@ -63,6 +63,8 @@ export class StorageService {
      */
     clear(): void {
         this.storage.clearAll();
+        
+        this._dataStorageAllowed = undefined;
     }
 
     /**

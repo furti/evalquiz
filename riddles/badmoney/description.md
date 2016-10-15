@@ -1,10 +1,29 @@
-You have ten bags each with 10 coins in them. Each coin weighs 10 gram. The bags are numbered from one to ten.
-But one bag contains bad money. The coins in this bag look exactly like the real ones, but they only weight 9 gram each.
+Captain Coppercranium offers you a **sack with one hundred gold coins** for you duties.
 
-I think you can imagine what comes next. You have to find the bag with the bad coins.
-All you've got is a scale that shows you the exact weight of everything you put on it.
+But there's a catch. You have to **choose one sack out of ten**. Only one sack contains
+the gold. All the other sacks just contain gilded lead coins.
 
-You might think thats easy. I simply weigh each bag and the lightest one is the bad one.
-But there is a little restriction. You have to find the bad coins with only ***one*** weighting.
-You can take the coins out of the bags and weight them. But if the scale shows you a weight, you have to tell us the number of
-the bag.
+![Sack](/riddles/badmoney/sack.svg)
+![Sack](/riddles/badmoney/sack.svg)
+![Sack](/riddles/badmoney/sack.svg)
+![Sack](/riddles/badmoney/sack.svg)
+![Sack](/riddles/badmoney/sack.svg)
+![Sack](/riddles/badmoney/sack.svg)
+![Sack](/riddles/badmoney/sack.svg)
+![Sack](/riddles/badmoney/sack.svg)
+![Sack](/riddles/badmoney/sack.svg)
+![Sack](/riddles/badmoney/sack.svg)
+
+The coins all look the same, but **a lead coin weights 10 gram** while **a gold coin
+weights 11 gram**. 
+
+**Your task is, to find the sack with the gold.**
+
+Captain Ironbeard is no fiend. You will get a scale. You can weight one or more sacks
+and you can take coins out of the sacks and weight them, too. The sack you choose does 
+not need to contain all one hundred coins, but any missing coins is your personal loss.
+
+**Good luck!**
+
+And by the way: If you choose the wrong sack, Captain Coppercranium will cut you 
+into tiny little pieces!

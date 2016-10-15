@@ -1,0 +1,43 @@
+{
+    "goals": [
+        "Solve the riddle.",
+        "Without any loops (`for`, `while`, `do`).",
+        "**The Wizard's Toe:** One statement, no coditions (`if`, `switch`, `?`)."
+    ],
+    "description": "file: description.md",
+    "hints": "file: hints.md",
+    "api": [
+        {
+            "name": "log",
+            "type": "void",
+            "description": "Writes logging output to the console.",
+            "params": [
+                {
+                    "name": "message",
+                    "type": "any",
+                    "description": "The object to write."
+                }
+            ]
+        },
+        {
+            "name": "attack",
+            "type": "void",
+            "description": "Let's the dwarf attack the dragon.",
+            "params": []
+        }
+    ],
+    "member": {
+        "name": "join",
+        "type": "number",
+        "description": "Returns the index, where to place the next dwarf.",
+        "explanation": "file: explanation.md",
+        "params": [
+            {
+                "name": "hats",
+                "type": "string[]",
+                "description": "An array of strings with the colors of the hats (either `\"red\"` or `\"blue\"`)."
+            }
+        ]
+    },
+    "suite": "file: suite.js"
+}

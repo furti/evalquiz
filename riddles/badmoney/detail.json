@@ -1,0 +1,62 @@
+{
+  "goals": [
+    "Find the sack with the gold.",
+    "Weight only once.",
+    "Solve it for `n` sacks."
+  ],
+  "description": "file: description.md",
+  "hints": "file: hints.md",
+  "api": [
+    {
+      "name": "weight",
+      "type": "number",
+      "description": "Returns the weight of the thing you put on it.",
+      "params": [
+        {
+          "name": "thing",
+          "type": "any",
+          "description": "One or more sacks and/or one or more coins."
+        }
+      ]
+    },
+    {
+      "name": "log",
+      "type": "void",
+      "description": "Writes logging output to the console.",
+      "params": [
+        {
+          "name": "message",
+          "type": "any",
+          "description": "The object to write."
+        }
+      ]
+    }
+  ],
+  "member": {
+    "name": "find",
+    "type": "Sack",
+    "description": "Returns the `Sack` object with the gold.",
+    "params": [
+      {
+        "name": "sacks",
+        "type": "Sack[]",
+        "description": "An array of `Sack` objects. Each `Sack` offers one function:",
+        "properties": [
+          {
+            "name": "getCoins",
+            "type": "Coin[]",
+            "description": "Retuns an array of `Coin` objects from the `Sack`.",
+            "params": [
+              {
+                "name": "numberOfCoins",
+                "type": "number",
+                "description": "The number of `Coin` objects to take out of the sack."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "suite": "file: suite.js"
+}

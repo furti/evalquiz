@@ -1,0 +1,36 @@
+{
+  "goals": [
+    "Solve the task.",
+    "As single statement with a simple condition.",
+    "Without a condition (`if`, `switch`, `?`)."
+  ],
+  "description": "file: description.md",
+  "hints": "file: hints.md",
+  "api": [
+    {
+      "name": "write",
+      "type": "void",
+      "description": "Writes the string `s` into Nobby's notebook.",
+      "params": [
+        {
+          "name": "s",
+          "type": "string",
+          "description": "The string to write."
+        }
+      ]
+    }
+  ],
+  "member": {
+    "name": "dictate",
+    "type": "void",
+    "description": "Write `s` into the notebook or `\"Nothing\"`, if `s` is `null`.",
+    "params": [
+      {
+        "name": "s",
+        "type": "string",
+        "description": "The contents. May be `null`."
+      }
+    ]
+  },
+  "suite": "file: suite.js"
+}

@@ -1,0 +1,41 @@
+{
+  "goals": [
+    "Find the correct answer.",
+    "No loops (`for`, `while`, `do`).",
+    "No caluclations (`+`, `*`, `&`, `||`, ...)"
+  ],
+  "description": "file: description.md",
+  "hints": "file: hints.md",
+  "api": [
+    {
+      "name": "log",
+      "type": "void",
+      "description": "Writes logging output to the console.",
+      "params": [
+        {
+          "name": "message",
+          "type": "any",
+          "description": "The object to write."
+        }
+      ]
+    }
+  ],
+  "member": {
+    "name": "distance",
+    "type": "number",
+    "description": "Returns the **distance** the **fast dog** travels **in meters** (m).",
+    "params": [
+      {
+        "name": "d",
+        "type": "number",
+        "description": "The **distance** from the start position to the tree **in meters** (m)."
+      },
+      {
+        "name": "s",
+        "type": "number",
+        "description": "The **speed** of the **slow dog** in **meters per second** (m/s)."
+      }
+    ]
+  },
+  "suite": "file: suite.js"
+}

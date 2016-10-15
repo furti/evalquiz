@@ -1,7 +1,19 @@
 @keyframes fade-in {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
+
+
+/* View */
+
+ng-view {
+    height: 100vh;
+}
+
 
 /* Loader */
 
@@ -9,6 +21,14 @@
     width: 240px;
     margin: 3em auto 0;
     text-align: center;
+    animation: fade-in 1.2s;
+}
+
+
+/* workbench */
+
+workbench {
+    overflow: hidden;
     animation: fade-in 1s;
 }
 
@@ -16,7 +36,6 @@
 
 .riddle-left-card {
     overflow: hidden;
-    animation: fade-in 1s;
 }
 
 .riddle-left-card > md-card-title {
@@ -43,23 +62,31 @@
     overflow: hidden;
 }
 
+.riddle-left-card .riddle-icon {
+    position: absolute;
+    right: 0;
+    width: 128px;
+    margin: 8px 24px 8px 8px
+}
+
 /* Right Riddle Card */
 
 .riddle-right-card {
     overflow: hidden;
-    animation: fade-in 1s;
 }
 
 .riddle-right-card .members {
     padding: 0 16px;
 }
 
+
 /* RiddleList */
 
 .riddle-list md-headline {
     align-items: baseline;
-    font-size: 20px;    
+    font-size: 20px;
 }
+
 
 /* Editor */
 
@@ -73,55 +100,268 @@
     flex: 1 1 auto;
 }
 
+
 /* Console */
 
 .console {
+    font-family: 'Short Stack', cursive;
     overflow: auto;
-    background-color: midnightblue;
+    background-color: #004d00;
     color: white;
+    padding: 2em 1em;
 }
 
 .console h1, .console h2, .console h3, .console h4, .console h5, .console h6 {
     color: skyblue;
-} 
-
-.console > div.block {
-    margin: 0.2em 0.4em;
-    display: flex;
 }
 
-.console > div.block div.icon {
-    width: 24px;
+.console a {
+    color: gold;
+}
+
+.console > div.item {
+    margin: 0 0.4em;
+    padding: 0.4em 0 0.2em 0;
+    display: flex;
+    align-items: baseline;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.console > div.item div.icon {
+    width: 32px;
     margin: 0.2em 0;
     flex: 0 0 auto;
 }
 
-.console > div.block div.content {
+.console > div.item div.content {
     flex: 1 1 auto;
+    overflow: visible;
 }
 
-.console p, .console pre {
-    margin: 0.2em 0;
+.console div, .console p, .console pre {
+    margin: 0.4em 0;
+}
+
+.console .center {
+    text-align: center;
+}
+
+.console .info {
+    color: lightsteelblue;
+    font-style: italic;
+}
+
+.console .success {
+    color: lime;
+}
+
+.console .warning {
+    color: gold;
+}
+
+.console .error, .console .error h1, .console .error h2, .console .error h3, .console .error h4, .console .error h5, .console .error h6 {
+    color: tomato;
+}
+
+.console .large {
+    font-size: 140%;
+}
+
+.console .xlarge {
+    font-size: 180%;
 }
 
 .console .code {
     font-family: Courier New, Courier, monospace;
 }
 
-.console .error {
-    color: LightSalmon;
-} 
+.console .fade-in {
+    opacity: 0;
+    animation: fade-in 0.5s ease-out forwards;
+}
+
+@keyframes move-in {
+    from {
+        opacity: 0;
+        transform: scale(1.5) translateY(1em);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.console .move-in {
+    opacity: 0;
+    animation: move-in 0.5s ease-in forwards;
+}
+
+
+/* Console Marks */
+
+.console .mark.ok, .console .mark.not-ok, .console .mark.star, .console .mark.no-star {
+    position: relative;
+    display: inline-block;
+    margin: 0 0.3em;
+}
+
+@keyframes ok-anim {
+    from {
+        opacity: 0;
+        transform: scale(4);
+    }
+    to {
+        opacity: 1;
+        transform: scale(2);
+    }
+}
+
+.console .mark.ok, .console .mark.not-ok {
+    opacity: 0;
+    animation: ok-anim 0.25s ease-in forwards;
+    margin: 0 0 0 1.5em;
+}
+
+@keyframes star-anim {
+    from {
+        opacity: 0;
+        transform: scale(4) rotate(360deg);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) rotate(0);
+    }
+}
+
+.console .mark.star, .console .mark.no-star {
+    opacity: 0;
+    font-size: 48px;
+    animation: star-anim 0.5s ease-out forwards;
+}
+
+.console .mark.ok {
+    color: lime;
+}
+
+.console .mark.not-ok {
+    color: tomato;
+}
+
+.console .mark.star {
+    color: gold;
+}
+
+.console .mark.no-star {
+    color: gold;
+}
+
+.console .mark.ok:before, .console .mark.not-ok:before, .console .mark.star:before, .console .mark.no-star:before {
+    font-family: FontAwesome;
+    top: 0;
+}
+
+.console .mark.ok:before {
+    content: "\f00c";
+}
+
+.console .mark.not-ok:before {
+    content: "\f00d";
+}
+
+.console .mark.star:before {
+    content: "\f005";
+}
+
+.console .mark.no-star:before {
+    content: "\f006";
+}
+
+.console code, .console pre {
+    background-color: inherit;
+    border: none;
+}
+
+
+/* Overview */
+
+.overview {
+    max-width: 45em;
+    padding: 1em 4em 4em 4em;
+    margin: auto;
+    background-color: white;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.24);
+}
+
+.overview .buttons {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    padding: 24px;
+    z-index: 65536;
+}
+
+@media print {
+    .overview .buttons {
+        display: none;
+    }
+}
+
+.overview .solution {
+    display: flex;
+    align-items: top;
+    margin: 0.5em 0;
+    overflow: hidden;
+}
+
+@media print {
+    .overview .solution {
+        page-break-inside: avoid;
+    }
+}
+
+.overview .solution stars {
+    flex: 0 0 auto;
+    margin: 0.4em 0.2em 0 0;
+}
+
+.overview .solution highlighter {
+    flex: 1 1 auto;
+}
+
+.overview .solution highlighter .CodeMirror {
+    height: auto;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+}
+
 
 /* Layout Helpers */
+
+.layout-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.layout-column {
+    display: flex;
+    flex-direction: column;
+}
 
 .layout-no-shrink {
     flex-shrink: 0;
 }
 
+.layout-shrink {
+    flex-shrink: 1;
+}
+
 .layout-no-grow {
     flex-grow: 0;
 }
- 
+
+.layout-grow {
+    flex-grow: 1;
+}
+
 .layout-no-resize {
     flex-shrink: 0;
     flex-grow: 0;
@@ -135,9 +375,17 @@
     align-items: baseline;
 }
 
+.container {
+    border-radius: 4px;
+    transition: 0.02s padding cubic-bezier(0.35, 0, 0.25, 1);
+    position: relative;
+    padding-bottom: 0;
+}
 
-
-
+.riddle-icon-small {
+    width: 64px;
+    margin: 0 32px 0 0;
+}
 
 .scrolls {
     overflow: auto;
@@ -147,20 +395,20 @@
     overflow: hidden;
 }
 
-.markdown > :first-child  {
+.markdown >:first-child {
     margin-top: 0;
 }
 
-.markdown > :last-child  {
+.markdown >:last-child {
     margin-bottom: 0;
 }
 
 .lined-top {
-    border-top: 1px solid rgba(0,0,0,0.12);
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
 }
 
 .lined-bottom {
-    border-bottom: 1px solid rgba(0,0,0,0.12);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 }
 
 .max-width-480 {
@@ -180,21 +428,63 @@
     margin: 16px 0;
 }
 
+.float-left {
+    float: left;
+}
+
+.float-right {
+    float: right;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.md-fab md-icon .fa {
+    font-size: 30px;
+    margin: 0;
+    left: -2px;
+    top: -8px;
+    display: inline-block;
+    position: relative;
+}
+
+
+/**
+ * markdown fix 
+ */
+
+pre {
+    padding: 0.5em;
+    background-color: #f6f6f6;
+    border-top: 1px dotted #e0e0e0;
+    border-bottom: 1px dotted #e0e0e0;
+    border-radius: 4px;
+}
+
+pre code {
+    padding: 0;
+}
+
+
 /**
  * Toolbar
  */
+
 .md-toolbar-item {
     margin-right: 10px;
 }
 
-.md-toolbar-item .md-button {
+.md-toolbar-item .md-button, md-dialog-actions .md-button, md-card-actions .md-button {
     padding-left: 15px;
     padding-right: 15px;
 }
 
+
 /**
  * Transitions
  */
+
 .grow {
     transition: all .2s ease-in-out;
 }
@@ -203,9 +493,11 @@
     transform: scale(1.05);
 }
 
+
 /**
  * Code
  */
+
 code {
     background: #F6F6F6;
     padding: 2px 5px;
@@ -219,10 +511,6 @@ code {
 
 .md-dialog-actions .md-button {
     margin-left: 10px;
-}
-
-ng-view {
-    overflow: hidden;
 }
 
 table td {
@@ -246,5 +534,26 @@ table td {
 }
 
 .glow {
-    text-shadow: 0px 0px 16px goldenRod;   
+    text-shadow: 0px 0px 16px goldenRod;
+}
+
+.separated {
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+}
+
+.anim-delay-1 {
+    animation-delay: 0.32s
+}
+
+.anim-delay-2 {
+    animation-delay: 0.48s
+}
+
+.anim-delay-3 {
+    animation-delay: 0.56s
+}
+
+.anim-delay-4 {
+    animation-delay: 0.60s
 }

@@ -1,0 +1,37 @@
+{
+    "goals": [
+        "Implement a working algorithm.",
+        "Meet a linear time complexity `O(n)` to solve the riddle.",
+        "Avoid any conditional statements (if, switch, ?)"
+    ],
+    "description": "file: description.md",
+    "hints": "file: hints.md",
+    "api": [
+        {
+            "name": "log",
+            "type": "void",
+            "description": "Writes logging output to the console.",
+            "params": [
+                {
+                    "name": "message",
+                    "type": "any",
+                    "description": "The object to write."
+                }
+            ]
+        }
+    ],
+    "member": {
+        "name": "maxSum",
+        "type": "number",
+        "description": "Returns the maximum subset sum of the specified values.",
+        "explanation": "file: explanation.md",
+        "params": [
+            {
+                "name": "data",
+                "type": "number[]",
+                "description": "An array holding altitude differences."
+            }
+        ]
+    },
+    "suite": "file: suite.js"
+}

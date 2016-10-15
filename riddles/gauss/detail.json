@@ -1,0 +1,36 @@
+{
+  "goals": [
+    "Solve Carly's task.",
+    "Avoid any loops (`for`, `while`, `do`).",
+    "**Poser Goal:** No multiplications (`*`, `*=`)."
+  ],
+  "description": "file: description.md",
+  "hints": "file: hints.md",
+  "api": [
+    {
+      "name": "log",
+      "type": "void",
+      "description": "Writes logging output to the console.",
+      "params": [
+        {
+          "name": "message",
+          "type": "any",
+          "description": "The object to write."
+        }
+      ]
+    }
+  ],
+  "member": {
+    "name": "carly",
+    "type": "number",
+    "description": "Returns the sum of all numbers, from 1 to `n`.",
+    "params": [
+      {
+        "name": "n",
+        "type": "number",
+        "description": "A number."
+      }
+    ]
+  },
+  "suite": "file: suite.js"
+}

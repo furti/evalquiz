@@ -1,21 +1,25 @@
 <md-dialog aria-label="Credits">
-    <md-toolbar>
-        <div class="md-toolbar-tools">Credits</div>
-    </md-toolbar>
+	<md-toolbar>
+		<div class="md-toolbar-tools">Credits</div>
+	</md-toolbar>
 
-    <md-dialog-content class="md-dialog-content" layout="column" layout-align="center center">
-        <p>Powered by <a href="https://angularjs.org/" target="_blank">AngularJS</a>.</p>
+	<img ng-src="style/title.svg" />
 
-        <p>Styled by <a href="https://material.angularjs.org" target="_blank">Angular Material</a>.</p>
+	<md-dialog-content class="md-dialog-content" layout="column" layout-align="center center">
+		<p>&copy; 2015-2016 eval(Quiz) Team</p>
+	</md-dialog-content>
 
-        <p>Icons by <a href="http://fortawesome.github.io/Font-Awesome" target="_blank">Font Awesome</a>.</p>
+	<md-dialog-content class="md-dialog-content" layout="column" layout-align="center center">
+        <div>Lisenced by <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License 2.0</a>.</div>
+		<div>Powered by <a href="https://angularjs.org/" target="_blank">AngularJS</a>.</div>
+		<div>Styled by <a href="https://material.angularjs.org" target="_blank">Angular Material</a>.</div>
+		<div>Icons by <a href="http://fortawesome.github.io/Font-Awesome" target="_blank">Font Awesome</a>.</div>
+		<div>Hosted by <a href="https://github.com/furti/evalquiz" target="_blank">GitHub</a>.</div>
+	</md-dialog-content>
 
-        <p>Hosted on <a href="https://github.com/furti/evalquiz" target="_blank">GitHub</a>.</p>
-    </md-dialog-content>
-
-    <md-dialog-actions layout="row">
-        <md-button ng-click="$ctrl.close()">
-            Close
-        </md-button>
-    </md-dialog-actions>
+	<md-dialog-actions layout="row">
+		<md-button ng-click="$ctrl.close()">
+			Close
+		</md-button>
+	</md-dialog-actions>
 </md-dialog>

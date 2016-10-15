@@ -14,7 +14,7 @@ module.exports = function (grunt) {
             default: {
                 files: [
                     { expand: true, cwd: "./src", src: ["index.html"], dest: ("./dist"), flatten: true },
-                    { expand: true, cwd: "./src", src: ["style/**/*.css"], dest: ("./dist"), flatten: false },
+                    { expand: true, cwd: "./src", src: ["style/**/*"], dest: ("./dist"), flatten: false },
                     { expand: true, cwd: "./src", src: ["riddles/**/*"], dest: ("./dist"), flatten: false }
                 ]
             },

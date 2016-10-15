@@ -18,4 +18,9 @@ import 'angular-markdown-directive';
 import 'angular-ui-codemirror';
 import 'angular-cookies';
 import 'angular-local-storage';
-// import 'esprima';
+
+import 'esprima';
+import 'escodegen';
+import 'esmangle';
+
+

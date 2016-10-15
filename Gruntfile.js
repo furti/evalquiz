@@ -33,6 +33,8 @@ module.exports = function (grunt) {
                     { expand: true, src: ["./node_modules/codemirror/addon/lint/javascript-lint.js"], dest: ("./dist/script/"), flatten: true },
                     { expand: true, src: ["./node_modules/codemirror/theme/elegant.css"], dest: ("./dist/style/"), flatten: true },
                     { expand: true, src: ["./node_modules/esprima/esprima.js"], dest: ("./dist/script/"), flatten: true },
+                    { expand: true, src: ["./node_modules/esmangle/esmangle.js"], dest: ("./dist/script/"), flatten: true },
+                    { expand: true, src: ["./node_modules/escodegen/escodegen.js"], dest: ("./dist/script/"), flatten: true },
                     { expand: true, src: ["./node_modules/roboto-fontface/css/roboto/roboto-fontface.css"], dest: ("./dist/style/roboto"), flatten: true },
                     { expand: true, src: ["./node_modules/roboto-fontface/fonts/Roboto/*"], dest: ("./dist/fonts/Roboto"), flatten: true },
                     { expand: true, src: ["./node_modules/font-awesome/css/font-awesome.min.css"], dest: ("./dist/style"), flatten: true },

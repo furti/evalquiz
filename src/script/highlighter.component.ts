@@ -37,6 +37,9 @@ class Controller {
             (window as any).CodeMirror(element, {
                 value: this.code,
                 mode: this.mode || 'javascript',
+                indentUnit: 4,
+                tabSize: 4,
+                indentWithTabs: true,
                 lineNumbers: true,
                 lineWrapping: true,
                 readOnly: true

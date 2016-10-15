@@ -28,14 +28,19 @@ module.exports = {
     },
 
     resolve: {
-        extensions: ["", ".ts", ".tsx", ".js"]
+        extensions: ["", ".ts", ".tsx", ".js", ".json"]
     },
 
     module: {
         loaders: [
             {
+                test: /\.json$/,
+                loaders: ["json-loader"]
+            },
+            {
                 test: /\.html$/,
-                loaders: ["html-loader"]
+                loaders: ["html-loader"],
+                exclude: /node_modules/
             },
             {
                 test: /\.ts$/,

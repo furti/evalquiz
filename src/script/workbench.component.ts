@@ -43,8 +43,12 @@ class WorkbenchComponent {
         };
 
         this.editorOptions = {
-            lineNumbers: true,
             mode: 'javascript',
+            indentUnit: 4,
+            smartIndent: true,
+            tabSize: 4,
+            indentWithTabs: true,
+            lineNumbers: true,
             gutters: ['CodeMirror-lint-markers'],
             lint: true,
             autofocus: true,

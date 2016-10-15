@@ -51,6 +51,7 @@ export class Suite {
 
     private days: Day[];
     private logItem: suite.LogItem;
+    private complexity: string;
 
     constructor(private context: suite.Context) {
     }
@@ -81,32 +82,109 @@ export class Suite {
         });
     }
 
-    test1(): angular.IPromise<void> {
+    testDay1(): angular.IPromise<void> {
         return this.execute(this.days[0]);
     }
 
-    test2(): angular.IPromise<void> {
+    testDay2(): angular.IPromise<void> {
         return this.execute(this.days[1]);
     }
 
-    test3(): angular.IPromise<void> {
+    testDay3(): angular.IPromise<void> {
         return this.execute(this.days[2]);
     }
 
-    test4(): angular.IPromise<void> {
+    testDay4(): angular.IPromise<void> | void {
+        if (this.context.maxScore <= 0) {
+            return;
+        }
+
         return this.execute(this.days[3]);
     }
 
-    test5(): angular.IPromise<void> {
+    testDay5(): angular.IPromise<void> | void {
+        if (this.context.maxScore <= 0) {
+            return;
+        }
+
         return this.execute(this.days[4]);
     }
 
-    test6(): angular.IPromise<void> {
+    testDay6(): angular.IPromise<void> | void {
+        if (this.context.maxScore <= 0) {
+            return;
+        }
+
         return this.execute(this.days[5]);
     }
 
-    test7(): angular.IPromise<void> {
+    testDay7(): angular.IPromise<void> | void {
+        if (this.context.maxScore <= 0) {
+            return;
+        }
+
         return this.execute(this.days[6]);
+    }
+
+    testComplexity(): void {
+        if (this.context.maxScore < 3) {
+            return;
+        }
+
+        let success = true;
+        let classname = 'fade-in';
+
+        if (this.complexity === 'O(n)') {
+            classname += ' success';
+        }
+        else {
+            this.context.maxScore = 1;
+            success = false;
+            classname += ' warning';
+
+            this.context.message({
+                content: 'This problem can be solved with a single loop, that uses each data value just once.',
+                type: 'markdown',
+                classname: 'warning fade-in',
+                icon: 'fa-info-circle'
+            });
+        }
+
+        let logItem = this.context.log({
+            content: `The algorithm has a complexity of ${this.complexity}.`,
+            type: 'plain',
+            classname,
+            icon: 'fa-info-circle'
+        });
+
+        if (success) {
+            logItem.mark('ok');
+        };
+    }
+
+    testConditions(): void {
+        if (this.context.maxScore < 3) {
+            return;
+        }
+
+        let classname = 'fade-in';
+        let count = this.context.countConditions();
+
+        if (count <= 0) {
+            classname += ' success';
+
+            let logItem = this.context.log({
+                content: `The code does not contain any conditional statements.`,
+                type: 'plain',
+                classname,
+                icon: 'fa-info-circle'
+            });
+
+            logItem.mark('ok');
+        }
+        else {
+            this.context.maxScore = 2;
+        }
     }
 
     create(index: number, config: Config): Day {
@@ -156,15 +234,17 @@ export class Suite {
                 this.logItem.markdown(`Expected result: ${day.maximum} ft`);
             },
             0.5, () => {
-                let result = this.context.invokeFn(day.data.slice());
+                let result = this.context.invokeInstrumentedFn(day.data.slice());
                 let element = this.logItem.write(`Your result: ${result} ft`);
+
+                this.complexity = this.context.estimateComplexity(day.data.length, this.complexity);
 
                 if (result === day.maximum) {
                     element.addClass('success');
                     this.logItem.mark('ok');
                     this.context.maxScore = 3;
                 }
-                else { 
+                else {
                     element.addClass('error');
                     this.logItem.mark('not-ok');
                     this.context.maxScore = 0;

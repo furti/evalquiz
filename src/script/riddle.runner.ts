@@ -6,8 +6,13 @@ import { isPromise } from './utils';
 import { UIService } from './ui.service';
 import { MILLIS_MULTIPLIER } from './utils';
 
-export const ABORTED = "Execution aborted.";
-export const SKIPPED = "Test skipped.";
+import * as esprima from 'esprima';
+import * as esmangle from 'esmangle';
+import * as escodegen from 'escodegen';
+
+export const ABORTED = 'Execution aborted.';
+export const SKIPPED = 'Test skipped.';
+export const INSTRUMENTATION_CALLBACK = '___'
 
 export interface XXX {
     riddle: Riddle;
@@ -19,10 +24,19 @@ export interface XXX {
 const SECONDS_BETWEEN_TESTS: number = 0.25;
 
 export class RiddleRunner implements suite.Context {
+    private code: string;
+
     private suiteFactory: Function;
     private fnWrapperArgs: string[];
-    private fnWrapper: Function;
-    private tree: ESTree.Program;
+
+    private _fnWrapper: Function;
+    private _fnInstrumentedWrapper: Function;
+    private _ast: ESTree.Program;
+    private _mangledCode: string;
+    private _instrumentedCode: string;
+
+    private invocationId: number;
+    private invocationCount: { [id: number]: number };
 
     private executeDeferred: angular.IDeferred<XXX> | undefined;
     private suite: any;
@@ -38,7 +52,8 @@ export class RiddleRunner implements suite.Context {
     private messages: suite.Message[] = [];
 
     constructor(private $q: angular.IQService, private uiService: UIService, private consoleService: ConsoleService, private riddle: Riddle) {
-        let code = riddle.state.code;
+        this.code = riddle.state.code!;
+
         let detail = riddle.detail!;
 
         this.suiteFactory = new Function('var exports = {};\n' + detail.suite + '\nreturn exports;');
@@ -49,18 +64,66 @@ export class RiddleRunner implements suite.Context {
                 this.fnWrapperArgs.push(member.name)
             }
         });
+    }
 
+    /**
+     * Returns the riddle function packed into it's wrapper.
+     * 
+     *   function(api..., <INSTRUMENTATION_CALLBACK>, params...) {
+     *     "use strict";
+     *     return riddleFunction(params...);
+     *   }
+     * 
+     * @readonly
+     * @type {Function} the function 
+     */
+    get fnWrapper(): Function {
+        if (this._fnWrapper) {
+            return this._fnWrapper;
+        }
+
+        let detail = this.riddle.detail!;
         let args = this.fnWrapperArgs.slice();
 
         if (detail.member.params) {
             args = args.concat(detail.member.params.map(param => param.name));
         }
 
-        args.push(`"use strict";\n${code}\nreturn ${detail.member.name}(${detail.member.paramsString});`);
+        args.push(`"use strict";\n${this.code}\nreturn ${detail.member.name}(${detail.member.paramsString});`);
 
-        this.fnWrapper = new Function(...args);
-        this.tree = esprima.parse(code!);
+        return this._fnWrapper = new Function(...args);
     }
+
+    /**
+     * Returns the riddle function packed into it's wrapper with intrumented code.
+     * 
+     *   function(api..., params...) {
+     *     "use strict";
+     *     return riddleFunction(params...);
+     *   }
+     * 
+     * @readonly
+     * @type {Function} the function 
+     */
+    get fnInstrumentedWrapper(): Function {
+        if (this._fnInstrumentedWrapper) {
+            return this._fnInstrumentedWrapper;
+        }
+
+        let detail = this.riddle.detail!;
+        let args = this.fnWrapperArgs.slice();
+
+        args.push(INSTRUMENTATION_CALLBACK);
+
+        if (detail.member.params) {
+            args = args.concat(detail.member.params.map(param => param.name));
+        }
+
+        args.push(`"use strict";\n${this.instrumentedCode}\nreturn ${detail.member.name}(${detail.member.paramsString});`);
+
+        return this._fnInstrumentedWrapper = new Function(...args);
+    }
+
 
     /**
      * Returns true if the suite is still running
@@ -318,10 +381,23 @@ export class RiddleRunner implements suite.Context {
      * 
      * @param {...any[]} params the parameters
      * @returns {*} the result of the function call
-     * 
-     * @memberOf RiddleRunner
      */
     invokeFn(...params: any[]): any {
+        return this.invokeFnInternal(true, ...params);
+    }
+
+    /**
+     * Invokes the riddle function using the specified parameters. Use this function to call the riddle function in your tests.
+     * Uses the instrumented code. 
+     * 
+     * @param {...any[]} params the parameters
+     * @returns {*} the result of the function call
+     */
+    invokeInstrumentedFn(...params: any[]): any {
+        return this.invokeFnInternal(true, ...params);
+    }
+
+    private invokeFnInternal(instrumented: boolean, ...params: any[]): any {
         this.check();
 
         let fnParams: any[] = [];
@@ -363,9 +439,19 @@ export class RiddleRunner implements suite.Context {
             });
         }
 
+        if (instrumented) {
+            fnParams.push((id: number, that: any, fn: Function) => this.incrementInvocationCount(id, that, fn));
+        }
+
         fnParams = fnParams.concat(params);
 
         try {
+            this.invocationCount = {};
+
+            if (instrumented) {
+                return this.fnInstrumentedWrapper.apply(this.fnWrapper, fnParams);
+            }
+
             return this.fnWrapper.apply(this.fnWrapper, fnParams);
         }
         catch (err) {
@@ -534,10 +620,196 @@ export class RiddleRunner implements suite.Context {
         }
     }
 
+    get ast(): ESTree.Program {
+        if (this._ast) {
+            return this._ast;
+        }
+
+        return this._ast = esprima.parse(this.code!);
+    }
+
+    get minifiedCode(): string {
+        if (this._mangledCode) {
+            return this._mangledCode;
+        }
+
+        let mangledAst = esmangle.mangle(esmangle.optimize(angular.copy(this.ast), null));
+
+        return this._mangledCode = escodegen.generate(mangledAst, {
+            format: {
+                renumber: true,
+                hexadecimal: true,
+                escapeless: true,
+                compact: true,
+                semicolons: false,
+                parentheses: false
+            }
+        });
+    }
+
+    get instrumentedCode(): string {
+        if (this._instrumentedCode) {
+            return this._instrumentedCode;
+        }
+
+        this.invocationId = 0;
+
+        let instrumentedAst = this.instrument(angular.copy(this.ast));
+
+        return this._instrumentedCode = escodegen.generate(instrumentedAst, {
+            format: {
+                renumber: false,
+                hexadecimal: false,
+                escapeless: false,
+                compact: false,
+                semicolons: true,
+                parentheses: true
+            }
+        });
+    }
+
+    instrument(node: any): any {
+        if (node instanceof Array) {
+            for (var i = 0; i < node.length; i++) {
+                node[i] = this.instrument(node[i]);
+            }
+        }
+        else {
+            if (node.body) {
+                node.body = this.instrument(node.body);
+            }
+
+            if (node.test) {
+                node.test = this.instrument(node.test);
+            }
+
+            if (node.left) {
+                node.left = this.instrument(node.left);
+            }
+
+            if (node.right) {
+                node.right = this.instrument(node.right);
+            }
+
+            if (node.consequent) {
+                node.consequent = this.instrument(node.consequent);
+            }
+
+            if (node.expression) {
+                node.expression = this.instrument(node.expression);
+            }
+
+            if (node.argument) {
+                node.argument = this.instrument(node.argument);
+            }
+
+            if (node.arguments) {
+                node.arguments = this.instrument(node.arguments);
+            }
+
+            if (node.declaration) {
+                node.declaration = this.instrument(node.declaration);
+            }
+
+            switch (node.type) {
+                case 'CallExpression':
+                case 'LogicalExpression':
+                case 'UnaryExpression':
+                case 'BinaryExpression':
+                    node = this.instrumentNode(node);
+                    break;
+            }
+        }
+
+        return node;
+    }
+
+    instrumentNode(node: any): any {
+        return {
+            type: 'CallExpression',
+            arguments: [
+                {
+                    type: 'Literal',
+                    value: this.invocationId++
+                },
+                {
+                    type: 'ThisExpression'
+                },
+                {
+                    type: 'FunctionExpression',
+                    params: [],
+                    id: null,
+                    generator: false,
+                    expression: false,
+                    defaults: [],
+                    body: {
+                        type: 'BlockStatement',
+                        body: [
+                            {
+                                type: 'ReturnStatement',
+                                argument: node
+                            }
+                        ]
+                    }
+                }
+            ],
+            callee: {
+                type: 'Identifier',
+                name: '___'
+            }
+        };
+    }
+
+    incrementInvocationCount(id: number, that: any, fn: Function): any {
+        this.invocationCount[id] = (this.invocationCount[id] || 0) + 1;
+
+        return fn.call(that);
+    }
+
+    get maximumInvocationCount(): number {
+        if (!Object.keys(this.invocationCount).length) {
+            throw new Error('No invocations recorded. Use invokeInstrumentedFn(...)');
+        }
+
+        // this.check();
+
+        return Object.keys(this.invocationCount).map(id => this.invocationCount[id]).reduce((a, b) => Math.max(a, b));
+    }
+
+    estimateComplexity(n: number, min?: string): string {
+        let count = this.maximumInvocationCount;
+
+        if (min === 'O(d\u207f)' || count > Math.pow(2, n)) {
+            return 'O(d\u207f)';
+        }
+
+        if (min === 'O(n³)' || count > Math.pow(n, 3)) {
+            return 'O(n³)';
+        }
+
+        if (min === 'O(n²)' || count > Math.pow(n, 2)) {
+            return 'O(n²)';
+        }
+
+        if (min === 'O(n log n)' || count > n * Math.log(n)) {
+            return 'O(n log n)';
+        }
+
+        if (min === 'O(n)' || count > n) {
+            return 'O(n)';
+        }
+
+        if (min === 'O(log n)' || count > Math.log(n)) {
+            return 'O(log n)';
+        }
+
+        return 'O(1)';
+    }
+
     countTypes(...types: string[]): number {
         var count = 0;
 
-        this.crawl(this.tree, (node: any) => {
+        this.crawl(this.ast, (node: any) => {
             if (types.indexOf(node.type) >= 0) {
                 count++;
             }
@@ -555,13 +827,13 @@ export class RiddleRunner implements suite.Context {
     }
 
     countCalculations(): number {
-        return this.countTypes('BinaryExpression', 'AssignmentExpression');
+        return this.countTypes('UnaryExpression', 'BinaryExpression', 'AssignmentExpression');
     }
 
     countIdentifiers(...identifiers: string[]): number {
         var count = 0;
 
-        this.crawl(this.tree, (node: any) => {
+        this.crawl(this.ast, (node: any) => {
             if (node.type === 'Identifier') {
                 if (!identifiers.length || identifiers.indexOf(node.name) >= 0) {
                     count++;
@@ -592,7 +864,7 @@ export class RiddleRunner implements suite.Context {
     countOperators(...operators: string[]): number {
         var count = 0;
 
-        this.crawl(this.tree, (node: any) => {
+        this.crawl(this.ast, (node: any) => {
             if ((node.type === 'BinaryExpression') || (node.type === 'UpdateExpression') || (node.type === 'AssignmentExpression')) {
                 if (!operators.length || operators.indexOf(node.operator) >= 0) {
                     count++;

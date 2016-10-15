@@ -67,6 +67,8 @@ declare namespace suite {
 
         invokeFn(...fnParams: any[]): any;
 
+        invokeInstrumentedFn(...fnParams: any[]): any;
+
         /**
          * Returns the (maximum) score. When setting this variable, 
          * it will never get more that it is.
@@ -127,6 +129,36 @@ declare namespace suite {
          * @returns {angular.IPromise<Result[]>} a promise for the result
          */
         map<Item, Result>(source: Item[], fn: (item: Item) => angular.IPromise<Result> | Result): angular.IPromise<Result[] | void>;
+
+        /**
+         * Returns the minified code.
+         * 
+         * @type {string}
+         */
+        readonly minifiedCode: string;
+
+        /**
+         * Returns the instrumented code.
+         * 
+         * @type {string}
+         */
+        readonly instrumentedCode: string;
+
+        /**
+         * Returns the call that was invoked most often.
+         * 
+         * @type {string}
+         */
+        readonly maximumInvocationCount: number;
+
+        /**
+         * Estimates the complexity from the maximum invocation count.
+         * 
+         * @param {number} the n of the complexity
+         * @param {min} the minimal complexity
+         * @returns {string} the O-notation of the comlexity
+         */
+        estimateComplexity(n: number, min?: string): string;
 
         /**
          * Counts the specified types.

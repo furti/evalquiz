@@ -358,7 +358,7 @@ export class Suite {
                         content: `**You have choosen sack #${id}, the one with the gold! And you did it with just one weighing.**\n\nCaptain Coppercranium admires your skill. You have earned **${goldCoins.length} coins and a star extra**.`,
                         type: 'markdown',
                         icon: 'fa-thumbs-up',
-                        classname: 'warning'
+                        classname: 'success'
                     });
                     this.context.maxScore = 3;
                 }
@@ -367,7 +367,7 @@ export class Suite {
                         content: `**You have choosen sack #${id}, the one with the gold! And you did it with just one weighing.**\n\nCaptain Coppercranium admires your skill. You have earned **${goldCoins.length} coins**.`,
                         type: 'markdown',
                         icon: 'fa-thumbs-up',
-                        classname: 'warning'
+                        classname: 'success'
                     });
                     this.context.maxScore = 3;
                 }

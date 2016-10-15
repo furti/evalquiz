@@ -1,7 +1,7 @@
 {
     "goals": [
         "Implement a working algorithm.",
-        "Meet a linear time complexity [O(n)] to solve the riddle.",
+        "Meet a linear time complexity `O(n)` to solve the riddle.",
         "Avoid any conditional statements (if, switch, ?)"
     ],
     "description": "file: description.md",

@@ -284,6 +284,15 @@ export class RiddleService {
         catch (err) {
             this.runner = null;
 
+            this.consoleService.log({
+                content: `Failed to compile and run code: ${err}`,
+                type: 'markdown',
+                classname: 'error',
+                icon: 'fa-times-circle'
+            });
+
+            console.error('Failed to compile and run code:', err);
+            
             deferred.reject(err);
         }
 

@@ -138,12 +138,12 @@ var Suite = (function () {
         var _this = this;
         var maxCoins = numberOfCoins > 20 ? 10 : 5;
         if (numberOfCoins > maxCoins) {
-            this.logItem.html("<img src=\"/riddles/badmoney2/coin" + maxCoins + ".svg\" class=\"move-in\"/>");
+            this.logItem.html("<img src=\"riddles/badmoney2/coin" + maxCoins + ".svg\" class=\"move-in\"/>");
             this.context.postpone(0.05, function () { return _this.showCoins(deferred, numberOfCoins - maxCoins).catch(function (err) { return deferred.reject(err); }); }).catch(function (err) { return deferred.reject(err); });
             return deferred.promise;
         }
         if (numberOfCoins > 0) {
-            this.logItem.html("<img src=\"/riddles/badmoney2/coin" + numberOfCoins + ".svg\" class=\"move-in\" />");
+            this.logItem.html("<img src=\"riddles/badmoney2/coin" + numberOfCoins + ".svg\" class=\"move-in\" />");
         }
         deferred.resolve();
         return deferred.promise;

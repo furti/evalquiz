@@ -164,10 +164,10 @@ var Suite = (function () {
                 return _this.context.postpone(0.125, function () {
                     var width = 32 * _this.getCoinsOfSack(sack).length / 100;
                     if (_this.isGoldSack(sack)) {
-                        _this.logItem.html("<img src=\"/riddles/badmoney/sack.svg\" style=\"width: " + width + "px\" class=\"move-in\">");
+                        _this.logItem.html("<img src=\"riddles/badmoney/sack.svg\" style=\"width: " + width + "px\" class=\"move-in\">");
                     }
                     else {
-                        _this.logItem.html("<img src=\"/riddles/badmoney/bad_sack.svg\" style=\"width: " + width + "px\" class=\"move-in\">");
+                        _this.logItem.html("<img src=\"riddles/badmoney/bad_sack.svg\" style=\"width: " + width + "px\" class=\"move-in\">");
                     }
                 });
             });

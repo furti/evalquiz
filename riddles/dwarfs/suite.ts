@@ -31,7 +31,7 @@ export class Suite {
         return this.context.sequence(
             0.25,
             () => {
-                logItem.markdown(`![Dwarf](/riddles/dwarfs/dwarf_${dwarf}.svg) **The dwarf** attacks **the dragon** with **bare hands**.`).addClass('info');
+                logItem.markdown(`![Dwarf](riddles/dwarfs/dwarf_${dwarf}.svg) **The dwarf** attacks **the dragon** with **bare hands**.`).addClass('info');
             },
             1,
             () => {
@@ -189,17 +189,17 @@ export class Suite {
             }
 
             if (index === null || index === undefined) {
-                this.context.log().withIcon('fa-exclamation-circle').withClass('warning').markdown(`![Dwarf](/riddles/dwarfs/dwarf_${dwarf}.svg) A dwarf abandonned himself to despair (the function returned ${index}).`);
+                this.context.log().withIcon('fa-exclamation-circle').withClass('warning').markdown(`![Dwarf](riddles/dwarfs/dwarf_${dwarf}.svg) A dwarf abandonned himself to despair (the function returned ${index}).`);
                 return false;
             }
 
             if (index < 0 || index > line.length) {
-                this.context.log().withIcon('fa-exclamation-circle').withClass('warning').markdown(`![Dwarf](/riddles/dwarfs/dwarf_${dwarf}.svg) A dwarf places himself at position ${index} of ${line.length} dwarfs. He got eaten by the dragon for this impossibility.`);
+                this.context.log().withIcon('fa-exclamation-circle').withClass('warning').markdown(`![Dwarf](riddles/dwarfs/dwarf_${dwarf}.svg) A dwarf places himself at position ${index} of ${line.length} dwarfs. He got eaten by the dragon for this impossibility.`);
                 return false;
             }
 
 
-            let element = angular.element(`<img src="/riddles/dwarfs/dwarf_${dwarf}.svg" class="move-in">`);
+            let element = angular.element(`<img src="riddles/dwarfs/dwarf_${dwarf}.svg" class="move-in">`);
 
             if (small) {
                 element.attr('style', 'max-width: 16px');

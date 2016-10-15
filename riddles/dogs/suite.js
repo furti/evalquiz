@@ -117,7 +117,7 @@ var Suite = (function () {
                 image.onerror = function () {
                     console.error('Failed to load image: ' + name_1);
                 };
-                image.src = "/riddles/dogs/" + name_1 + ".svg";
+                image.src = "riddles/dogs/" + name_1 + ".svg";
                 this_1.images[name_1] = image;
             }
         };

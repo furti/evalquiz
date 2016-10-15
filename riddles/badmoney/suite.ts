@@ -217,10 +217,10 @@ export class Suite {
                 return this.context.postpone(0.125, () => {
                     let width = 32 * this.getCoinsOfSack(sack).length / 100;
                     if (this.isGoldSack(sack)) {
-                        this.logItem.html(`<img src="/riddles/badmoney/sack.svg" style="width: ${width}px" class="move-in">`);
+                        this.logItem.html(`<img src="riddles/badmoney/sack.svg" style="width: ${width}px" class="move-in">`);
                     }
                     else {
-                        this.logItem.html(`<img src="/riddles/badmoney/bad_sack.svg" style="width: ${width}px" class="move-in">`);
+                        this.logItem.html(`<img src="riddles/badmoney/bad_sack.svg" style="width: ${width}px" class="move-in">`);
                     }
                 });
             });

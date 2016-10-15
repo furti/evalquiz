@@ -21,7 +21,7 @@ var Suite = (function () {
         var logItem = this.context.log();
         logItem.markdown("**The dwarf** has **" + Math.floor(Math.random() * 10 + 10) + " HPs**.");
         return this.context.sequence(0.25, function () {
-            logItem.markdown("![Dwarf](/riddles/dwarfs/dwarf_" + dwarf + ".svg) **The dwarf** attacks **the dragon** with **bare hands**.").addClass('info');
+            logItem.markdown("![Dwarf](riddles/dwarfs/dwarf_" + dwarf + ".svg) **The dwarf** attacks **the dragon** with **bare hands**.").addClass('info');
         }, 1, function () {
             var d = Math.floor(Math.random() * 18);
             if (d < 1) {
@@ -143,14 +143,14 @@ var Suite = (function () {
                 return _this.doAttack(dwarf);
             }
             if (index === null || index === undefined) {
-                _this.context.log().withIcon('fa-exclamation-circle').withClass('warning').markdown("![Dwarf](/riddles/dwarfs/dwarf_" + dwarf + ".svg) A dwarf abandonned himself to despair (the function returned " + index + ").");
+                _this.context.log().withIcon('fa-exclamation-circle').withClass('warning').markdown("![Dwarf](riddles/dwarfs/dwarf_" + dwarf + ".svg) A dwarf abandonned himself to despair (the function returned " + index + ").");
                 return false;
             }
             if (index < 0 || index > line.length) {
-                _this.context.log().withIcon('fa-exclamation-circle').withClass('warning').markdown("![Dwarf](/riddles/dwarfs/dwarf_" + dwarf + ".svg) A dwarf places himself at position " + index + " of " + line.length + " dwarfs. He got eaten by the dragon for this impossibility.");
+                _this.context.log().withIcon('fa-exclamation-circle').withClass('warning').markdown("![Dwarf](riddles/dwarfs/dwarf_" + dwarf + ".svg) A dwarf places himself at position " + index + " of " + line.length + " dwarfs. He got eaten by the dragon for this impossibility.");
                 return false;
             }
-            var element = angular.element("<img src=\"/riddles/dwarfs/dwarf_" + dwarf + ".svg\" class=\"move-in\">");
+            var element = angular.element("<img src=\"riddles/dwarfs/dwarf_" + dwarf + ".svg\" class=\"move-in\">");
             if (small) {
                 element.attr('style', 'max-width: 16px');
             }

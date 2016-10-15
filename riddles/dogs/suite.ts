@@ -151,7 +151,7 @@ export class Suite {
                     console.error('Failed to load image: ' + name);
                 }
 
-                image.src = `/riddles/dogs/${name}.svg`;
+                image.src = `riddles/dogs/${name}.svg`;
 
                 this.images[name] = image;
             }

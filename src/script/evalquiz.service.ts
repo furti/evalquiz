@@ -81,7 +81,7 @@ export class EvalQuizService {
             this.riddleMap![riddle.id] = riddle;
         });
 
-        let persistedRiddleStates = this.storageService.load();
+        let persistedRiddleStates = this.storageService.loadRiddles();
 
         for (let id in persistedRiddleStates) {
             let riddle = this.riddleMap[id];
@@ -193,7 +193,7 @@ export class EvalQuizService {
     }
 
     saveRiddle(...riddles: Riddle[]): void {
-        this.storageService.save(...riddles);
+        this.storageService.saveRiddles(...riddles);
         this.updateStatistics();
     }
 

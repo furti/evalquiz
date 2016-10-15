@@ -8,7 +8,6 @@ import { EvalQuizService } from './evalquiz.service';
 import './member-info.component';
 import { Riddle } from './riddle';
 import { RiddleService } from './riddle.service';
-import './toolbar.component';
 import { UIService } from './ui.service';
 import { Component, Injectable, DialogService, Dialog } from './utils';
 

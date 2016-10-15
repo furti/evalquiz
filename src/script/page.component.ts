@@ -3,6 +3,7 @@
 import { EvalQuizService } from './evalquiz.service';
 import { Riddle } from './riddle';
 import { RiddleService } from './riddle.service';
+import './storage-info-bar.component';
 import './toolbar.component';
 import { UIService } from './ui.service';
 import './workbench.component';

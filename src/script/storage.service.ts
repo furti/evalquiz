@@ -10,10 +10,13 @@ export type RiddleStateMap = { [riddleId: string]: RiddleState };
 const STATE_KEY = 'evalQuiz.state';
 const PATH_KEY = 'evalQuiz.path';
 const LAST_RIDDLE_ID_KEY = 'evalQuiz.lastRiddleId';
+const DATA_STORAGE_ALLOWED_KEY = 'evalQuiz.agreement';
 
 @Injectable(module, 'storageService')
 export class StorageService {
     static $inject = ['localStorageService'];
+
+    private _dataStorageAllowed: boolean | undefined;
 
     constructor(private storage: angular.local.storage.ILocalStorageService) {
     }
@@ -25,7 +28,7 @@ export class StorageService {
      * 
      * @memberOf StorageService
      */
-    public load(): RiddleStateMap {
+    loadRiddles(): RiddleStateMap {
         return this.storage.get(STATE_KEY) as RiddleStateMap || {};
     }
 
@@ -36,8 +39,8 @@ export class StorageService {
      * 
      * @memberOf StorageService
      */
-    public save(...riddles: Riddle[]): void {
-        let map: RiddleStateMap = this.load();
+    saveRiddles(...riddles: Riddle[]): void {
+        let map: RiddleStateMap = this.loadRiddles();
 
         riddles.forEach((riddle) => {
             if (!riddle.state) {
@@ -48,7 +51,9 @@ export class StorageService {
             map[riddle.id] = angular.copy(riddle.state);
         });
 
-        this.storage.set(STATE_KEY, map);
+        if (!this.dataStorageAllowed) {
+            this.storage.set(STATE_KEY, map);
+        }
     }
 
     /**
@@ -56,7 +61,7 @@ export class StorageService {
      * 
      * @memberOf StorageService
      */
-    public clear(): void {
+    clear(): void {
         this.storage.clearAll();
     }
 
@@ -67,7 +72,7 @@ export class StorageService {
      * 
      * @memberOf StorageService
      */
-    public loadPath(): string {
+    loadPath(): string {
         return this.storage.get<string>(PATH_KEY) || '/riddles/' + this.loadLastRiddleId();
     }
 
@@ -78,8 +83,10 @@ export class StorageService {
      * 
      * @memberOf StorageService
      */
-    public savePath(path: string): void {
-        this.storage.set(PATH_KEY, path);
+    savePath(path: string): void {
+        if (!this.dataStorageAllowed) {
+            this.storage.set(PATH_KEY, path);
+        }
     }
 
     /**
@@ -89,7 +96,7 @@ export class StorageService {
      * 
      * @memberOf StorageService
      */
-    public loadLastRiddleId(): string {
+    loadLastRiddleId(): string {
         return this.storage.get<string>(LAST_RIDDLE_ID_KEY) || 'intro';
     }
 
@@ -100,8 +107,43 @@ export class StorageService {
      * 
      * @memberOf StorageService
      */
-    public saveLastRiddleId(lastRiddleId: string): void {
-        this.storage.set(LAST_RIDDLE_ID_KEY, lastRiddleId);
+    saveLastRiddleId(lastRiddleId: string): void {
+        if (!this.dataStorageAllowed) {
+            this.storage.set(LAST_RIDDLE_ID_KEY, lastRiddleId);
+        }
+    }
+
+    /**
+     * Loads the storage agreement.
+     * 
+     * @returns {string} the path
+     * 
+     * @memberOf StorageService
+     */
+    get dataStorageAllowed(): boolean {
+        if (this._dataStorageAllowed !== undefined) {
+            return !!this._dataStorageAllowed;
+        }
+
+        return this._dataStorageAllowed = (this.storage.get<boolean>(DATA_STORAGE_ALLOWED_KEY) || false);
+    }
+
+    /**
+     * Save the the storage agreement. If false, the whole storage will be cleared.
+     * 
+     * @param {string} allowed true if allowed
+     * 
+     * @memberOf StorageService
+     */
+    saveDataStorageAllowed(dataStorageAllowed: boolean): void {
+        this._dataStorageAllowed = dataStorageAllowed;
+
+        if (dataStorageAllowed) {
+            this.storage.set(DATA_STORAGE_ALLOWED_KEY, dataStorageAllowed);
+        }
+        else {
+            this.clear();
+        }
     }
 
 }

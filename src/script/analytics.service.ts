@@ -4,8 +4,6 @@ let module = angular.module('evalquiz');
 
 import { Injectable } from './utils';
 
-console.log('tata');
-
 declare function ga(...args: any[]): void;
 
 @Injectable(module, 'analyticsService')

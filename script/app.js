@@ -38,9 +38,10 @@ webpackJsonp([0],[
 	};
 	var module = angular.module('evalquiz');
 	var utils_1 = __webpack_require__(2);
-	console.log('tata');
+	var ID = 'UA-85753025-1';
 	var AnalyticsService = (function () {
 	    function AnalyticsService() {
+	        this.created = false;
 	    }
 	    Object.defineProperty(AnalyticsService.prototype, "active", {
 	        get: function () {
@@ -58,10 +59,22 @@ webpackJsonp([0],[
 	    AnalyticsService.prototype.event = function (category, action, label, value) {
 	        this.send('event', category, action, label, value);
 	    };
+	    AnalyticsService.prototype.create = function (id) {
+	        if (this.active) {
+	            ga('create', id, 'auto');
+	        }
+	        else {
+	            console.info('Analytics initialized.');
+	        }
+	    };
 	    AnalyticsService.prototype.send = function () {
 	        var args = [];
 	        for (var _i = 0; _i < arguments.length; _i++) {
 	            args[_i - 0] = arguments[_i];
+	        }
+	        if (!this.created) {
+	            this.create(ID);
+	            this.created = true;
 	        }
 	        if (this.active) {
 	            ga.apply(void 0, ['send'].concat(args));

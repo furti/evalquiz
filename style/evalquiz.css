@@ -286,6 +286,7 @@ workbench {
 
 .overview {
     max-width: 45em;
+    min-width: 32em;
     padding: 1em 4em 4em 4em;
     margin: auto;
     background-color: white;
@@ -434,6 +435,10 @@ workbench {
 
 .float-right {
     float: right;
+}
+
+.clear {
+    clear: both;
 }
 
 .full-width {

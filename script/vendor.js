@@ -99,20 +99,20 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	__webpack_require__(103);
 	__webpack_require__(104);
-	__webpack_require__(106);
-	__webpack_require__(108);
-	__webpack_require__(110);
-	__webpack_require__(112);
-	__webpack_require__(114);
-	__webpack_require__(116);
+	__webpack_require__(105);
+	__webpack_require__(107);
+	__webpack_require__(109);
+	__webpack_require__(111);
+	__webpack_require__(113);
+	__webpack_require__(115);
 	__webpack_require__(117);
 	__webpack_require__(118);
-	__webpack_require__(120);
-	__webpack_require__(22);
-	__webpack_require__(78);
+	__webpack_require__(119);
+	__webpack_require__(121);
 	__webpack_require__(23);
+	__webpack_require__(79);
+	__webpack_require__(24);
 
 
 /***/ },
@@ -137,13 +137,14 @@
 /* 19 */,
 /* 20 */,
 /* 21 */,
-/* 22 */
+/* 22 */,
+/* 23 */
 /***/ function(module, exports) {
 
 	module.exports = esprima;
 
 /***/ },
-/* 23 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -183,11 +184,11 @@
 	        Pass,
 	        annotateDirective;
 	
-	    esshorten = __webpack_require__(24);
-	    common = __webpack_require__(37);
-	    Options = __webpack_require__(42);
-	    Pass = __webpack_require__(43);
-	    annotateDirective = __webpack_require__(76);
+	    esshorten = __webpack_require__(25);
+	    common = __webpack_require__(38);
+	    Options = __webpack_require__(43);
+	    Pass = __webpack_require__(44);
+	    annotateDirective = __webpack_require__(77);
 	    Syntax = common.Syntax;
 	
 	    // recover some broken AST
@@ -328,7 +329,7 @@
 	        return recover(tree, options.get('directive'));
 	    }
 	
-	    exports.version = __webpack_require__(77).version;
+	    exports.version = __webpack_require__(78).version;
 	    exports.mangle = esshorten.mangle;
 	    exports.optimize = optimize;
 	    exports.pass = Pass;
@@ -337,7 +338,7 @@
 
 
 /***/ },
-/* 24 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -378,12 +379,12 @@
 	        Syntax,
 	        Map;
 	
-	    escope = __webpack_require__(25);
-	    estraverse = __webpack_require__(28);
-	    esutils = __webpack_require__(30);
-	    utility = __webpack_require__(34);
-	    Map = __webpack_require__(35);
-	    version = __webpack_require__(36).version;
+	    escope = __webpack_require__(26);
+	    estraverse = __webpack_require__(29);
+	    esutils = __webpack_require__(31);
+	    utility = __webpack_require__(35);
+	    Map = __webpack_require__(36);
+	    version = __webpack_require__(37).version;
 	
 	    Syntax = estraverse.Syntax;
 	
@@ -633,7 +634,7 @@
 
 
 /***/ },
-/* 25 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -705,7 +706,7 @@
 	    // Universal Module Definition (UMD) to support AMD, CommonJS/Node.js,
 	    // and plain browser loading,
 	    if (true) {
-	        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [exports, __webpack_require__(26)], __WEBPACK_AMD_DEFINE_RESULT__ = function (exports, estraverse) {
+	        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [exports, __webpack_require__(27)], __WEBPACK_AMD_DEFINE_RESULT__ = function (exports, estraverse) {
 	            factory(exports, global, estraverse);
 	        }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	    } else if (typeof exports !== 'undefined') {
@@ -1761,7 +1762,7 @@
 
 
 /***/ },
-/* 26 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -2590,7 +2591,7 @@
 	        return tree;
 	    }
 	
-	    exports.version = __webpack_require__(27).version;
+	    exports.version = __webpack_require__(28).version;
 	    exports.Syntax = Syntax;
 	    exports.traverse = traverse;
 	    exports.replace = replace;
@@ -2606,7 +2607,7 @@
 
 
 /***/ },
-/* 27 */
+/* 28 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -2699,7 +2700,7 @@
 	};
 
 /***/ },
-/* 28 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -3532,7 +3533,7 @@
 	        return tree;
 	    }
 	
-	    exports.version = __webpack_require__(29).version;
+	    exports.version = __webpack_require__(30).version;
 	    exports.Syntax = Syntax;
 	    exports.traverse = traverse;
 	    exports.replace = replace;
@@ -3548,7 +3549,7 @@
 
 
 /***/ },
-/* 29 */
+/* 30 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -3645,7 +3646,7 @@
 	};
 
 /***/ },
-/* 30 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -3676,15 +3677,15 @@
 	(function () {
 	    'use strict';
 	
-	    exports.ast = __webpack_require__(31);
-	    exports.code = __webpack_require__(32);
-	    exports.keyword = __webpack_require__(33);
+	    exports.ast = __webpack_require__(32);
+	    exports.code = __webpack_require__(33);
+	    exports.keyword = __webpack_require__(34);
 	}());
 	/* vim: set sw=4 ts=4 et tw=80 : */
 
 
 /***/ },
-/* 31 */
+/* 32 */
 /***/ function(module, exports) {
 
 	/*
@@ -3834,7 +3835,7 @@
 
 
 /***/ },
-/* 32 */
+/* 33 */
 /***/ function(module, exports) {
 
 	/*
@@ -3975,7 +3976,7 @@
 
 
 /***/ },
-/* 33 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -4005,7 +4006,7 @@
 	(function () {
 	    'use strict';
 	
-	    var code = __webpack_require__(32);
+	    var code = __webpack_require__(33);
 	
 	    function isStrictModeReservedWordES6(id) {
 	        switch (id) {
@@ -4146,7 +4147,7 @@
 
 
 /***/ },
-/* 34 */
+/* 35 */
 /***/ function(module, exports) {
 
 	/*
@@ -4261,7 +4262,7 @@
 
 
 /***/ },
-/* 35 */
+/* 36 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/*
@@ -4379,7 +4380,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 36 */
+/* 37 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -4480,7 +4481,7 @@
 	};
 
 /***/ },
-/* 37 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -4522,9 +4523,9 @@
 	        escope,
 	        esutils;
 	
-	    estraverse = __webpack_require__(38);
-	    escope = __webpack_require__(25);
-	    esutils = __webpack_require__(39);
+	    estraverse = __webpack_require__(39);
+	    escope = __webpack_require__(26);
+	    esutils = __webpack_require__(40);
 	
 	    Syntax = estraverse.Syntax;
 	
@@ -4954,7 +4955,7 @@
 
 
 /***/ },
-/* 38 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -5649,7 +5650,7 @@
 
 
 /***/ },
-/* 39 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -5680,14 +5681,14 @@
 	(function () {
 	    'use strict';
 	
-	    exports.code = __webpack_require__(40);
-	    exports.keyword = __webpack_require__(41);
+	    exports.code = __webpack_require__(41);
+	    exports.keyword = __webpack_require__(42);
 	}());
 	/* vim: set sw=4 ts=4 et tw=80 : */
 
 
 /***/ },
-/* 40 */
+/* 41 */
 /***/ function(module, exports) {
 
 	/*
@@ -5783,7 +5784,7 @@
 
 
 /***/ },
-/* 41 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -5813,7 +5814,7 @@
 	(function () {
 	    'use strict';
 	
-	    var code = __webpack_require__(40);
+	    var code = __webpack_require__(41);
 	
 	    function isStrictModeReservedWordES6(id) {
 	        switch (id) {
@@ -5906,7 +5907,7 @@
 
 
 /***/ },
-/* 42 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -5939,7 +5940,7 @@
 	
 	    var common;
 	
-	    common = __webpack_require__(37);
+	    common = __webpack_require__(38);
 	
 	    function extend(result, update) {
 	        var prop, lhs, rhs;
@@ -6001,7 +6002,7 @@
 
 
 /***/ },
-/* 43 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -6036,8 +6037,8 @@
 	
 	    var query, Registry, pass, post, common;
 	
-	    common = __webpack_require__(37);
-	    query = __webpack_require__(44);
+	    common = __webpack_require__(38);
+	    query = __webpack_require__(45);
 	
 	    Registry = {};
 	    Registry.__direct = {};
@@ -6057,21 +6058,20 @@
 	    }
 	
 	    pass = [
-	        __webpack_require__(45),
 	        __webpack_require__(46),
 	        __webpack_require__(47),
 	        __webpack_require__(48),
 	        __webpack_require__(49),
 	        __webpack_require__(50),
 	        __webpack_require__(51),
-	        __webpack_require__(53),
+	        __webpack_require__(52),
 	        __webpack_require__(54),
 	        __webpack_require__(55),
 	        __webpack_require__(56),
 	        __webpack_require__(57),
 	        __webpack_require__(58),
 	        __webpack_require__(59),
-	        __webpack_require__(61),
+	        __webpack_require__(60),
 	        __webpack_require__(62),
 	        __webpack_require__(63),
 	        __webpack_require__(64),
@@ -6080,15 +6080,16 @@
 	        __webpack_require__(67),
 	        __webpack_require__(68),
 	        __webpack_require__(69),
-	        __webpack_require__(70)
+	        __webpack_require__(70),
+	        __webpack_require__(71)
 	    ];
 	
 	    post = [
-	        __webpack_require__(71),
 	        __webpack_require__(72),
 	        __webpack_require__(73),
 	        __webpack_require__(74),
-	        __webpack_require__(75)
+	        __webpack_require__(75),
+	        __webpack_require__(76)
 	    ];
 	
 	    initialize('pass', pass);
@@ -6117,7 +6118,7 @@
 
 
 /***/ },
-/* 44 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -6151,7 +6152,7 @@
 	
 	    var common;
 	
-	    common = __webpack_require__(37);
+	    common = __webpack_require__(38);
 	
 	    exports.get = function get(root, query) {
 	        var i, iz, name, node;
@@ -6179,7 +6180,7 @@
 
 
 /***/ },
-/* 45 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -6214,8 +6215,8 @@
 	    var Name, Syntax, common, escope, modified;
 	
 	    Name = 'hoist-variable-to-arguments';
-	    escope = __webpack_require__(25);
-	    common = __webpack_require__(37);
+	    escope = __webpack_require__(26);
+	    common = __webpack_require__(38);
 	
 	    Syntax = common.Syntax;
 	
@@ -6367,7 +6368,7 @@
 
 
 /***/ },
-/* 46 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -6402,7 +6403,7 @@
 	    var Name, Syntax, common, modified;
 	
 	    Name = 'transform-dynamic-to-static-property-access';
-	    common = __webpack_require__(37);
+	    common = __webpack_require__(38);
 	    Syntax = common.Syntax;
 	
 	    function transformDynamicToStaticPropertyAccess(tree, options) {
@@ -6447,7 +6448,7 @@
 
 
 /***/ },
-/* 47 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -6482,7 +6483,7 @@
 	    var Name, Syntax, common, modified;
 	
 	    Name = 'transform-dynamic-to-static-property-definition';
-	    common = __webpack_require__(37);
+	    common = __webpack_require__(38);
 	    Syntax = common.Syntax;
 	
 	    function transformDynamicToStaticPropertyDefinition(tree, options) {
@@ -6531,7 +6532,7 @@
 
 
 /***/ },
-/* 48 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -6566,7 +6567,7 @@
 	    var Name, Syntax, common, modified;
 	
 	    Name = 'transform-immediate-function-call';
-	    common = __webpack_require__(37);
+	    common = __webpack_require__(38);
 	    Syntax = common.Syntax;
 	
 	    function isEmptyFunctionCall(call) {
@@ -6643,7 +6644,7 @@
 
 
 /***/ },
-/* 49 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -6678,7 +6679,7 @@
 	    var Name, Syntax, common, modified;
 	
 	    Name = 'transform-logical-association';
-	    common = __webpack_require__(37);
+	    common = __webpack_require__(38);
 	    Syntax = common.Syntax;
 	
 	    function transformLogicalAssociation(tree, options) {
@@ -6720,7 +6721,7 @@
 
 
 /***/ },
-/* 50 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -6755,7 +6756,7 @@
 	    var Name, Syntax, common, modified;
 	
 	    Name = 'reordering-function-declarations';
-	    common = __webpack_require__(37);
+	    common = __webpack_require__(38);
 	    Syntax = common.Syntax;
 	
 	    function reordering(array) {
@@ -6813,7 +6814,7 @@
 
 
 /***/ },
-/* 51 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -6848,8 +6849,8 @@
 	    var Name, Syntax, Map, common, scope, modified;
 	
 	    Name = 'remove-unused-label';
-	    common = __webpack_require__(37);
-	    Map = __webpack_require__(52);
+	    common = __webpack_require__(38);
+	    Map = __webpack_require__(53);
 	    Syntax = common.Syntax;
 	
 	    function Scope(upper) {
@@ -6947,7 +6948,7 @@
 
 
 /***/ },
-/* 52 */
+/* 53 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/*
@@ -7065,7 +7066,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 53 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -7100,7 +7101,7 @@
 	    var Name, Syntax, common, modified;
 	
 	    Name = 'remove-empty-statement';
-	    common = __webpack_require__(37);
+	    common = __webpack_require__(38);
 	    Syntax = common.Syntax;
 	
 	    function remove(array) {
@@ -7185,7 +7186,7 @@
 
 
 /***/ },
-/* 54 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -7220,7 +7221,7 @@
 	    var Name, Syntax, common, modified;
 	
 	    Name = 'remove-wasted-blocks';
-	    common = __webpack_require__(37);
+	    common = __webpack_require__(38);
 	    Syntax = common.Syntax;
 	
 	    function flattenBlockStatement(body) {
@@ -7303,7 +7304,7 @@
 
 
 /***/ },
-/* 55 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -7338,8 +7339,8 @@
 	    var Name, Syntax, common, escope, modified;
 	
 	    Name = 'transform-to-compound-assignment';
-	    escope = __webpack_require__(25);
-	    common = __webpack_require__(37);
+	    escope = __webpack_require__(26);
+	    common = __webpack_require__(38);
 	    Syntax = common.Syntax;
 	
 	    function equals(lhs, rhs) {
@@ -7444,7 +7445,7 @@
 
 
 /***/ },
-/* 56 */
+/* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -7479,7 +7480,7 @@
 	    var Name, Syntax, common, modified;
 	
 	    Name = 'transform-to-sequence-expression';
-	    common = __webpack_require__(37);
+	    common = __webpack_require__(38);
 	    Syntax = common.Syntax;
 	
 	    function transform(node) {
@@ -7594,7 +7595,7 @@
 
 
 /***/ },
-/* 57 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -7629,7 +7630,7 @@
 	    var Name, Syntax, common, modified;
 	
 	    Name = 'transform-branch-to-expression';
-	    common = __webpack_require__(37);
+	    common = __webpack_require__(38);
 	    Syntax = common.Syntax;
 	
 	    function transformBranchToExpression(tree, options) {
@@ -7746,7 +7747,7 @@
 
 
 /***/ },
-/* 58 */
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -7781,8 +7782,8 @@
 	    var Name, Syntax, common, escope, modified;
 	
 	    Name = 'transform-typeof-undefined';
-	    escope = __webpack_require__(25);
-	    common = __webpack_require__(37);
+	    escope = __webpack_require__(26);
+	    common = __webpack_require__(38);
 	    Syntax = common.Syntax;
 	
 	    function isUndefinedStringLiteral(node) {
@@ -7851,7 +7852,7 @@
 
 
 /***/ },
-/* 59 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -7886,9 +7887,9 @@
 	    var Name, Syntax, common, evaluator, escope, modified;
 	
 	    Name = 'reduce-sequence-expression';
-	    escope = __webpack_require__(25);
-	    common = __webpack_require__(37);
-	    evaluator = __webpack_require__(60);
+	    escope = __webpack_require__(26);
+	    common = __webpack_require__(38);
+	    evaluator = __webpack_require__(61);
 	    Syntax = common.Syntax;
 	
 	    function reduce(node) {
@@ -8049,7 +8050,7 @@
 
 
 /***/ },
-/* 60 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -8082,7 +8083,7 @@
 	
 	    var Syntax, common;
 	
-	    common = __webpack_require__(37);
+	    common = __webpack_require__(38);
 	    Syntax = common.Syntax;
 	
 	    // constant
@@ -8419,7 +8420,7 @@
 
 
 /***/ },
-/* 61 */
+/* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -8454,7 +8455,7 @@
 	    var Name, Syntax, common, modified;
 	
 	    Name = 'reduce-branch-jump';
-	    common = __webpack_require__(37);
+	    common = __webpack_require__(38);
 	    Syntax = common.Syntax;
 	
 	    function reduceLast(ary, index) {
@@ -8594,7 +8595,7 @@
 
 
 /***/ },
-/* 62 */
+/* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -8629,7 +8630,7 @@
 	    var Name, Syntax, common, modified;
 	
 	    Name = 'reduce-multiple-if-statements';
-	    common = __webpack_require__(37);
+	    common = __webpack_require__(38);
 	    Syntax = common.Syntax;
 	
 	    function reduceMultipleIfStatements(tree, options) {
@@ -8677,7 +8678,7 @@
 
 
 /***/ },
-/* 63 */
+/* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -8717,7 +8718,7 @@
 	
 	    Name = 'dead-code-elimination';
 	
-	    common = __webpack_require__(37);
+	    common = __webpack_require__(38);
 	    Syntax = common.Syntax;
 	
 	    function JumpTarget(node, status, type) {
@@ -9243,7 +9244,7 @@
 
 
 /***/ },
-/* 64 */
+/* 65 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -9278,9 +9279,9 @@
 	    var Name, Syntax, common, escope, evaluator, modified;
 	
 	    Name = 'remove-side-effect-free-expressions';
-	    escope = __webpack_require__(25);
-	    common = __webpack_require__(37);
-	    evaluator = __webpack_require__(60);
+	    escope = __webpack_require__(26);
+	    common = __webpack_require__(38);
+	    evaluator = __webpack_require__(61);
 	    Syntax = common.Syntax;
 	
 	    function reduce(node, scope, parent, isResultNeeded) {
@@ -9406,7 +9407,7 @@
 
 
 /***/ },
-/* 65 */
+/* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -9442,9 +9443,9 @@
 	    var Name, Syntax, common, evaluator, escope, modified;
 	
 	    Name = 'remove-context-sensitive-expressions';
-	    common = __webpack_require__(37);
-	    evaluator = __webpack_require__(60);
-	    escope = __webpack_require__(25);
+	    common = __webpack_require__(38);
+	    evaluator = __webpack_require__(61);
+	    escope = __webpack_require__(26);
 	    Syntax = common.Syntax;
 	
 	
@@ -9771,7 +9772,7 @@
 
 
 /***/ },
-/* 66 */
+/* 67 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -9806,8 +9807,8 @@
 	    var Name, Syntax, common, evaluator, modified;
 	
 	    Name = 'tree-based-constant-folding';
-	    common = __webpack_require__(37);
-	    evaluator = __webpack_require__(60);
+	    common = __webpack_require__(38);
+	    evaluator = __webpack_require__(61);
 	    Syntax = common.Syntax;
 	
 	
@@ -9971,7 +9972,7 @@
 
 
 /***/ },
-/* 67 */
+/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -10007,7 +10008,7 @@
 	
 	    Name = 'concatenate-variable-definition';
 	
-	    common = __webpack_require__(37);
+	    common = __webpack_require__(38);
 	    Syntax = common.Syntax;
 	
 	    function concatenateVariableDefinition(tree, options) {
@@ -10064,7 +10065,7 @@
 
 
 /***/ },
-/* 68 */
+/* 69 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -10099,9 +10100,9 @@
 	    var Name, Syntax, common, modified, escope, evaluator;
 	
 	    Name = 'drop-variable-definition';
-	    common = __webpack_require__(37);
-	    escope = __webpack_require__(25);
-	    evaluator = __webpack_require__(60);
+	    common = __webpack_require__(38);
+	    escope = __webpack_require__(26);
+	    evaluator = __webpack_require__(61);
 	    Syntax = common.Syntax;
 	
 	    function getCandidates(scope) {
@@ -10296,7 +10297,7 @@
 
 
 /***/ },
-/* 69 */
+/* 70 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -10331,9 +10332,9 @@
 	    var Name, Syntax, common, escope, evaluator, modified;
 	
 	    Name = 'remove-unreachable-branch';
-	    escope = __webpack_require__(25);
-	    common = __webpack_require__(37);
-	    evaluator = __webpack_require__(60);
+	    escope = __webpack_require__(26);
+	    common = __webpack_require__(38);
+	    evaluator = __webpack_require__(61);
 	    Syntax = common.Syntax;
 	
 	    function handleIfStatement(func, node) {
@@ -10498,7 +10499,7 @@
 
 
 /***/ },
-/* 70 */
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -10533,8 +10534,8 @@
 	    var Name, Syntax, Map, common, modified;
 	
 	    Name = 'eliminate-duplicate-function-declarations';
-	    common = __webpack_require__(37);
-	    Map = __webpack_require__ (52);
+	    common = __webpack_require__(38);
+	    Map = __webpack_require__ (53);
 	
 	    Syntax = common.Syntax;
 	
@@ -10665,7 +10666,7 @@
 
 
 /***/ },
-/* 71 */
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -10701,7 +10702,7 @@
 	    var Name, Syntax, common;
 	
 	    Name = 'transform-static-to-dynamic-property-access';
-	    common = __webpack_require__(37);
+	    common = __webpack_require__(38);
 	    Syntax = common.Syntax;
 	
 	    function transformStaticToDynamicPropertyAccess(tree, options) {
@@ -10765,7 +10766,7 @@
 
 
 /***/ },
-/* 72 */
+/* 73 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -10801,7 +10802,7 @@
 	    var Name, Syntax, common;
 	
 	    Name = 'transform-infinity';
-	    common = __webpack_require__(37);
+	    common = __webpack_require__(38);
 	    Syntax = common.Syntax;
 	
 	    function transformInfinity(tree, options) {
@@ -10839,7 +10840,7 @@
 
 
 /***/ },
-/* 73 */
+/* 74 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -10874,7 +10875,7 @@
 	    var Name, Syntax, common, modified;
 	
 	    Name = 'rewrite-boolean';
-	    common = __webpack_require__(37);
+	    common = __webpack_require__(38);
 	    Syntax = common.Syntax;
 	
 	    function isBooleanLiteral(node) {
@@ -10939,7 +10940,7 @@
 
 
 /***/ },
-/* 74 */
+/* 75 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -10974,7 +10975,7 @@
 	    var Name, Syntax, common, modified;
 	
 	    Name = 'rewrite-conditional-expression';
-	    common = __webpack_require__(37);
+	    common = __webpack_require__(38);
 	    Syntax = common.Syntax;
 	
 	    function rewrite(node) {
@@ -11017,7 +11018,7 @@
 
 
 /***/ },
-/* 75 */
+/* 76 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -11050,7 +11051,7 @@
 	    var Name, Syntax, common, modified;
 	
 	    Name = 'omit-parens-in-void-context-iife';
-	    common = __webpack_require__(37);
+	    common = __webpack_require__(38);
 	    Syntax = common.Syntax;
 	
 	    function isIIFE(node) {
@@ -11125,7 +11126,7 @@
 
 
 /***/ },
-/* 76 */
+/* 77 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -11160,7 +11161,7 @@
 	    var Name, Syntax, common;
 	
 	    Name = 'annotate-directive';
-	    common = __webpack_require__(37);
+	    common = __webpack_require__(38);
 	    Syntax = common.Syntax;
 	
 	    function isDirective(stmt) {
@@ -11298,7 +11299,7 @@
 
 
 /***/ },
-/* 77 */
+/* 78 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -11415,7 +11416,7 @@
 	};
 
 /***/ },
-/* 78 */
+/* 79 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/*
@@ -11485,8 +11486,8 @@
 	        FORMAT_MINIFY,
 	        FORMAT_DEFAULTS;
 	
-	    estraverse = __webpack_require__(79);
-	    esutils = __webpack_require__(30);
+	    estraverse = __webpack_require__(80);
+	    esutils = __webpack_require__(31);
 	
 	    Syntax = estraverse.Syntax;
 	
@@ -13969,7 +13970,7 @@
 	            if (!exports.browser) {
 	                // We assume environment is node.js
 	                // And prevent from including source-map by browserify
-	                SourceNode = __webpack_require__(80).SourceNode;
+	                SourceNode = __webpack_require__(81).SourceNode;
 	            } else {
 	                SourceNode = global.sourceMap.SourceNode;
 	            }
@@ -14016,7 +14017,7 @@
 	
 	    FORMAT_DEFAULTS = getDefaultOptions().format;
 	
-	    exports.version = __webpack_require__(92).version;
+	    exports.version = __webpack_require__(93).version;
 	    exports.generate = generate;
 	    exports.attachComments = estraverse.attachComments;
 	    exports.Precedence = updateDeeply({}, Precedence);
@@ -14029,7 +14030,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 79 */
+/* 80 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -14880,7 +14881,7 @@
 
 
 /***/ },
-/* 80 */
+/* 81 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -14888,13 +14889,13 @@
 	 * Licensed under the New BSD license. See LICENSE.txt or:
 	 * http://opensource.org/licenses/BSD-3-Clause
 	 */
-	exports.SourceMapGenerator = __webpack_require__(81).SourceMapGenerator;
-	exports.SourceMapConsumer = __webpack_require__(87).SourceMapConsumer;
-	exports.SourceNode = __webpack_require__(91).SourceNode;
+	exports.SourceMapGenerator = __webpack_require__(82).SourceMapGenerator;
+	exports.SourceMapConsumer = __webpack_require__(88).SourceMapConsumer;
+	exports.SourceNode = __webpack_require__(92).SourceNode;
 
 
 /***/ },
-/* 81 */
+/* 82 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* -*- Mode: js; js-indent-level: 2; -*- */
@@ -14908,10 +14909,10 @@
 	}
 	!(__WEBPACK_AMD_DEFINE_RESULT__ = function (require, exports, module) {
 	
-	  var base64VLQ = __webpack_require__(82);
-	  var util = __webpack_require__(84);
-	  var ArraySet = __webpack_require__(85).ArraySet;
-	  var MappingList = __webpack_require__(86).MappingList;
+	  var base64VLQ = __webpack_require__(83);
+	  var util = __webpack_require__(85);
+	  var ArraySet = __webpack_require__(86).ArraySet;
+	  var MappingList = __webpack_require__(87).MappingList;
 	
 	  /**
 	   * An instance of the SourceMapGenerator represents a source map which is
@@ -15300,7 +15301,7 @@
 
 
 /***/ },
-/* 82 */
+/* 83 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* -*- Mode: js; js-indent-level: 2; -*- */
@@ -15344,7 +15345,7 @@
 	}
 	!(__WEBPACK_AMD_DEFINE_RESULT__ = function (require, exports, module) {
 	
-	  var base64 = __webpack_require__(83);
+	  var base64 = __webpack_require__(84);
 	
 	  // A single base 64 digit can contain 6 bits of data. For the base 64 variable
 	  // length quantities we use in the source map spec, the first bit is the sign,
@@ -15448,7 +15449,7 @@
 
 
 /***/ },
-/* 83 */
+/* 84 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* -*- Mode: js; js-indent-level: 2; -*- */
@@ -15496,7 +15497,7 @@
 
 
 /***/ },
-/* 84 */
+/* 85 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* -*- Mode: js; js-indent-level: 2; -*- */
@@ -15821,7 +15822,7 @@
 
 
 /***/ },
-/* 85 */
+/* 86 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* -*- Mode: js; js-indent-level: 2; -*- */
@@ -15835,7 +15836,7 @@
 	}
 	!(__WEBPACK_AMD_DEFINE_RESULT__ = function (require, exports, module) {
 	
-	  var util = __webpack_require__(84);
+	  var util = __webpack_require__(85);
 	
 	  /**
 	   * A data structure which is a combination of an array and a set. Adding a new
@@ -15924,7 +15925,7 @@
 
 
 /***/ },
-/* 86 */
+/* 87 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* -*- Mode: js; js-indent-level: 2; -*- */
@@ -15938,7 +15939,7 @@
 	}
 	!(__WEBPACK_AMD_DEFINE_RESULT__ = function (require, exports, module) {
 	
-	  var util = __webpack_require__(84);
+	  var util = __webpack_require__(85);
 	
 	  /**
 	   * Determine whether mappingB is after mappingA with respect to generated
@@ -16016,7 +16017,7 @@
 
 
 /***/ },
-/* 87 */
+/* 88 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* -*- Mode: js; js-indent-level: 2; -*- */
@@ -16030,7 +16031,7 @@
 	}
 	!(__WEBPACK_AMD_DEFINE_RESULT__ = function (require, exports, module) {
 	
-	  var util = __webpack_require__(84);
+	  var util = __webpack_require__(85);
 	
 	  function SourceMapConsumer(aSourceMap) {
 	    var sourceMap = aSourceMap;
@@ -16040,16 +16041,16 @@
 	
 	    // We do late requires because the subclasses require() this file.
 	    if (sourceMap.sections != null) {
-	      var indexedSourceMapConsumer = __webpack_require__(88);
+	      var indexedSourceMapConsumer = __webpack_require__(89);
 	      return new indexedSourceMapConsumer.IndexedSourceMapConsumer(sourceMap);
 	    } else {
-	      var basicSourceMapConsumer = __webpack_require__(90);
+	      var basicSourceMapConsumer = __webpack_require__(91);
 	      return new basicSourceMapConsumer.BasicSourceMapConsumer(sourceMap);
 	    }
 	  }
 	
 	  SourceMapConsumer.fromSourceMap = function(aSourceMap) {
-	    var basicSourceMapConsumer = __webpack_require__(90);
+	    var basicSourceMapConsumer = __webpack_require__(91);
 	    return basicSourceMapConsumer.BasicSourceMapConsumer
 	            .fromSourceMap(aSourceMap);
 	  }
@@ -16244,7 +16245,7 @@
 
 
 /***/ },
-/* 88 */
+/* 89 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* -*- Mode: js; js-indent-level: 2; -*- */
@@ -16258,10 +16259,10 @@
 	}
 	!(__WEBPACK_AMD_DEFINE_RESULT__ = function (require, exports, module) {
 	
-	  var util = __webpack_require__(84);
-	  var binarySearch = __webpack_require__(89);
-	  var SourceMapConsumer = __webpack_require__(87).SourceMapConsumer;
-	  var BasicSourceMapConsumer = __webpack_require__(90).BasicSourceMapConsumer;
+	  var util = __webpack_require__(85);
+	  var binarySearch = __webpack_require__(90);
+	  var SourceMapConsumer = __webpack_require__(88).SourceMapConsumer;
+	  var BasicSourceMapConsumer = __webpack_require__(91).BasicSourceMapConsumer;
 	
 	  /**
 	   * An IndexedSourceMapConsumer instance represents a parsed source map which
@@ -16553,7 +16554,7 @@
 
 
 /***/ },
-/* 89 */
+/* 90 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* -*- Mode: js; js-indent-level: 2; -*- */
@@ -16639,7 +16640,7 @@
 
 
 /***/ },
-/* 90 */
+/* 91 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* -*- Mode: js; js-indent-level: 2; -*- */
@@ -16653,11 +16654,11 @@
 	}
 	!(__WEBPACK_AMD_DEFINE_RESULT__ = function (require, exports, module) {
 	
-	  var util = __webpack_require__(84);
-	  var binarySearch = __webpack_require__(89);
-	  var ArraySet = __webpack_require__(85).ArraySet;
-	  var base64VLQ = __webpack_require__(82);
-	  var SourceMapConsumer = __webpack_require__(87).SourceMapConsumer;
+	  var util = __webpack_require__(85);
+	  var binarySearch = __webpack_require__(90);
+	  var ArraySet = __webpack_require__(86).ArraySet;
+	  var base64VLQ = __webpack_require__(83);
+	  var SourceMapConsumer = __webpack_require__(88).SourceMapConsumer;
 	
 	  /**
 	   * A BasicSourceMapConsumer instance represents a parsed source map which we can
@@ -17065,7 +17066,7 @@
 
 
 /***/ },
-/* 91 */
+/* 92 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* -*- Mode: js; js-indent-level: 2; -*- */
@@ -17079,8 +17080,8 @@
 	}
 	!(__WEBPACK_AMD_DEFINE_RESULT__ = function (require, exports, module) {
 	
-	  var SourceMapGenerator = __webpack_require__(81).SourceMapGenerator;
-	  var util = __webpack_require__(84);
+	  var SourceMapGenerator = __webpack_require__(82).SourceMapGenerator;
+	  var util = __webpack_require__(85);
 	
 	  // Matches a Windows-style `\r\n` newline or a `\n` newline used by all other
 	  // operating systems these days (capturing the result).
@@ -17485,7 +17486,7 @@
 
 
 /***/ },
-/* 92 */
+/* 93 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -17606,7 +17607,6 @@
 	};
 
 /***/ },
-/* 93 */,
 /* 94 */,
 /* 95 */,
 /* 96 */,
@@ -17616,7 +17616,8 @@
 /* 100 */,
 /* 101 */,
 /* 102 */,
-/* 103 */
+/* 103 */,
+/* 104 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*! Hammer.JS - v2.0.7 - 2016-04-22
@@ -20265,15 +20266,15 @@
 
 
 /***/ },
-/* 104 */
+/* 105 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(105);
+	__webpack_require__(106);
 	module.exports = angular;
 
 
 /***/ },
-/* 105 */
+/* 106 */
 /***/ function(module, exports) {
 
 	/**
@@ -52046,15 +52047,15 @@
 	!window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
 
 /***/ },
-/* 106 */
+/* 107 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(107);
+	__webpack_require__(108);
 	module.exports = 'ngRoute';
 
 
 /***/ },
-/* 107 */
+/* 108 */
 /***/ function(module, exports) {
 
 	/**
@@ -53129,15 +53130,15 @@
 
 
 /***/ },
-/* 108 */
+/* 109 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(109);
+	__webpack_require__(110);
 	module.exports = 'ngAnimate';
 
 
 /***/ },
-/* 109 */
+/* 110 */
 /***/ function(module, exports) {
 
 	/**
@@ -57282,15 +57283,15 @@
 
 
 /***/ },
-/* 110 */
+/* 111 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(111);
+	__webpack_require__(112);
 	module.exports = 'ngAria';
 
 
 /***/ },
-/* 111 */
+/* 112 */
 /***/ function(module, exports) {
 
 	/**
@@ -57701,15 +57702,15 @@
 
 
 /***/ },
-/* 112 */
+/* 113 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(113);
+	__webpack_require__(114);
 	module.exports = 'ngSanitize';
 
 
 /***/ },
-/* 113 */
+/* 114 */
 /***/ function(module, exports) {
 
 	/**
@@ -58453,25 +58454,25 @@
 
 
 /***/ },
-/* 114 */
+/* 115 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Should already be required, here for clarity
-	__webpack_require__(104);
+	__webpack_require__(105);
 	
 	// Load Angular and dependent libs
-	__webpack_require__(108);
-	__webpack_require__(110);
+	__webpack_require__(109);
+	__webpack_require__(111);
 	
 	// Now load Angular Material
-	__webpack_require__(115);
+	__webpack_require__(116);
 	
 	// Export namespace
 	module.exports = 'ngMaterial';
 
 
 /***/ },
-/* 115 */
+/* 116 */
 /***/ function(module, exports) {
 
 	/*!
@@ -91426,7 +91427,7 @@
 	})(window, window.angular);;window.ngMaterial={version:{full: "1.1.1"}};
 
 /***/ },
-/* 116 */
+/* 117 */
 /***/ function(module, exports) {
 
 	/*
@@ -91468,7 +91469,7 @@
 
 
 /***/ },
-/* 117 */
+/* 118 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -91624,15 +91625,15 @@
 
 
 /***/ },
-/* 118 */
+/* 119 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(119);
+	__webpack_require__(120);
 	module.exports = 'ngCookies';
 
 
 /***/ },
-/* 119 */
+/* 120 */
 /***/ function(module, exports) {
 
 	/**
@@ -91960,15 +91961,15 @@
 
 
 /***/ },
-/* 120 */
+/* 121 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(121);
+	__webpack_require__(122);
 	module.exports = 'LocalStorageModule';
 
 
 /***/ },
-/* 121 */
+/* 122 */
 /***/ function(module, exports) {
 
 	/**

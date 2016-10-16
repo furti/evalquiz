@@ -477,7 +477,7 @@ webpackJsonp([0],[
 	            }
 	            map[riddle.id] = angular.copy(riddle.state);
 	        });
-	        if (!this.dataStorageAllowed) {
+	        if (this.dataStorageAllowed) {
 	            this.storage.set(STATE_KEY, map);
 	        }
 	    };
@@ -489,7 +489,7 @@ webpackJsonp([0],[
 	        return this.storage.get(PATH_KEY) || '/riddles/' + this.loadLastRiddleId();
 	    };
 	    StorageService.prototype.savePath = function (path) {
-	        if (!this.dataStorageAllowed) {
+	        if (this.dataStorageAllowed) {
 	            this.storage.set(PATH_KEY, path);
 	        }
 	    };
@@ -497,7 +497,7 @@ webpackJsonp([0],[
 	        return this.storage.get(LAST_RIDDLE_ID_KEY) || 'intro';
 	    };
 	    StorageService.prototype.saveLastRiddleId = function (lastRiddleId) {
-	        if (!this.dataStorageAllowed) {
+	        if (this.dataStorageAllowed) {
 	            this.storage.set(LAST_RIDDLE_ID_KEY, lastRiddleId);
 	        }
 	    };

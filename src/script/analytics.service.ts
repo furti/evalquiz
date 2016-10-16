@@ -6,8 +6,12 @@ import { Injectable } from './utils';
 
 declare function ga(...args: any[]): void;
 
+const ID: string = 'UA-85753025-1';
+
 @Injectable(module, 'analyticsService')
 export class AnalyticsService {
+
+    private created: boolean = false;
 
     get active(): boolean {
         return window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
@@ -25,7 +29,21 @@ export class AnalyticsService {
         this.send('event', category, action, label, value);
     }
 
+    create(id: string) {
+        if (this.active) {
+            ga('create', id, 'auto');
+        }
+        else {
+            console.info('Analytics initialized.');
+        }
+    }
+
     send(...args: any[]): void {
+        if (!this.created) {
+            this.create(ID);
+            this.created = true;
+        }
+
         if (this.active) {
             ga('send', ...args);
         }

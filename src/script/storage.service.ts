@@ -51,7 +51,7 @@ export class StorageService {
             map[riddle.id] = angular.copy(riddle.state);
         });
 
-        if (!this.dataStorageAllowed) {
+        if (this.dataStorageAllowed) {
             this.storage.set(STATE_KEY, map);
         }
     }
@@ -63,7 +63,7 @@ export class StorageService {
      */
     clear(): void {
         this.storage.clearAll();
-        
+
         this._dataStorageAllowed = undefined;
     }
 
@@ -86,7 +86,7 @@ export class StorageService {
      * @memberOf StorageService
      */
     savePath(path: string): void {
-        if (!this.dataStorageAllowed) {
+        if (this.dataStorageAllowed) {
             this.storage.set(PATH_KEY, path);
         }
     }
@@ -110,7 +110,7 @@ export class StorageService {
      * @memberOf StorageService
      */
     saveLastRiddleId(lastRiddleId: string): void {
-        if (!this.dataStorageAllowed) {
+        if (this.dataStorageAllowed) {
             this.storage.set(LAST_RIDDLE_ID_KEY, lastRiddleId);
         }
     }

@@ -28,7 +28,7 @@
         "shortDescription": "Help the dwarfs to save their lives.",
         "minScoreToSolve": 1,
         "location": "dwarfs",
-        "dependsOn": ["defaultvalue"]
+        "dependsOn": ["gauss"]
     },
     {
         "id": "dogs",

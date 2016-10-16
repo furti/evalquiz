@@ -9,13 +9,13 @@
 	</p>
 
 	<div class="buttons">
-		<md-button class="md-fab md-primary">
+		<md-button class="md-fab md-primary" aria-label="Print">
 			<md-icon ng-click="$ctrl.print()"><i class="fa fa-print"></i></md-icon>
 		</md-button>
 
 		<br />
 
-		<md-button class="md-fab md-accent">
+		<md-button class="md-fab md-accent" aria-label="Back">
 			<md-icon ng-click="$ctrl.back()"><i class="fa fa-arrow-left"></i></md-icon>
 		</md-button>
 	</div>
@@ -30,7 +30,7 @@
 
 		<p class="markdown" btf-markdown="riddle.shortDescription"></p>
 
-		<div ng-repeat="(score, code) in $ctrl.code(riddle)" class="solution">
+		<div ng-repeat="(score, code) in $ctrl.code(riddle)" class="solution clear">
 			<stars count="score"></stars>
 			<highlighter code="code"></highlighter>
 		</div>

@@ -1,12 +1,11 @@
 # TODO
 
+* Move the goals to the info and add an additional description.
+* Change the dwarf riddle to be solved with 2 stars
+
 # Bugs
 
-* Exceptions and error do not stop the execution.
-* The stars are missing in the list of riddles.
-* Compilererror does not always cancel the execution.
 * Variables in the invokeFn call should get annonymized
-* Tab-Width in editor is not set
 
 # Backlog
 

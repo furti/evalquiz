@@ -2,6 +2,7 @@
 
 let module = angular.module('evalquiz');
 
+import { AnalyticsService } from './analytics.service';
 import { Riddle, RiddleDetail, RiddleState, Member } from './riddle';
 import { StorageService } from './storage.service';
 import { UIService } from './ui.service';

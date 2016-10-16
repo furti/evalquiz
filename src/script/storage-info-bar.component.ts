@@ -12,7 +12,6 @@ class Controller {
     static $inject = ['storageService'];
 
     constructor(private storageService: StorageService) {
-        console.log("hier");
     }
 
     get dataStorageAllowed(): boolean {

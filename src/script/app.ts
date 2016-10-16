@@ -6,6 +6,7 @@
 
 let module = angular.module('evalquiz', ['ngRoute', 'ngMaterial', 'ui.codemirror', 'LocalStorageModule', 'btford.markdown']);
 
+import './analytics.service';
 import {EvalQuizService} from './evalquiz.service';
 import './overview.component';
 import './page.component';

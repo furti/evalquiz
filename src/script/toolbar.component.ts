@@ -2,6 +2,7 @@
 
 let module = angular.module('evalquiz');
 
+import { AnalyticsService } from './analytics.service';
 import './credits.dialog';
 import { EvalQuizService } from './evalquiz.service';
 import { Riddle } from './riddle';
@@ -17,12 +18,12 @@ import { Component, DialogService } from './utils';
     }
 })
 class Controller {
-    static $inject = ['evalQuizService', 'riddleService', 'creditsDialog', 'riddleListDialog'];
+    static $inject = ['evalQuizService', 'riddleService', 'creditsDialog', 'riddleListDialog', 'analyticsService'];
 
     riddles: Riddle[];
     selectedRiddle: Riddle;
 
-    constructor(private evalQuizService: EvalQuizService, private riddleService: RiddleService, private creditsDialog: DialogService, private riddleListDialog: DialogService) {
+    constructor(private evalQuizService: EvalQuizService, private riddleService: RiddleService, private creditsDialog: DialogService, private riddleListDialog: DialogService, private analyticsService: AnalyticsService) {
     }
 
     get solved(): boolean {
@@ -54,6 +55,7 @@ class Controller {
     }
 
     gotoRiddle(riddleId: string): void {
+        this.analyticsService.event('navigation', 'next-riddle', riddleId);
         this.evalQuizService.gotoRiddle(riddleId);
     }
 

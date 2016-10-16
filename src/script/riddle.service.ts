@@ -2,6 +2,7 @@
 
 let module = angular.module('evalquiz');
 
+import { AnalyticsService } from './analytics.service';
 import { ConsoleService, ConsoleLogItem } from './console.service';
 import { EvalQuizService } from './evalquiz.service';
 import { Riddle, RiddleDetail, RiddleState, Member } from './riddle';
@@ -12,11 +13,11 @@ import { Injectable } from './utils';
 @Injectable(module, 'riddleService')
 export class RiddleService {
 
-    static $inject = ['evalQuizService', '$http', '$q', '$timeout', 'consoleService', 'uiService'];
+    static $inject = ['evalQuizService', '$http', '$q', '$timeout', 'consoleService', 'uiService', 'analyticsService'];
 
     private runner: RiddleRunner | null = null;
 
-    constructor(protected evalQuizService: EvalQuizService, protected $http: ng.IHttpService, protected $q: ng.IQService, protected $timeout: ng.ITimeoutService, protected consoleService: ConsoleService, protected uiService: UIService) {
+    constructor(protected evalQuizService: EvalQuizService, protected $http: ng.IHttpService, protected $q: ng.IQService, protected $timeout: ng.ITimeoutService, protected consoleService: ConsoleService, protected uiService: UIService, private analyticsService: AnalyticsService) {
     }
 
     prepare(riddle: Riddle): angular.IPromise<Riddle> {
@@ -166,6 +167,8 @@ export class RiddleService {
 
                 let passed: boolean = result.score > 0;
 
+                this.analyticsService.event('riddle', 'solve', riddle.id, result.score);
+
                 if (!passed) {
                     this.consoleService.log().withContentClass('center fade-in').markdown('## Tests failed\n\nYour code did not pass all tests.').addClass('error');
 
@@ -292,7 +295,7 @@ export class RiddleService {
             });
 
             console.error('Failed to compile and run code:', err);
-            
+
             deferred.reject(err);
         }
 

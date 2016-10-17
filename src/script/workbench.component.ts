@@ -2,7 +2,6 @@
 
 let module = angular.module('evalquiz');
 
-import { AnalyticsService } from './analytics.service';
 import './api-info.component';
 import { ConsoleService, ConsoleLogItem } from './console.service';
 import { EvalQuizService } from './evalquiz.service';
@@ -19,13 +18,13 @@ import { Component, Injectable, DialogService, Dialog } from './utils';
     }
 })
 class WorkbenchComponent {
-    static $inject = ['evalQuizService', 'riddleService', 'consoleService', 'uiService', 'analyticsService'];
+    static $inject = ['evalQuizService', 'riddleService', 'consoleService', 'uiService'];
 
     riddle: Riddle;
     editorOptions: any;
     selectedTab: number = 0;
 
-    constructor(private evalQuizService: EvalQuizService, private riddleService: RiddleService, private consoleService: ConsoleService, private uiService: UIService, private analyticsService: AnalyticsService) {
+    constructor(private evalQuizService: EvalQuizService, private riddleService: RiddleService, private consoleService: ConsoleService, private uiService: UIService) {
 
         // After the value of the editor is set we mark the first and last line as readonly
         var cmChange = (editor: any, change: any) => {

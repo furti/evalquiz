@@ -1,6 +1,5 @@
 /// <reference path="./index.d.ts" />
 
-import { AnalyticsService } from './analytics.service';
 import { EvalQuizService } from './evalquiz.service';
 import './highlighter.component.ts';
 import { Riddle } from './riddle';
@@ -11,12 +10,12 @@ import { UIService } from './ui.service';
 let module = angular.module('evalquiz');
 
 class OverviewComponent {
-    static $inject = ['$routeParams', 'evalQuizService', 'riddleService', 'uiService', 'analyticsService'];
+    static $inject = ['$routeParams', 'evalQuizService', 'riddleService', 'uiService'];
 
     protected riddles: Riddle[];
     protected totalScore: number;
 
-    constructor(private $routeParams: ng.route.IRouteParamsService, private evalQuizService: EvalQuizService, private riddleService: RiddleService, private uiService: UIService, private analyticsService: AnalyticsService) {
+    constructor(private $routeParams: ng.route.IRouteParamsService, private evalQuizService: EvalQuizService, private riddleService: RiddleService, private uiService: UIService) {
         this.evalQuizService.whenInitialized(() => {
             this.init();
         });
@@ -25,8 +24,6 @@ class OverviewComponent {
     init(): void {
         this.riddles = this.evalQuizService.getRiddles();
         this.totalScore = this.riddles.map(riddle => riddle.state.score).reduce((a, b) => a + b, 0);
-
-        this.analyticsService.pageview('/overview');
     }
 
     isSolved(riddle: Riddle): boolean {

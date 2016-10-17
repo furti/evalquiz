@@ -2,7 +2,6 @@
 
 let module = angular.module('evalquiz');
 
-import { AnalyticsService } from './analytics.service';
 import { EvalQuizService } from './evalquiz.service';
 import { Riddle } from './riddle';
 import { RiddleService } from './riddle.service';
@@ -12,16 +11,14 @@ import { UIService } from './ui.service';
 import './workbench.component';
 
 class PageComponent {
-    static $inject = ['$routeParams', 'evalQuizService', 'riddleService', 'uiService', 'analyticsService'];
+    static $inject = ['$routeParams', 'evalQuizService', 'riddleService', 'uiService'];
 
     protected selectedRiddle: Riddle;
 
-    constructor(private $routeParams: ng.route.IRouteParamsService, private evalQuizService: EvalQuizService, private riddleService: RiddleService, private uiService: UIService, private analyticsService: AnalyticsService) {
+    constructor(private $routeParams: ng.route.IRouteParamsService, private evalQuizService: EvalQuizService, private riddleService: RiddleService, private uiService: UIService) {
         this.evalQuizService.whenInitialized(() => {
             let riddleId = this.$routeParams['riddleId'];
             let riddle = this.evalQuizService.getRiddle(riddleId);
-
-            this.analyticsService.pageview('/riddles/' + riddleId);
 
             if (!riddle) {
                 this.uiService.alert('Error', `Unknown riddle: ${riddleId}`).then(() => {

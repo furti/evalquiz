@@ -2,7 +2,6 @@
 
 let module = angular.module('evalquiz');
 
-import { AnalyticsService } from './analytics.service';
 import { EvalQuizService } from './evalquiz.service';
 import { RiddleService } from './riddle.service';
 import { Riddle } from './riddle';
@@ -16,12 +15,12 @@ import { Component } from './utils';
     }
 })
 class Controller {
-    static $inject = ['evalQuizService', 'riddleService', '$mdDialog', '$timeout', 'analyticsService'];
+    static $inject = ['evalQuizService', 'riddleService', '$mdDialog', '$timeout'];
 
     protected riddles: Riddle[];
     protected selectedRiddle: Riddle;
 
-    constructor(protected evalQuizService: EvalQuizService, protected riddleService: RiddleService, protected $mdDialog: angular.material.IDialogService, protected $timeout: ng.ITimeoutService, protected analyticsService: AnalyticsService) {
+    constructor(protected evalQuizService: EvalQuizService, protected riddleService: RiddleService, protected $mdDialog: angular.material.IDialogService, protected $timeout: ng.ITimeoutService) {
     }
 
     isSolved(riddle: Riddle): boolean {
@@ -33,8 +32,6 @@ class Controller {
     }
 
     gotoRiddle(riddleId: string): void {
-        this.analyticsService.event('navigation', 'goto-riddle', riddleId);
-
         this.$timeout(() => {
             this.$mdDialog.hide();
             this.evalQuizService.gotoRiddle(riddleId);

@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var Coin = (function () {
     function Coin() {
     }
@@ -196,7 +197,7 @@ var Suite = (function () {
         this.goldCoins = [];
         this.leadCoins = [];
         this.selected = undefined;
-        var _loop_1 = function(i) {
+        var _loop_1 = function (i) {
             var coins = [];
             for (var j = (numberOfCoins || Math.floor(Math.random() * 150 + 100)); j > 0; j--) {
                 coins.push(new Coin());
@@ -237,13 +238,13 @@ var Suite = (function () {
                 this_1.leadSacks.push(sack);
                 (_b = this_1.leadCoins).push.apply(_b, coins);
             }
+            var _a, _b;
         };
         var this_1 = this;
         for (var i = 0; i < numberOfSacks; i++) {
             _loop_1(i);
         }
         return index;
-        var _a, _b;
     };
     Suite.prototype.verify = function (selected, weightings, bonusTest) {
         var set = this.isolate(selected);

@@ -331,7 +331,7 @@ export class Suite {
             },
             1, () => {
                 this.stage.renderer = (g: Graphics) => {
-                    let anim = Math.floor(this.timestamp / 50);
+                    let anim = Math.floor((this.timestamp || 0) / 50);
                     let dogA = this.distanceA;
                     let mirrorA = false;
                     let remaining = this.totalDistance;

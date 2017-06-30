@@ -16,5 +16,5 @@ When you think your code may work, click on `Solve` button to run the tests.
 
 #### Lets try an easy example
 
-Mary has `a` apples and `b` bananas. How may fruits does she have?
+Mary has `a` apples and `b` bananas. How many fruits does she have?
 

@@ -252,7 +252,7 @@ export class Suite {
             });
     }
 
-    write(day: Day): angular.IPromise<void> {
+    write(day: Day): angular.IPromise<void | void[]> {
         let visuals = day.data.map(v => {
             return {
                 text: v.toString(),

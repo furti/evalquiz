@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var PIXEL_TO_METERS = 0.025;
 var Graphics = (function () {
     function Graphics(stage, ctx, scale) {
@@ -104,7 +105,7 @@ var Suite = (function () {
     Suite.prototype.load = function () {
         var _this = this;
         var deferred = this.context.defer();
-        var _loop_1 = function(name_1) {
+        var _loop_1 = function (name_1) {
             if (this_1.images[name_1] === null) {
                 this_1.loading++;
                 var image = this_1.createImage();
@@ -270,7 +271,7 @@ var Suite = (function () {
             });
         }, 1, function () {
             _this.stage.renderer = function (g) {
-                var anim = Math.floor(_this.timestamp / 50);
+                var anim = Math.floor((_this.timestamp || 0) / 50);
                 var dogA = _this.distanceA;
                 var mirrorA = false;
                 var remaining = _this.totalDistance;

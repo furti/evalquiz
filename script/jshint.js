@@ -1,4 +1,4 @@
-/*! 2.9.3 */
+/*! 2.9.5 */
 var JSHINT;
 if (typeof window === 'undefined') window = {};
 (function () {
@@ -704,31 +704,6 @@ function isUndefined(arg) {
 }
 
 },{}],6:[function(require,module,exports){
-if (typeof Object.create === 'function') {
-  // implementation from standard node.js 'util' module
-  module.exports = function inherits(ctor, superCtor) {
-    ctor.super_ = superCtor
-    ctor.prototype = Object.create(superCtor.prototype, {
-      constructor: {
-        value: ctor,
-        enumerable: false,
-        writable: true,
-        configurable: true
-      }
-    });
-  };
-} else {
-  // old school shim for old browsers
-  module.exports = function inherits(ctor, superCtor) {
-    ctor.super_ = superCtor
-    var TempCtor = function () {}
-    TempCtor.prototype = superCtor.prototype
-    ctor.prototype = new TempCtor()
-    ctor.prototype.constructor = ctor
-  }
-}
-
-},{}],7:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -787,6 +762,31 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 process.umask = function() { return 0; };
+
+},{}],7:[function(require,module,exports){
+if (typeof Object.create === 'function') {
+  // implementation from standard node.js 'util' module
+  module.exports = function inherits(ctor, superCtor) {
+    ctor.super_ = superCtor
+    ctor.prototype = Object.create(superCtor.prototype, {
+      constructor: {
+        value: ctor,
+        enumerable: false,
+        writable: true,
+        configurable: true
+      }
+    });
+  };
+} else {
+  // old school shim for old browsers
+  module.exports = function inherits(ctor, superCtor) {
+    ctor.super_ = superCtor
+    var TempCtor = function () {}
+    TempCtor.prototype = superCtor.prototype
+    ctor.prototype = new TempCtor()
+    ctor.prototype.constructor = ctor
+  }
+}
 
 },{}],8:[function(require,module,exports){
 module.exports = function isBuffer(arg) {
@@ -1385,7 +1385,7 @@ function hasOwnProperty(obj, prop) {
 }
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./support/isBuffer":8,"_process":7,"inherits":6}],10:[function(require,module,exports){
+},{"./support/isBuffer":8,"_process":6,"inherits":7}],10:[function(require,module,exports){
 (function (global){
 /*global window, global*/
 var util = require("util")
@@ -13695,6 +13695,14 @@ var Context = {
   Template: 2
 };
 
+function isHex(str) {
+  return /^[0-9a-fA-F]+$/.test(str);
+}
+
+function isHexDigit(str) {
+  return str.length === 1 && isHex(str);
+}
+
 // Object that handles postponed lexing verifications that checks the parsed
 // environment state.
 
@@ -14032,7 +14040,7 @@ Lexer.prototype = {
    * also recognizes JSHint- and JSLint-specific comments such as
    * /*jshint, /*jslint, /*globals and so on.
    */
-  scanComments: function() {
+  scanComments: function(checks) {
     var ch1 = this.peek();
     var ch2 = this.peek(1);
     var rest = this.input.substr(2);
@@ -14169,7 +14177,7 @@ Lexer.prototype = {
 
           // If we hit EOF and our comment is still unclosed,
           // trigger an error and end the comment implicitly.
-          if (!this.nextLine()) {
+          if (!this.nextLine(checks)) {
             this.trigger("error", {
               code: "E017",
               line: startLine,
@@ -14240,10 +14248,6 @@ Lexer.prototype = {
       return isNonAsciiIdentifierStart(code) || nonAsciiIdentifierPartTable.indexOf(code) > -1;
     }
 
-    function isHexDigit(str) {
-      return (/^[0-9a-fA-F]$/).test(str);
-    }
-
     var readUnicodeEscapeSequence = function() {
       /*jshint validthis:true */
       index += 1;
@@ -14252,18 +14256,16 @@ Lexer.prototype = {
         return null;
       }
 
-      var ch1 = this.peek(index + 1);
-      var ch2 = this.peek(index + 2);
-      var ch3 = this.peek(index + 3);
-      var ch4 = this.peek(index + 4);
+      var sequence = this.peek(index + 1) + this.peek(index + 2) +
+        this.peek(index + 3) + this.peek(index + 4);
       var code;
 
-      if (isHexDigit(ch1) && isHexDigit(ch2) && isHexDigit(ch3) && isHexDigit(ch4)) {
-        code = parseInt(ch1 + ch2 + ch3 + ch4, 16);
+      if (isHex(sequence)) {
+        code = parseInt(sequence, 16);
 
         if (asciiIdentifierPartTable[code] || isNonAsciiIdentifierPart(code)) {
           index += 5;
-          return "\\u" + ch1 + ch2 + ch3 + ch4;
+          return "\\u" + sequence;
         }
 
         return null;
@@ -14375,7 +14377,7 @@ Lexer.prototype = {
    * This method's implementation was heavily influenced by the
    * scanNumericLiteral function in the Esprima parser's source code.
    */
-  scanNumericLiteral: function() {
+  scanNumericLiteral: function(checks) {
     var index = 0;
     var value = "";
     var length = this.input.length;
@@ -14395,10 +14397,6 @@ Lexer.prototype = {
 
     function isBinaryDigit(str) {
       return (/^[01]$/).test(str);
-    }
-
-    function isHexDigit(str) {
-      return (/^[0-9a-fA-F]$/).test(str);
     }
 
     function isIdentifierStart(ch) {
@@ -14433,12 +14431,17 @@ Lexer.prototype = {
           base = 8;
 
           if (!state.inES6(true)) {
-            this.trigger("warning", {
-              code: "W119",
-              line: this.line,
-              character: this.char,
-              data: [ "Octal integer literal", "6" ]
-            });
+            this.triggerAsync(
+              "warning",
+              {
+                code: "W119",
+                line: this.line,
+                character: this.char,
+                data: [ "Octal integer literal", "6" ]
+              },
+              checks,
+              function() { return true; }
+            );
           }
 
           index += 1;
@@ -14451,12 +14454,17 @@ Lexer.prototype = {
           base = 2;
 
           if (!state.inES6(true)) {
-            this.trigger("warning", {
-              code: "W119",
-              line: this.line,
-              character: this.char,
-              data: [ "Binary integer literal", "6" ]
-            });
+            this.triggerAsync(
+              "warning",
+              {
+                code: "W119",
+                line: this.line,
+                character: this.char,
+                data: [ "Binary integer literal", "6" ]
+              },
+              checks,
+              function() { return true; }
+            );
           }
 
           index += 1;
@@ -14629,15 +14637,32 @@ Lexer.prototype = {
       }, checks,
       function() { return n >= 0 && n <= 7 && state.isStrict(); });
       break;
+    case "1":
+    case "2":
+    case "3":
+    case "4":
+    case "5":
+    case "6":
+    case "7":
+      char = "\\" + char;
+      this.triggerAsync("warning", {
+        code: "W115",
+        line: this.line,
+        character: this.char
+      }, checks,
+      function() { return state.isStrict(); });
+      break;
     case "u":
-      var hexCode = this.input.substr(1, 4);
-      var code = parseInt(hexCode, 16);
-      if (isNaN(code)) {
+      var sequence = this.input.substr(1, 4);
+      var code = parseInt(sequence, 16);
+      if (!isHex(sequence)) {
+        // This condition unequivocally describes a syntax error.
+        // TODO: Re-factor as an "error" (not a "warning").
         this.trigger("warning", {
           code: "W052",
           line: this.line,
           character: this.char,
-          data: [ "u" + hexCode ]
+          data: [ "u" + sequence ]
         });
       }
       char = String.fromCharCode(code);
@@ -14699,12 +14724,17 @@ Lexer.prototype = {
 
     if (this.peek() === "`") {
       if (!state.inES6(true)) {
-        this.trigger("warning", {
-          code: "W119",
-          line: this.line,
-          character: this.char,
-          data: ["template literal syntax", "6"]
-        });
+        this.triggerAsync(
+          "warning",
+          {
+            code: "W119",
+            line: this.line,
+            character: this.char,
+            data: ["template literal syntax", "6"]
+          },
+          checks,
+          function() { return true; }
+        );
       }
       // Template must start with a backtick.
       tokenType = Token.TemplateHead;
@@ -14723,7 +14753,7 @@ Lexer.prototype = {
     while (this.peek() !== "`") {
       while ((ch = this.peek()) === "") {
         value += "\n";
-        if (!this.nextLine()) {
+        if (!this.nextLine(checks)) {
           // Unclosed template literal --- point to the starting "`"
           var startPos = this.templateStarts.pop();
           this.trigger("error", {
@@ -14827,6 +14857,8 @@ Lexer.prototype = {
         // but it generates too many false positives.
 
         if (!allowNewLine) {
+          // This condition unequivocally describes a syntax error.
+          // TODO: Re-factor as an "error" (not a "warning").
           this.trigger("warning", {
             code: "W112",
             line: this.line,
@@ -14854,7 +14886,7 @@ Lexer.prototype = {
         // If we get an EOF inside of an unclosed string, show an
         // error and implicitly close it at the EOF point.
 
-        if (!this.nextLine()) {
+        if (!this.nextLine(checks)) {
           this.trigger("error", {
             code: "E029",
             line: startLine,
@@ -14880,12 +14912,17 @@ Lexer.prototype = {
 
         if (char < " ") {
           // Warn about a control character in a string.
-          this.trigger("warning", {
-            code: "W113",
-            line: this.line,
-            character: this.char,
-            data: [ "<non-printable>" ]
-          });
+          this.triggerAsync(
+            "warning",
+            {
+              code: "W113",
+              line: this.line,
+              character: this.char,
+              data: [ "<non-printable>" ]
+            },
+            checks,
+            function() { return true; }
+          );
         }
 
         // Special treatment for some escaped characters.
@@ -14922,7 +14959,7 @@ Lexer.prototype = {
    * rare edge cases where one JavaScript engine complains about
    * your regular expression while others don't.
    */
-  scanRegExp: function() {
+  scanRegExp: function(checks) {
     var index = 0;
     var length = this.input.length;
     var char = this.peek();
@@ -14937,22 +14974,32 @@ Lexer.prototype = {
       // Unexpected control character
       if (char < " ") {
         malformed = true;
-        this.trigger("warning", {
-          code: "W048",
-          line: this.line,
-          character: this.char
-        });
+        this.triggerAsync(
+          "warning",
+          {
+            code: "W048",
+            line: this.line,
+            character: this.char
+          },
+          checks,
+          function() { return true; }
+        );
       }
 
       // Unexpected escaped character
       if (char === "<") {
         malformed = true;
-        this.trigger("warning", {
-          code: "W049",
-          line: this.line,
-          character: this.char,
-          data: [ char ]
-        });
+        this.triggerAsync(
+          "warning",
+          {
+            code: "W049",
+            line: this.line,
+            character: this.char,
+            data: [ char ]
+          },
+          checks,
+          function() { return true; }
+        );
       }
     }.bind(this);
 
@@ -15054,12 +15101,17 @@ Lexer.prototype = {
       }
       if (char === "y") {
         if (!state.inES6(true)) {
-          this.trigger("warning", {
-            code: "W119",
-            line: this.line,
-            character: this.char,
-            data: [ "Sticky RegExp flag", "6" ]
-          });
+          this.triggerAsync(
+            "warning",
+            {
+              code: "W119",
+              line: this.line,
+              character: this.char,
+              data: [ "Sticky RegExp flag", "6" ]
+            },
+            checks,
+            function() { return true; }
+          );
         }
         if (value.indexOf("y") > -1) {
           malformedDesc = "Duplicate RegExp flag";
@@ -15135,7 +15187,7 @@ Lexer.prototype = {
     // Methods that work with multi-line structures and move the
     // character pointer.
 
-    var match = this.scanComments() ||
+    var match = this.scanComments(checks) ||
       this.scanStringLiteral(checks) ||
       this.scanTemplateLiteral(checks);
 
@@ -15146,11 +15198,11 @@ Lexer.prototype = {
     // Methods that don't move the character pointer.
 
     match =
-      this.scanRegExp() ||
+      this.scanRegExp(checks) ||
       this.scanPunctuator() ||
       this.scanKeyword() ||
       this.scanIdentifier() ||
-      this.scanNumericLiteral();
+      this.scanNumericLiteral(checks);
 
     if (match) {
       this.skip(match.tokenLength || match.value.length);
@@ -15166,7 +15218,7 @@ Lexer.prototype = {
    * Switch to the next line and reset all char pointers. Once
    * switched, this method also checks for other minor warnings.
    */
-  nextLine: function() {
+  nextLine: function(checks) {
     var char;
 
     if (this.line >= this.getLines().length) {
@@ -15202,14 +15254,24 @@ Lexer.prototype = {
 
     char = this.scanNonBreakingSpaces();
     if (char >= 0) {
-      this.trigger("warning", { code: "W125", line: this.line, character: char + 1 });
+      this.triggerAsync(
+        "warning",
+        { code: "W125", line: this.line, character: char + 1 },
+        checks,
+        function() { return true; }
+      );
     }
 
     this.input = this.input.replace(/\t/g, state.tab);
     char = this.scanUnsafeChars();
 
     if (char >= 0) {
-      this.trigger("warning", { code: "W100", line: this.line, character: char });
+      this.triggerAsync(
+        "warning",
+        { code: "W100", line: this.line, character: char },
+        checks,
+        function() { return true; }
+      );
     }
 
     // If there is a limit on line length, warn when lines get too
@@ -15224,19 +15286,16 @@ Lexer.prototype = {
       var shouldTriggerError = !inComment || !reg.maxlenException.test(inputTrimmed);
 
       if (shouldTriggerError) {
-        this.trigger("warning", { code: "W101", line: this.line, character: this.input.length });
+        this.triggerAsync(
+          "warning",
+          { code: "W101", line: this.line, character: this.input.length },
+          checks,
+          function() { return true; }
+        );
       }
     }
 
     return true;
-  },
-
-  /*
-   * This is simply a synonym for nextLine() method with a friendlier
-   * public name.
-   */
-  start: function() {
-    this.nextLine();
   },
 
   /*
@@ -15305,7 +15364,7 @@ Lexer.prototype = {
       }
 
       if (type === "(identifier)") {
-        if (value === "return" || value === "case" ||
+        if (value === "return" || value === "case" || value === "yield" ||
             value === "typeof" || value === "instanceof") {
           this.prereg = true;
         }
@@ -15362,7 +15421,7 @@ Lexer.prototype = {
 
     for (;;) {
       if (!this.input.length) {
-        if (this.nextLine()) {
+        if (this.nextLine(checks)) {
           return create("(endline)", "");
         }
 
@@ -15468,6 +15527,8 @@ Lexer.prototype = {
 
       case Token.NumericLiteral:
         if (token.isMalformed) {
+          // This condition unequivocally describes a syntax error.
+          // TODO: Re-factor as an "error" (not a "warning").
           this.trigger("warning", {
             code: "W045",
             line: this.line,
@@ -15600,7 +15661,7 @@ var errors = {
   E043: "Too many errors.",
   E044: null,
   E045: "Invalid for each loop.",
-  E046: "A yield statement shall be within a generator function (with syntax: `function*`)",
+  E046: "Yield expressions may only occur within generator functions.",
   E047: null,
   E048: "{a} declaration not directly within block.",
   E049: "A {a} cannot be named '{b}'.",
@@ -15632,7 +15693,7 @@ var warnings = {
   W011: null,
   W012: null,
   W013: null,
-  W014: "Bad line breaking before '{a}'.",
+  W014: "Misleading line break before '{a}'; readers may interpret this as an expression boundary.",
   W015: null,
   W016: "Unexpected use of '{a}'.",
   W017: "Bad operand.",
@@ -15658,8 +15719,9 @@ var warnings = {
   W037: "'{a}' is a statement label.",
   W038: "'{a}' used out of scope.",
   W039: "'{a}' is not allowed.",
-  W040: "Possible strict violation.",
-  W041: "Use '{a}' to compare with '{b}'.",
+  W040: "If a strict mode function is executed using function invocation, " +
+    "its 'this' value will be undefined.",
+  W041: null,
   W042: "Avoid EOL escaping.",
   W043: "Bad escaping of EOL. Use option multistr if needed.",
   W044: "Bad or unnecessary escaping.", /* TODO(caitp): remove W044 */
@@ -15705,7 +15767,8 @@ var warnings = {
   W082: "Function declarations should not be placed in blocks. " +
     "Use a function expression or move the statement to the top of " +
     "the outer function.",
-  W083: "Don't make functions within a loop.",
+  W083: "Functions declared within loops referencing an outer scoped " +
+    "variable may lead to confusing semantics.",
   W084: "Expected a conditional expression and instead saw an assignment.",
   W085: "Don't use 'with'.",
   W086: "Expected a 'break' statement before '{a}'.",
@@ -15745,7 +15808,7 @@ var warnings = {
   W121: "Extending prototype of native object: '{a}'.",
   W122: "Invalid typeof value '{a}'",
   W123: "'{a}' is already defined in outer scope.",
-  W124: "A generator function shall contain a yield statement.",
+  W124: "A generator function should contain at least one yield expression.",
   W125: "This line contains non-breaking spaces: http://jshint.com/docs/options/#nonbsp",
   W126: "Unnecessary grouping operator.",
   W127: "Unexpected use of a comma operator.",
@@ -15761,7 +15824,8 @@ var warnings = {
   W136: "'{a}' must be in function scope.",
   W137: "Empty destructuring.",
   W138: "Regular parameters should not come after default parameters.",
-  W139: "Function expressions should not be used as the second operand to instanceof."
+  W139: "Function expressions should not be used as the second operand to instanceof.",
+  W140: "Missing comma."
 };
 
 var info = {
@@ -15935,23 +15999,6 @@ exports.bool = {
     futurehostile: true,
 
     /**
-     * This option suppresses warnings about invalid `typeof` operator values.
-     * This operator has only [a limited set of possible return
-     * values](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof).
-     * By default, JSHint warns when you compare its result with an invalid
-     * value which often can be a typo.
-     *
-     *     // 'fuction' instead of 'function'
-     *     if (typeof a == "fuction") { // Invalid typeof value 'fuction'
-     *       // ...
-     *     }
-     *
-     * Do not use this option unless you're absolutely sure you don't want
-     * these checks.
-     */
-    notypeof    : true,
-
-    /**
      * This option tells JSHint that your code needs to adhere to ECMAScript 3
      * specification. Use this option if you need your program to be executable
      * in older browsers—such as Internet Explorer 6/7/8/9—and other legacy
@@ -15992,26 +16039,6 @@ exports.bool = {
     forin       : true,
 
     /**
-     * This option suppresses warnings about declaring variables inside of
-     * control
-     * structures while accessing them later from the outside. Even though
-     * JavaScript has only two real scopes—global and function—such practice
-     * leads to confusion among people new to the language and hard-to-debug
-     * bugs. This is why, by default, JSHint warns about variables that are
-     * used outside of their intended scope.
-     *
-     *     function test() {
-     *       if (true) {
-     *         var x = 0;
-     *       }
-     *
-     *       x += 1; // Default: 'x' used out of scope.
-     *                 // No warning when funcscope:true
-     *     }
-     */
-    funcscope   : true,
-
-    /**
      * This option prohibits the use of immediate function invocations without
      * wrapping them in parentheses. Wrapping parentheses assists readers of
      * your code in understanding that the expression is the result of a
@@ -16023,12 +16050,6 @@ exports.bool = {
      *             project](https://github.com/jscs-dev/node-jscs).
      */
     immed       : true,
-
-    /**
-     * This option suppresses warnings about the `__iterator__` property. This
-     * property is not supported by all browsers so use it carefully.
-     */
-    iterator    : true,
 
     /**
      * This option requires you to capitalize names of constructor functions.
@@ -16147,7 +16168,47 @@ exports.bool = {
      *             warnings/errors in when upgrading between minor versions of
      *             JSHint.
      */
-    enforceall : false
+    enforceall : false,
+
+    /**
+     * This option warns when a comma is not placed after the last element in an
+     * array or object literal. Due to bugs in old versions of IE, trailing
+     * commas used to be discouraged, but since ES5 their semantics were
+     * standardized. (See
+     * [#11.1.4](http://www.ecma-international.org/ecma-262/5.1/#sec-11.1.4) and
+     * [#11.1.5](http://www.ecma-international.org/ecma-262/5.1/#sec-11.1.5).)
+     * Now, they help to prevent the same [visual
+     * ambiguities](http://www.ecma-international.org/ecma-262/5.1/#sec-7.9.2)
+     * that the strict usage of semicolons helps prevent.
+     *
+     * For example, this code might have worked last Tuesday:
+     *
+     *     [
+     *         b + c
+     *     ].forEach(print);
+     *
+     * But if one adds an element to the array and forgets to compensate for the
+     * missing comma, no syntax error is thrown, and a linter cannot determine
+     * if this was a mistake or an intentional function invocation.
+     *
+     *     [
+     *         b + c
+     *         (d + e)
+     *     ].forEach(print);
+     *
+     * If one always appends a list item with a comma, this ambiguity cannot
+     * occur:
+     *
+     *     [
+     *         b + c,
+     *     ].forEach(print);
+     *
+     *     [
+     *         b + c,
+     *         (d + e),
+     *     ].forEach(print);
+     */
+    trailingcomma: false
   },
   relaxing: {
 
@@ -16224,6 +16285,26 @@ exports.bool = {
     evil        : true,
 
     /**
+     * This option suppresses warnings about declaring variables inside of
+     * control
+     * structures while accessing them later from the outside. Even though
+     * JavaScript has only two real scopes—global and function—such practice
+     * leads to confusion among people new to the language and hard-to-debug
+     * bugs. This is why, by default, JSHint warns about variables that are
+     * used outside of their intended scope.
+     *
+     *     function test() {
+     *       if (true) {
+     *         var x = 0;
+     *       }
+     *
+     *       x += 1; // Default: 'x' used out of scope.
+     *                 // No warning when funcscope:true
+     *     }
+     */
+    funcscope   : true,
+
+    /**
      * This option suppresses warnings about the use of global strict mode.
      * Global strict mode can break third-party widgets so it is not
      * recommended.
@@ -16233,6 +16314,29 @@ exports.bool = {
      * @deprecated Use `strict: "global"`.
      */
     globalstrict: true,
+
+    /**
+     * This option suppresses warnings about the `__iterator__` property. This
+     * property is not supported by all browsers so use it carefully.
+     */
+    iterator    : true,
+
+     /**
+     * This option suppresses warnings about invalid `typeof` operator values.
+     * This operator has only [a limited set of possible return
+     * values](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof).
+     * By default, JSHint warns when you compare its result with an invalid
+     * value which often can be a typo.
+     *
+     *     // 'fuction' instead of 'function'
+     *     if (typeof a == "fuction") { // Invalid typeof value 'fuction'
+     *       // ...
+     *     }
+     *
+     * Do not use this option unless you're absolutely sure you don't want
+     * these checks.
+     */
+    notypeof    : true,
 
     /**
      * This option prohibits the use of unary increment and decrement
@@ -16782,10 +16886,10 @@ exports.val = {
    * In addition to that, this option will warn you about unused global
    * variables declared via the `global` directive.
    *
-   * This can be set to `vars` to only check for variables, not function
-   * parameters, or `strict` to check all variables and parameters.  The
-   * default (true) behavior is to allow unused parameters that are followed by
-   * a used parameter.
+   * When set to `true`, unused parameters that are followed by a used
+   * parameter will not produce warnings. This option can be set to `vars` to
+   * only check for variables, not function parameters, or `strict` to check
+   * all variables and parameters.
    */
   unused       : true,
 
@@ -17198,6 +17302,7 @@ var scopeManager = function(state, predefined, exported, declared) {
         var usedLabel = currentLabels[usedLabelName];
         if (usedLabel) {
           var usedLabelType = usedLabel["(type)"];
+          var isImmutable = usedLabelType === "const" || usedLabelType === "import";
 
           if (usedLabel["(useOutsideOfScope)"] && !state.option.funcscope) {
             var usedTokens = usage["(tokens)"];
@@ -17215,7 +17320,7 @@ var scopeManager = function(state, predefined, exported, declared) {
           _current["(labels)"][usedLabelName]["(unused)"] = false;
 
           // check for modifying a const
-          if (usedLabelType === "const" && usage["(modified)"]) {
+          if (isImmutable && usage["(modified)"]) {
             for (j = 0; j < usage["(modified)"].length; j++) {
               error("E013", usage["(modified)"][j], usedLabelName);
             }
@@ -17531,25 +17636,33 @@ var scopeManager = function(state, predefined, exported, declared) {
       this.block.use(labelName, token);
     },
 
+    initialize: function(labelName) {
+      if (_current["(labels)"][labelName]) {
+        _current["(labels)"][labelName]["(initialized)"] = true;
+      }
+    },
+
     /**
      * adds an indentifier to the relevant current scope and creates warnings/errors as necessary
      * @param {string} labelName
      * @param {Object} opts
-     * @param {String} opts.type - the type of the label e.g. "param", "var", "let, "const", "function"
+     * @param {String} opts.type - the type of the label e.g. "param", "var", "let, "const", "import", "function"
      * @param {Token} opts.token - the token pointing at the declaration
+     * @param {boolean} opts.initialized - whether the binding should be created in an "initialized" state.
      */
     addlabel: function(labelName, opts) {
 
       var type  = opts.type;
       var token = opts.token;
-      var isblockscoped = type === "let" || type === "const" || type === "class";
+      var isblockscoped = type === "let" || type === "const" ||
+        type === "class" || type === "import";
+      var ishoisted = type === "function" || type === "import";
       var isexported    = (isblockscoped ? _current : _currentFunctBody)["(type)"] === "global" &&
                           _.has(exported, labelName);
 
       // outer shadow check (inner is only on non-block scoped)
       _checkOuterShadow(labelName, token, type);
 
-      // if is block scoped (let or const)
       if (isblockscoped) {
 
         var declaredInCurrentScope = _current["(labels)"][labelName];
@@ -17564,9 +17677,9 @@ var scopeManager = function(state, predefined, exported, declared) {
         if (!declaredInCurrentScope && _current["(usages)"][labelName]) {
           var usage = _current["(usages)"][labelName];
           // if its in a sub function it is not necessarily an error, just latedef
-          if (usage["(onlyUsedSubFunction)"]) {
+          if (usage["(onlyUsedSubFunction)"] || ishoisted) {
             _latedefWarning(type, labelName, token);
-          } else {
+          } else if (!ishoisted) {
             // this is a clear illegal usage for block scoped variables
             warning("E056", token, labelName, type);
           }
@@ -17584,7 +17697,9 @@ var scopeManager = function(state, predefined, exported, declared) {
           }
         }
 
-        scopeManagerInst.block.add(labelName, type, token, !isexported);
+        scopeManagerInst.block.add(
+          labelName, type, token, !isexported, opts.initialized
+        );
 
       } else {
 
@@ -17725,6 +17840,12 @@ var scopeManager = function(state, predefined, exported, declared) {
           token["(function)"] = _currentFunctBody;
           _current["(usages)"][labelName]["(tokens)"].push(token);
         }
+
+        // blockscoped vars can't be used within their initializer (TDZ)
+        var label = _current["(labels)"][labelName];
+        if (label && label["(blockscoped)"] && !label["(initialized)"]) {
+          error("E056", token, labelName, label["(type)"]);
+        }
       },
 
       reassign: function(labelName, token) {
@@ -17747,10 +17868,11 @@ var scopeManager = function(state, predefined, exported, declared) {
       /**
        * Adds a new variable
        */
-      add: function(labelName, type, tok, unused) {
+      add: function(labelName, type, tok, unused, initialized) {
         _current["(labels)"][labelName] = {
           "(type)" : type,
           "(token)": tok,
+          "(initialized)": !!initialized,
           "(blockscoped)": true,
           "(unused)": unused };
       },
@@ -17892,7 +18014,11 @@ var state = {
         return badOpt;
       }
 
-      this.esVersion = this.option.esversion;
+      if (this.option.esversion === 2015) {
+        this.esVersion = 6;
+      } else {
+        this.esVersion = this.option.esversion;
+      }
     } else if (this.option.es3) {
       this.esVersion = 3;
     } else if (this.option.esnext) {
@@ -18243,6 +18369,7 @@ exports.browser = {
   localStorage         : false,
   location             : false,
   matchMedia           : false,
+  MediaRecorder        : false,
   MessageChannel       : false,
   MessageEvent         : false,
   MessagePort          : false,
@@ -18284,6 +18411,7 @@ exports.browser = {
   setTimeout           : false,
   SharedWorker         : false,
   status               : false,
+  Storage              : false,
   SVGAElement          : false,
   SVGAltGlyphDefElement: false,
   SVGAltGlyphElement   : false,
@@ -18482,6 +18610,7 @@ exports.devel = {
 
 exports.worker = {
   importScripts  : true,
+  onmessage      : true,
   postMessage    : true,
   self           : true,
   FileReaderSync : true
@@ -18844,7 +18973,6 @@ exports.jasmine = {
  */
 
 /*jshint quotmark:double */
-/*global console:true */
 /*exported console */
 
 var _            = require("lodash");
@@ -19007,7 +19135,10 @@ var JSHINT = (function() {
     }
   }
 
-  function assume() {
+  /**
+   * Apply all linting options according to the status of the `state` object.
+   */
+  function applyOptions() {
     var badESOpt = null;
     processenforceall();
 
@@ -19224,23 +19355,32 @@ var JSHINT = (function() {
   }
 
   // Tracking of "internal" scripts, like eval containing a static string
-  function addInternalSrc(elem, src) {
-    var i;
-    i = {
+  function addEvalCode(elem, token) {
+    JSHINT.internals.push({
       id: "(internal)",
       elem: elem,
-      value: src
-    };
-    JSHINT.internals.push(i);
-    return i;
+      token: token,
+      code: token.value.replace(/([^\\])(\\*)\2\\n/g, "$1\n")
+    });
   }
 
-  function doOption() {
-    var nt = state.tokens.next;
-    var body = nt.body.split(",").map(function(s) { return s.trim(); });
-
+  /**
+   * Process an inline linting directive
+   *
+   * @param {Token} directiveToken - the directive-bearing comment token
+   * @param {Token} previous - the token that preceeds the directive
+   */
+  function lintingDirective(directiveToken, previous) {
+    var body = directiveToken.body.split(",")
+      .map(function(s) { return s.trim(); });
     var predef = {};
-    if (nt.type === "globals") {
+
+    if (directiveToken.type === "falls through") {
+      previous.caseFallsThrough = true;
+      return;
+    }
+
+    if (directiveToken.type === "globals") {
       body.forEach(function(g, idx) {
         g = g.split(":");
         var key = (g[0] || "").trim();
@@ -19251,7 +19391,7 @@ var JSHINT = (function() {
           if (idx > 0 && idx === body.length - 1) {
             return;
           }
-          error("E002", nt);
+          error("E002", directiveToken);
           return;
         }
 
@@ -19270,19 +19410,19 @@ var JSHINT = (function() {
 
       for (var key in predef) {
         if (_.has(predef, key)) {
-          declared[key] = nt;
+          declared[key] = directiveToken;
         }
       }
     }
 
-    if (nt.type === "exported") {
+    if (directiveToken.type === "exported") {
       body.forEach(function(e, idx) {
         if (!e.length) {
           // Ignore trailing comma
           if (idx > 0 && idx === body.length - 1) {
             return;
           }
-          error("E002", nt);
+          error("E002", directiveToken);
           return;
         }
 
@@ -19290,7 +19430,7 @@ var JSHINT = (function() {
       });
     }
 
-    if (nt.type === "members") {
+    if (directiveToken.type === "members") {
       membersOnly = membersOnly || {};
 
       body.forEach(function(m) {
@@ -19317,13 +19457,13 @@ var JSHINT = (function() {
       "indent"
     ];
 
-    if (nt.type === "jshint" || nt.type === "jslint") {
+    if (directiveToken.type === "jshint" || directiveToken.type === "jslint") {
       body.forEach(function(g) {
         g = g.split(":");
         var key = (g[0] || "").trim();
         var val = (g[1] || "").trim();
 
-        if (!checkOption(key, nt)) {
+        if (!checkOption(key, directiveToken)) {
           return;
         }
 
@@ -19333,7 +19473,7 @@ var JSHINT = (function() {
             val = +val;
 
             if (typeof val !== "number" || !isFinite(val) || val <= 0 || Math.floor(val) !== val) {
-              error("E032", nt, g[1].trim());
+              error("E032", directiveToken, g[1].trim());
               return;
             }
 
@@ -19352,7 +19492,7 @@ var JSHINT = (function() {
             return void error("E009");
 
           if (val !== "true" && val !== "false")
-            return void error("E002", nt);
+            return void error("E002", directiveToken);
 
           state.option.validthis = (val === "true");
           return;
@@ -19369,7 +19509,7 @@ var JSHINT = (function() {
             state.option.quotmark = val;
             break;
           default:
-            error("E002", nt);
+            error("E002", directiveToken);
           }
           return;
         }
@@ -19387,7 +19527,7 @@ var JSHINT = (function() {
             state.option.shadow = "inner";
             break;
           default:
-            error("E002", nt);
+            error("E002", directiveToken);
           }
           return;
         }
@@ -19405,7 +19545,7 @@ var JSHINT = (function() {
             state.option.unused = val;
             break;
           default:
-            error("E002", nt);
+            error("E002", directiveToken);
           }
           return;
         }
@@ -19422,7 +19562,7 @@ var JSHINT = (function() {
             state.option.latedef = "nofunc";
             break;
           default:
-            error("E002", nt);
+            error("E002", directiveToken);
           }
           return;
         }
@@ -19430,11 +19570,11 @@ var JSHINT = (function() {
         if (key === "ignore") {
           switch (val) {
           case "line":
-            state.ignoredLines[nt.line] = true;
+            state.ignoredLines[directiveToken.line] = true;
             removeIgnoredMessages();
             break;
           default:
-            error("E002", nt);
+            error("E002", directiveToken);
           }
           return;
         }
@@ -19452,7 +19592,7 @@ var JSHINT = (function() {
             state.option.strict = val;
             break;
           default:
-            error("E002", nt);
+            error("E002", directiveToken);
           }
           return;
         }
@@ -19462,7 +19602,7 @@ var JSHINT = (function() {
            * TODO: Extend this restriction to *all* "environmental" options.
            */
           if (!hasParsedCode(state.funct)) {
-            error("E055", state.tokens.next, "module");
+            error("E055", directiveToken, "module");
           }
         }
 
@@ -19471,18 +19611,15 @@ var JSHINT = (function() {
           case "3":
           case "5":
           case "6":
+          case "2015":
             state.option.moz = false;
             state.option.esversion = +val;
             break;
-          case "2015":
-            state.option.moz = false;
-            state.option.esversion = 6;
-            break;
           default:
-            error("E002", nt);
+            error("E002", directiveToken);
           }
           if (!hasParsedCode(state.funct)) {
-            error("E055", state.tokens.next, "esversion");
+            error("E055", directiveToken, "esversion");
           }
           return;
         }
@@ -19496,7 +19633,7 @@ var JSHINT = (function() {
 
         var tn;
         if (val === "true" || val === "false") {
-          if (nt.type === "jslint") {
+          if (directiveToken.type === "jslint") {
             tn = options.renamed[key] || key;
             state.option[tn] = (val === "true");
 
@@ -19510,19 +19647,30 @@ var JSHINT = (function() {
           return;
         }
 
-        error("E002", nt);
+        error("E002", directiveToken);
       });
 
-      assume();
+      applyOptions();
     }
   }
 
-  // We need a peek function. If it has an argument, it peeks that much farther
-  // ahead. It is used to distinguish
-  //     for ( var i in ...
-  // from
-  //     for ( var i = ...
-
+  /**
+   * Return a token beyond the token available in `state.tokens.next`. If no
+   * such token exists, return the "(end)" token. This function is used to
+   * determine parsing strategies in cases where the value of the next token
+   * does not provide sufficient information, as is the case with `for` loops,
+   * e.g.:
+   *
+   *     for ( var i in ...
+   *
+   * versus:
+   *
+   *     for ( var i = ...
+   *
+   * @param {number} [p] - offset of desired token; defaults to 0
+   *
+   * @returns {token}
+   */
   function peek(p) {
     var i = p || 0, j = lookahead.length, t;
 
@@ -19533,10 +19681,18 @@ var JSHINT = (function() {
     while (j <= i) {
       t = lex.token();
 
-      // Peeking past the end of the program should produce the "(end)" token
-      // and should not extend the lookahead buffer.
-      if (!t && state.tokens.next.id === "(end)") {
-        return state.tokens.next;
+      // When the lexer is exhausted, this function should produce the "(end)"
+      // token, even in cases where the requested token is beyond the end of
+      // the input stream.
+      if (!t) {
+        // If the lookahead buffer is empty, the expected "(end)" token was
+        // already emitted by the most recent invocation of `advance` and is
+        // available as the next token.
+        if (!lookahead.length) {
+          return state.tokens.next;
+        }
+
+        return lookahead[j - 1];
       }
 
       lookahead[j] = t;
@@ -19607,11 +19763,7 @@ var JSHINT = (function() {
       }
 
       if (state.tokens.next.isSpecial) {
-        if (state.tokens.next.type === "falls through") {
-          state.tokens.curr.caseFallsThrough = true;
-        } else {
-          doOption();
-        }
+        lintingDirective(state.tokens.next, state.tokens.curr);
       } else {
         if (state.tokens.next.id !== "(endline)") {
           break;
@@ -19620,12 +19772,15 @@ var JSHINT = (function() {
     }
   }
 
-  function isInfix(token) {
-    return token.infix ||
-      (!token.identifier && !token.template && !!token.led) ||
-      // Although implemented as an Identifier, the `yield` keyword behaves as
-      // an operator when it appears in the body of a generator function.
-      (token.id === "yield" && !!state.funct["(generator)"]);
+  /**
+   * Determine whether a given token is an operator.
+   *
+   * @param {token} token
+   *
+   * @returns {boolean}
+   */
+  function isOperator(token) {
+    return token.first || token.right || token.left || token.id === "yield";
   }
 
   function isEndOfExpr(curr, next) {
@@ -19637,7 +19792,7 @@ var JSHINT = (function() {
     if (next.id === ";" || next.id === "}" || next.id === ":") {
       return true;
     }
-    if (isInfix(next) === isInfix(curr) || curr.ltBoundary === "after" ||
+    if (next.infix === curr.infix || curr.ltBoundary === "after" ||
       next.ltBoundary === "before") {
       return curr.line !== startLine(next);
     }
@@ -19980,6 +20135,7 @@ var JSHINT = (function() {
   function application(s) {
     var x = symbol(s, 42);
 
+    x.infix = true;
     x.led = function(left) {
       nobreaknonadjacent(state.tokens.prev, state.tokens.curr);
 
@@ -19993,6 +20149,7 @@ var JSHINT = (function() {
   function relation(s, f) {
     var x = symbol(s, 100);
 
+    x.infix = true;
     x.led = function(left) {
       nobreaknonadjacent(state.tokens.prev, state.tokens.curr);
       this.left = left;
@@ -20019,16 +20176,6 @@ var JSHINT = (function() {
       return this;
     };
     return x;
-  }
-
-  function isPoorRelation(node) {
-    return node &&
-        ((node.type === "(number)" && +node.value === 0) ||
-         (node.type === "(string)" && node.value === "") ||
-         (node.type === "null" && !state.option.eqnull) ||
-        node.type === "true" ||
-        node.type === "false" ||
-        node.type === "undefined");
   }
 
   var typeofValues = {};
@@ -20159,13 +20306,7 @@ var JSHINT = (function() {
       state.nameStack.set(state.tokens.prev);
       return true;
     } else if (left.id === "{" || left.id === "[") {
-      if (allowDestructuring && left.destructAssign) {
-        left.destructAssign.forEach(function(t) {
-          if (t.id) {
-            state.funct["(scope)"].block.modify(t.id, t.token);
-          }
-        });
-      } else {
+      if (!allowDestructuring || !left.destructAssign) {
         if (left.id === "{" || !left.left) {
           warning("E031", assignToken);
         } else if (left.left.value === "arguments" && !state.isStrict()) {
@@ -20215,6 +20356,7 @@ var JSHINT = (function() {
   function bitwise(s, f, p) {
     var x = symbol(s, p);
     reserveName(x);
+    x.infix = true;
     x.led = (typeof f === "function") ? f : function(left) {
       if (state.option.bitwise) {
         warning("W016", this, this.id);
@@ -20324,7 +20466,7 @@ var JSHINT = (function() {
       }
 
       if (!state.tokens.next.identifier) {
-        warning("E024", state.tokens.curr, "...");
+        warning("E024", state.tokens.curr, state.tokens.next.id);
         return;
       }
 
@@ -20371,7 +20513,13 @@ var JSHINT = (function() {
     }
   }
 
-  function parseFinalSemicolon() {
+  /**
+   * Consume the semicolon that delimits the statement currently being parsed,
+   * emitting relevant warnings/errors as appropriate.
+   *
+   * @param {token} stmt - token describing the statement under consideration
+   */
+  function parseFinalSemicolon(stmt) {
     if (state.tokens.next.id !== ";") {
       // don't complain about unclosed templates / strings
       if (state.tokens.next.isUnclosed) return advance();
@@ -20380,13 +20528,13 @@ var JSHINT = (function() {
                      state.tokens.next.id !== "(end)";
       var blockEnd = checkPunctuator(state.tokens.next, "}");
 
-      if (sameLine && !blockEnd) {
+      if (sameLine && !blockEnd && !(stmt.id === "do" && state.inES6(true))) {
         errorAt("E058", state.tokens.curr.line, state.tokens.curr.character);
       } else if (!state.option.asi) {
         // If this is the last statement in a block that ends on
         // the same line *and* option lastsemic is on, ignore the warning.
         // Otherwise, complain about missing semicolon.
-        if ((blockEnd && !state.option.lastsemic) || !sameLine) {
+        if (!(blockEnd && sameLine && state.option.lastsemic)) {
           warningAt("W033", state.tokens.curr.line, state.tokens.curr.character);
         }
       }
@@ -20443,6 +20591,11 @@ var JSHINT = (function() {
       //  }
       var iscase = (state.funct["(verb)"] === "case" && state.tokens.curr.value === ":");
       block(true, true, false, false, iscase);
+
+      if (hasOwnScope) {
+        state.funct["(scope)"].unstack();
+      }
+
       return;
     }
 
@@ -20466,7 +20619,7 @@ var JSHINT = (function() {
       } else if (state.option.nonew && r && r.left && r.id === "(" && r.left.id === "new") {
         warning("W031", t);
       }
-      parseFinalSemicolon();
+      parseFinalSemicolon(t);
     }
 
 
@@ -20522,7 +20675,7 @@ var JSHINT = (function() {
       // there's no directive negation, so always set to true
       state.directive[directive] = true;
 
-      parseFinalSemicolon();
+      parseFinalSemicolon(current);
     }
 
     if (state.isStrict()) {
@@ -20879,12 +21032,6 @@ var JSHINT = (function() {
         this.from = this.character;
         warning("W116", this, "===", "==");
         break;
-      case isPoorRelation(left):
-        warning("W041", this, "===", left.value);
-        break;
-      case isPoorRelation(right):
-        warning("W041", this, "===", right.value);
-        break;
       case isTypoTypeof(right, left, state):
         warning("W122", this, right.value);
         break;
@@ -20910,10 +21057,6 @@ var JSHINT = (function() {
     if (!eqnull && state.option.eqeqeq) {
       this.from = this.character;
       warning("W116", this, "!==", "!=");
-    } else if (isPoorRelation(left)) {
-      warning("W041", this, "!==", left.value);
-    } else if (isPoorRelation(right)) {
-      warning("W041", this, "!==", right.value);
     } else if (isTypoTypeof(right, left, state)) {
       warning("W122", this, right.value);
     } else if (isTypoTypeof(left, right, state)) {
@@ -20942,6 +21085,12 @@ var JSHINT = (function() {
     var scope = state.funct["(scope)"];
     token.left = left;
     token.right = right = expression(120);
+
+    // This condition reflects a syntax error which will be reported by the
+    // `expression` function.
+    if (!right) {
+      return token;
+    }
 
     if (right.id === "(number)" ||
         right.id === "(string)" ||
@@ -21269,14 +21418,21 @@ var JSHINT = (function() {
             left.value === "execScript") {
           warning("W061", left);
 
-          if (p[0] && [0].id === "(string)") {
-            addInternalSrc(left, p[0].value);
-          }
+          // This conditional expression was initially implemented with a typo
+          // which prevented the branch's execution in all cases. While
+          // enabling the code will produce behavior that is consistent with
+          // the other forms of code evaluation that follow, such a change is
+          // also technically incompatable with prior versions of JSHint (due
+          // to the fact that the behavior was never formally documented). This
+          // branch should be enabled as part of a major release.
+          //if (p[0] && p[0].id === "(string)") {
+          //  addEvalCode(left, p[0]);
+          //}
         } else if (p[0] && p[0].id === "(string)" &&
              (left.value === "setTimeout" ||
             left.value === "setInterval")) {
           warning("W066", left);
-          addInternalSrc(left, p[0].value);
+          addEvalCode(left, p[0]);
 
         // window.setTimeout/setInterval
         } else if (p[0] && p[0].id === "(string)" &&
@@ -21285,7 +21441,7 @@ var JSHINT = (function() {
              (left.right === "setTimeout" ||
             left.right === "setInterval")) {
           warning("W066", left);
-          addInternalSrc(left, p[0].value);
+          addEvalCode(left, p[0]);
         }
       }
       if (!left.identifier && left.id !== "." && left.id !== "[" && left.id !== "=>" &&
@@ -21399,7 +21555,7 @@ var JSHINT = (function() {
       // The operator may be necessary to override the default binding power of
       // neighboring operators (whenever there is an operator in use within the
       // first expression *or* the current group contains multiple expressions)
-      if (!isNecessary && (isInfix(first) || first.right || ret.exprs)) {
+      if (!isNecessary && (isOperator(first) || ret.exprs)) {
         isNecessary =
           (rbp > first.lbp) ||
           (rbp > 0 && rbp === first.lbp) ||
@@ -21548,6 +21704,9 @@ var JSHINT = (function() {
           break;
         }
       } else {
+        if (state.option.trailingcomma && state.inES5()) {
+          warningAt("W140", state.tokens.curr.line, state.tokens.curr.character);
+        }
         break;
       }
     }
@@ -22129,6 +22288,9 @@ var JSHINT = (function() {
             warning("W070", state.tokens.curr);
           }
         } else {
+          if (state.option.trailingcomma && state.inES5()) {
+            warningAt("W140", state.tokens.curr.line, state.tokens.curr.character);
+          }
           break;
         }
       }
@@ -22364,10 +22526,6 @@ var JSHINT = (function() {
               type: type,
               token: t.token });
             names.push(t.token);
-
-            if (lone && inexport) {
-              state.funct["(scope)"].setExported(t.token.value, t.token);
-            }
           }
         }
       }
@@ -22387,6 +22545,19 @@ var JSHINT = (function() {
           tokens[0].first = value;
         } else {
           destructuringPatternMatch(names, value);
+        }
+      }
+
+      if (!prefix) {
+        for (t in tokens) {
+          if (tokens.hasOwnProperty(t)) {
+            t = tokens[t];
+            state.funct["(scope)"].initialize(t.id);
+
+            if (lone && inexport) {
+              state.funct["(scope)"].setExported(t.token.value, t.token);
+            }
+          }
         }
       }
 
@@ -22422,10 +22593,6 @@ var JSHINT = (function() {
     var inexport = context && context.inexport;
     var tokens, lone, value;
 
-    // If the `implied` option is set, bindings are set differently.
-    var implied = context && context.implied;
-    var report = !(context && context.ignore);
-
     this.first = [];
     for (;;) {
       var names = [];
@@ -22437,7 +22604,7 @@ var JSHINT = (function() {
         lone = true;
       }
 
-      if (!(prefix && implied) && report && state.option.varstmt) {
+      if (state.option.varstmt) {
         warning("W132", this);
       }
 
@@ -22446,7 +22613,7 @@ var JSHINT = (function() {
       for (var t in tokens) {
         if (tokens.hasOwnProperty(t)) {
           t = tokens[t];
-          if (!implied && state.funct["(global)"] && !state.impliedClosure()) {
+          if (state.funct["(global)"] && !state.impliedClosure()) {
             if (predefined[t.id] === false) {
               warning("W079", t.token, t.id);
             } else if (state.option.futurehostile === false) {
@@ -22457,20 +22624,12 @@ var JSHINT = (function() {
             }
           }
           if (t.id) {
-            if (implied === "for") {
+            state.funct["(scope)"].addlabel(t.id, {
+              type: "var",
+              token: t.token });
 
-              if (!state.funct["(scope)"].has(t.id)) {
-                if (report) warning("W088", t.token, t.id);
-              }
-              state.funct["(scope)"].block.use(t.id, t.token);
-            } else {
-              state.funct["(scope)"].addlabel(t.id, {
-                type: "var",
-                token: t.token });
-
-              if (lone && inexport) {
-                state.funct["(scope)"].setExported(t.id, t.token);
-              }
+            if (lone && inexport) {
+              state.funct["(scope)"].setExported(t.id, t.token);
             }
             names.push(t.token);
           }
@@ -22482,7 +22641,7 @@ var JSHINT = (function() {
 
         advance("=");
         if (peek(0).id === "=" && state.tokens.next.identifier) {
-          if (!prefix && report &&
+          if (!prefix &&
               !state.funct["(params)"] ||
               state.funct["(params)"].indexOf(state.tokens.next.value) === -1) {
             warning("W120", state.tokens.next, state.tokens.next.value);
@@ -22491,7 +22650,7 @@ var JSHINT = (function() {
         var id = state.tokens.prev;
         // don't accept `in` in expression if prefix is used for ForIn/Of loop.
         value = expression(prefix ? 120 : 10);
-        if (value && !prefix && report && !state.funct["(loopage)"] && value.type === "undefined") {
+        if (value && !prefix && !state.funct["(loopage)"] && value.type === "undefined") {
           warning("W080", id, id.value);
         }
         if (lone) {
@@ -22528,6 +22687,7 @@ var JSHINT = (function() {
       state.funct["(scope)"].addlabel(this.name, {
         type: "class",
         token: state.tokens.curr });
+
     } else if (state.tokens.next.identifier && state.tokens.next.value !== "extends") {
       // BindingIdentifier(opt)
       this.name = identifier();
@@ -22535,7 +22695,13 @@ var JSHINT = (function() {
     } else {
       this.name = state.nameStack.infer();
     }
+
     classtail(this);
+
+    if (isStatement) {
+      state.funct["(scope)"].initialize(this.name);
+    }
+
     return this;
   }
 
@@ -22727,6 +22893,11 @@ var JSHINT = (function() {
     state.condition = true;
     advance("(");
     var expr = expression(0);
+
+    if (!expr) {
+      quit("E041", this);
+    }
+
     checkCondAssignment(expr);
 
     // When the if is within a for-in loop, check if the condition
@@ -23020,6 +23191,8 @@ var JSHINT = (function() {
     var comma; // First comma punctuator at level 0
     var initializer; // First initializer at level 0
     var bindingPower;
+    var targets;
+    var target;
 
     // If initial token is a BindingPattern, count it as such.
     if (checkPunctuators(state.tokens.next, ["{", "["])) ++level;
@@ -23047,7 +23220,6 @@ var JSHINT = (function() {
         bindingPower = 0;
       }
 
-      var ok = !(initializer || comma);
       if (initializer) {
         error("W133", comma, nextop.value, "initializer is forbidden");
       }
@@ -23066,10 +23238,48 @@ var JSHINT = (function() {
         state.funct["(scope)"].stack();
         state.tokens.curr.fud({ prefix: true });
       } else {
-        // Parse as a var statement, with implied bindings. Ignore errors if an error
-        // was already reported
-        Object.create(varstatement).fud({ prefix: true, implied: "for", ignore: !ok });
+        targets = [];
+
+        // The following parsing logic recognizes initializers and the comma
+        // operator despite the fact that they are not supported by the
+        // grammar. Doing so allows JSHint to emit more a meaningful error
+        // message (i.e. W133) in response to a common programming mistake.
+        do {
+          if (checkPunctuators(state.tokens.next, ["{", "["])) {
+            destructuringPattern({ assignment: true }).forEach(function(elem) {
+              this.push(elem.token);
+            }, targets);
+          } else {
+            target = expression(120);
+
+            if (target.type === "(identifier)") {
+              targets.push(target);
+            }
+
+            checkLeftSideAssign(target, nextop);
+          }
+
+          if (checkPunctuator(state.tokens.next, "=")) {
+            advance("=");
+            expression(120);
+          }
+
+          if (checkPunctuator(state.tokens.next, ",")) {
+            advance(",");
+          }
+        } while (state.tokens.next !== nextop);
+
+        // In the event of a syntax error, do no issue warnings regarding the
+        // implicit creation of bindings.
+        if (!initializer && !comma) {
+          targets.forEach(function(token) {
+            if (!state.funct["(scope)"].has(token.value)) {
+              warning("W088", token, token.value);
+            }
+          });
+        }
       }
+
       advance(nextop.value);
       // The binding power is variable because for-in statements accept any
       // Expression in this position, while for-of statements are limited to
@@ -23208,10 +23418,9 @@ var JSHINT = (function() {
   stmt("continue", function() {
     var v = state.tokens.next.value;
 
-    if (state.funct["(breakage)"] === 0)
+    if (state.funct["(breakage)"] === 0 || !state.funct["(loopage)"]) {
       warning("W052", state.tokens.next, this.value);
-    if (!state.funct["(loopage)"])
-      warning("W052", state.tokens.next, this.value);
+    }
 
     if (!state.option.asi)
       nolinebreak(this);
@@ -23379,7 +23588,8 @@ var JSHINT = (function() {
       this.name = identifier();
       // Import bindings are immutable (see ES6 8.1.1.5.5)
       state.funct["(scope)"].addlabel(this.name, {
-        type: "const",
+        type: "import",
+        initialized: true,
         token: state.tokens.curr });
 
       if (state.tokens.next.value === ",") {
@@ -23405,7 +23615,8 @@ var JSHINT = (function() {
         this.name = identifier();
         // Import bindings are immutable (see ES6 8.1.1.5.5)
         state.funct["(scope)"].addlabel(this.name, {
-          type: "const",
+          type: "import",
+          initialized: true,
           token: state.tokens.curr });
       }
     } else {
@@ -23430,7 +23641,8 @@ var JSHINT = (function() {
 
         // Import bindings are immutable (see ES6 8.1.1.5.5)
         state.funct["(scope)"].addlabel(importName, {
-          type: "const",
+          type: "import",
+          initialized: true,
           token: state.tokens.curr });
 
         if (state.tokens.next.value === ",") {
@@ -23476,7 +23688,7 @@ var JSHINT = (function() {
 
     if (state.tokens.next.type === "default") {
       // ExportDeclaration ::
-      //      export default [lookahead  { function, class }] AssignmentExpression[In] ;
+      //      export default [lookahead ∉ { function, class }] AssignmentExpression[In] ;
       //      export default HoistableDeclaration
       //      export default ClassDeclaration
       state.nameStack.set(state.tokens.next);
@@ -23495,6 +23707,7 @@ var JSHINT = (function() {
       if (this.block) {
         state.funct["(scope)"].addlabel(identifier, {
           type: exportType,
+          initialized: true,
           token: token });
 
         state.funct["(scope)"].setExported(identifier, token);
@@ -23948,13 +24161,38 @@ var JSHINT = (function() {
     }
   }
 
+  /**
+   * Lint dynamically-evaluated code, appending any resulting errors/warnings
+   * into the global `errors` array.
+   *
+   * @param {array} internals - collection of "internals" objects describing
+   *                            string tokens that contain evaluated code
+   * @param {object} options - linting options to apply
+   * @param {object} globals - globally-defined bindings for the evaluated code
+   */
+  function lintEvalCode(internals, options, globals) {
+    var priorErrorCount, idx, jdx, internal;
+
+    for (idx = 0; idx < internals.length; idx += 1) {
+      internal = internals[idx];
+      options.scope = internal.elem;
+      priorErrorCount = JSHINT.errors.length;
+
+      itself(internal.code, options, globals);
+
+      for (jdx = priorErrorCount; jdx < JSHINT.errors.length; jdx += 1) {
+        JSHINT.errors[jdx].line += internal.token.line - 1;
+      }
+    }
+  }
+
   var escapeRegex = function(str) {
     return str.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
   };
 
   // The actual JSHINT function itself.
   var itself = function(s, o, g) {
-    var i, k, x, reIgnoreStr, reIgnore;
+    var x, reIgnoreStr, reIgnore;
     var optionKeys;
     var newOptionObj = {};
     var newIgnoredObj = {};
@@ -24144,8 +24382,6 @@ var JSHINT = (function() {
       emitter.emit("Number", ev);
     });
 
-    lex.start();
-
     // Check options
     for (var name in o) {
       if (_.has(o, name)) {
@@ -24154,7 +24390,7 @@ var JSHINT = (function() {
     }
 
     try {
-      assume();
+      applyOptions();
 
       // combine the passed globals after we've assumed all our options
       combine(predefined, g || {});
@@ -24196,22 +24432,15 @@ var JSHINT = (function() {
           reason    : err.reason,
           line      : err.line || nt.line,
           character : err.character || nt.from
-        }, null);
+        });
       } else {
         throw err;
       }
     }
 
     // Loop over the listed "internals", and check them as well.
-
     if (JSHINT.scope === "(main)") {
-      o = o || {};
-
-      for (i = 0; i < JSHINT.internals.length; i += 1) {
-        k = JSHINT.internals[i];
-        o.scope = k.elem;
-        itself(k.value, o, g);
-      }
+      lintEvalCode(JSHINT.internals, o || {}, g);
     }
 
     return JSHINT.errors.length === 0;

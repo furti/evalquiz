@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var Suite = (function () {
     function Suite(context) {
         this.context = context;

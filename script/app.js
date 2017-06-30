@@ -1,8 +1,9 @@
 webpackJsonp([0],[
 /* 0 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
+	Object.defineProperty(exports, "__esModule", { value: true });
 	var module = angular.module('evalquiz', ['ngRoute', 'ngMaterial', 'ui.codemirror', 'LocalStorageModule', 'btford.markdown']);
 	__webpack_require__(1);
 	__webpack_require__(7);
@@ -21,11 +22,12 @@ webpackJsonp([0],[
 	    }]);
 
 
-/***/ },
+/***/ }),
 /* 1 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
+	Object.defineProperty(exports, "__esModule", { value: true });
 	__webpack_require__(2);
 	__webpack_require__(4);
 	var module = angular.module('evalquiz');
@@ -83,9 +85,9 @@ webpackJsonp([0],[
 	    }]);
 
 
-/***/ },
+/***/ }),
 /* 2 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -97,6 +99,7 @@ webpackJsonp([0],[
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
+	Object.defineProperty(exports, "__esModule", { value: true });
 	var module = angular.module('evalquiz');
 	var utils_1 = __webpack_require__(3);
 	var Controller = (function () {
@@ -134,18 +137,19 @@ webpackJsonp([0],[
 	                code: '<',
 	                mode: '@?'
 	            }
-	        }), 
-	        __metadata('design:paramtypes', [Object])
+	        }),
+	        __metadata("design:paramtypes", [Object])
 	    ], Controller);
 	    return Controller;
 	}());
 
 
-/***/ },
+/***/ }),
 /* 3 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	"use strict";
+	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.MILLIS_MULTIPLIER = 1000;
 	function Component(nameOrModule, selector, options) {
 	    return function (controller) {
@@ -202,9 +206,9 @@ webpackJsonp([0],[
 	exports.isPromise = isPromise;
 
 
-/***/ },
+/***/ }),
 /* 4 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -216,6 +220,7 @@ webpackJsonp([0],[
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
+	Object.defineProperty(exports, "__esModule", { value: true });
 	var utils_1 = __webpack_require__(3);
 	var module = angular.module('evalquiz');
 	var OverviewComponent = (function () {
@@ -239,34 +244,35 @@ webpackJsonp([0],[
 	                count: '<',
 	                maximum: '<?'
 	            }
-	        }), 
-	        __metadata('design:paramtypes', [])
+	        }),
+	        __metadata("design:paramtypes", [])
 	    ], OverviewComponent);
 	    return OverviewComponent;
 	}());
 
 
-/***/ },
+/***/ }),
 /* 5 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = "<span ng-repeat=\"item in $ctrl.list\" class=\"layout-no-resize\"><i class=\"fa {{item.classname}}\"></i>&nbsp;</span>";
 
-/***/ },
+/***/ }),
 /* 6 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = "<div class=\"overview md-body-1\">\r\n\t<div class=\"layout-row layout-baseline\">\r\n\t\t<h1 class=\"layout-grow\"><code>eval(Quiz)</code> Solutions</h1>\r\n\t\t<span>Score: <i class=\"fa fa-star\"></i> {{$ctrl.totalScore}}</span>\r\n\t</div>\r\n\r\n\t<p>\r\n\t\t<a href=\"http://furti.github.io/evalquiz/\" target=\"_blank\">http://furti.github.io/evalquiz/</a>\r\n\t</p>\r\n\r\n\t<div class=\"buttons\">\r\n\t\t<md-button class=\"md-fab md-primary\" aria-label=\"Print\">\r\n\t\t\t<md-icon ng-click=\"$ctrl.print()\"><i class=\"fa fa-print\"></i></md-icon>\r\n\t\t</md-button>\r\n\r\n\t\t<br />\r\n\r\n\t\t<md-button class=\"md-fab md-accent\" aria-label=\"Back\">\r\n\t\t\t<md-icon ng-click=\"$ctrl.back()\"><i class=\"fa fa-arrow-left\"></i></md-icon>\r\n\t\t</md-button>\r\n\t</div>\r\n\r\n\t<div ng-repeat=\"riddle in $ctrl.riddles\" ng-if=\"$ctrl.isSolved(riddle)\">\r\n\t\t<img ng-src=\"riddles/{{riddle.location}}/icon.svg\" class=\"riddle-icon-small float-right\" />\r\n\t\t<h2>\r\n\t\t\t<i class=\"layout-no-resize fa\" ng-class=\"{'fa-square-o': !$ctrl.isSolved(riddle), 'fa-check-square-o': $ctrl.isSolved(riddle)}\"></i>&nbsp;\r\n\t\t\t<span class=\"lighter\">Level {{riddle.level}}:</span>&nbsp;<span>{{riddle.title}}</span>&nbsp;\r\n\t\t\t<stars count=\"riddle.state.score\"></stars>\r\n\t\t</h2>\r\n\r\n\t\t<p class=\"markdown\" btf-markdown=\"riddle.shortDescription\"></p>\r\n\r\n\t\t<div ng-repeat=\"(score, code) in $ctrl.code(riddle)\" class=\"solution clear\">\r\n\t\t\t<stars count=\"score\"></stars>\r\n\t\t\t<highlighter code=\"code\"></highlighter>\r\n\t\t</div>\r\n\t</div>\r\n</div>";
 
-/***/ },
+/***/ }),
 /* 7 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
+	Object.defineProperty(exports, "__esModule", { value: true });
 	var module = angular.module('evalquiz');
 	__webpack_require__(8);
 	__webpack_require__(11);
-	__webpack_require__(96);
+	__webpack_require__(95);
 	var PageComponent = (function () {
 	    function PageComponent($routeParams, evalQuizService, riddleService, uiService) {
 	        var _this = this;
@@ -312,16 +318,16 @@ webpackJsonp([0],[
 	module.config(['$routeProvider', function ($routeProvider) {
 	        console.log('Hmmm... I don\'t think you\'ll need the console right now ;)');
 	        $routeProvider.when('/riddles/:riddleId', {
-	            template: __webpack_require__(102),
+	            template: __webpack_require__(101),
 	            controller: 'PageComponent',
 	            controllerAs: '$ctrl'
 	        });
 	    }]);
 
 
-/***/ },
+/***/ }),
 /* 8 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -333,6 +339,7 @@ webpackJsonp([0],[
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
+	Object.defineProperty(exports, "__esModule", { value: true });
 	var module = angular.module('evalquiz');
 	var storage_service_1 = __webpack_require__(9);
 	var utils_1 = __webpack_require__(3);
@@ -354,17 +361,16 @@ webpackJsonp([0],[
 	    Controller = __decorate([
 	        utils_1.Component(module, 'storageInfoBar', {
 	            template: __webpack_require__(10)
-	        }), 
-	        __metadata('design:paramtypes', [(typeof (_a = typeof storage_service_1.StorageService !== 'undefined' && storage_service_1.StorageService) === 'function' && _a) || Object])
+	        }),
+	        __metadata("design:paramtypes", [storage_service_1.StorageService])
 	    ], Controller);
 	    return Controller;
-	    var _a;
 	}());
 
 
-/***/ },
+/***/ }),
 /* 9 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -376,6 +382,7 @@ webpackJsonp([0],[
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
+	Object.defineProperty(exports, "__esModule", { value: true });
 	var module = angular.module('evalquiz');
 	var utils_1 = __webpack_require__(3);
 	var STATE_KEY = 'evalQuiz.state';
@@ -392,7 +399,7 @@ webpackJsonp([0],[
 	    StorageService.prototype.saveRiddles = function () {
 	        var riddles = [];
 	        for (var _i = 0; _i < arguments.length; _i++) {
-	            riddles[_i - 0] = arguments[_i];
+	            riddles[_i] = arguments[_i];
 	        }
 	        var map = this.loadRiddles();
 	        riddles.forEach(function (riddle) {
@@ -447,23 +454,23 @@ webpackJsonp([0],[
 	    };
 	    StorageService.$inject = ['localStorageService'];
 	    StorageService = __decorate([
-	        utils_1.Injectable(module, 'storageService'), 
-	        __metadata('design:paramtypes', [Object])
+	        utils_1.Injectable(module, 'storageService'),
+	        __metadata("design:paramtypes", [Object])
 	    ], StorageService);
 	    return StorageService;
 	}());
 	exports.StorageService = StorageService;
 
 
-/***/ },
+/***/ }),
 /* 10 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = "<md-toolbar ng-if=\"!$ctrl.dataStorageAllowed\" class=\"md-accent md-whiteframe-1dp\">\r\n\t<div class=\"md-toolbar-tools\" layout=\"row\">\r\n\t\t<div class=\"md-toolbar-item md-body-1\">\r\n\t\t\t<i class=\"fa fa-exclamation-triangle\"></i> eval(Quiz) stores your code and progress in the local storage of your browser.\r\n\t\t</div>\r\n\r\n\t\t<div flex></div>\r\n\r\n\t\t<div class=\"md-toolbar-item\">\r\n\t\t\t<md-button ng-click=\"$ctrl.accept()\" class=\"md-raised\">Accept</md-button>\r\n\t\t</div>\r\n\t</div>\r\n</md-toolbar>";
 
-/***/ },
+/***/ }),
 /* 11 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -475,11 +482,12 @@ webpackJsonp([0],[
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
+	Object.defineProperty(exports, "__esModule", { value: true });
 	var module = angular.module('evalquiz');
 	__webpack_require__(12);
 	var evalquiz_service_1 = __webpack_require__(14);
 	__webpack_require__(16);
-	var riddle_service_1 = __webpack_require__(19);
+	var riddle_service_1 = __webpack_require__(18);
 	var utils_1 = __webpack_require__(3);
 	var Controller = (function () {
 	    function Controller(evalQuizService, riddleService, creditsDialog, riddleListDialog) {
@@ -550,22 +558,21 @@ webpackJsonp([0],[
 	    Controller.$inject = ['evalQuizService', 'riddleService', 'creditsDialog', 'riddleListDialog'];
 	    Controller = __decorate([
 	        utils_1.Component(module, 'toolbar', {
-	            template: __webpack_require__(95),
+	            template: __webpack_require__(94),
 	            bindings: {
 	                riddles: '<',
 	                selectedRiddle: '<'
 	            }
-	        }), 
-	        __metadata('design:paramtypes', [(typeof (_a = typeof evalquiz_service_1.EvalQuizService !== 'undefined' && evalquiz_service_1.EvalQuizService) === 'function' && _a) || Object, (typeof (_b = typeof riddle_service_1.RiddleService !== 'undefined' && riddle_service_1.RiddleService) === 'function' && _b) || Object, (typeof (_c = typeof utils_1.DialogService !== 'undefined' && utils_1.DialogService) === 'function' && _c) || Object, (typeof (_d = typeof utils_1.DialogService !== 'undefined' && utils_1.DialogService) === 'function' && _d) || Object])
+	        }),
+	        __metadata("design:paramtypes", [evalquiz_service_1.EvalQuizService, riddle_service_1.RiddleService, Object, Object])
 	    ], Controller);
 	    return Controller;
-	    var _a, _b, _c, _d;
 	}());
 
 
-/***/ },
+/***/ }),
 /* 12 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -577,6 +584,7 @@ webpackJsonp([0],[
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
+	Object.defineProperty(exports, "__esModule", { value: true });
 	var utils_1 = __webpack_require__(3);
 	var module = angular.module('evalquiz');
 	var Controller = (function () {
@@ -594,22 +602,22 @@ webpackJsonp([0],[
 	            focusOnOpen: true,
 	            hasBackdrop: true,
 	            template: __webpack_require__(13)
-	        }), 
-	        __metadata('design:paramtypes', [Object])
+	        }),
+	        __metadata("design:paramtypes", [Object])
 	    ], Controller);
 	    return Controller;
 	}());
 
 
-/***/ },
+/***/ }),
 /* 13 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = "<md-dialog aria-label=\"Credits\">\r\n\t<md-toolbar>\r\n\t\t<div class=\"md-toolbar-tools\">Credits</div>\r\n\t</md-toolbar>\r\n\r\n\t<img ng-src=\"style/title.svg\" />\r\n\r\n\t<md-dialog-content class=\"md-dialog-content\" layout=\"column\" layout-align=\"center center\">\r\n\t\t<p>&copy; 2015-2016 eval(Quiz) Team</p>\r\n\t</md-dialog-content>\r\n\r\n\t<md-dialog-content class=\"md-dialog-content\" layout=\"column\" layout-align=\"center center\">\r\n        <div>Licensed by <a href=\"http://www.apache.org/licenses/LICENSE-2.0\">Apache License 2.0</a>.</div>\r\n\t\t<div>Powered by <a href=\"https://angularjs.org/\" target=\"_blank\">AngularJS</a>.</div>\r\n\t\t<div>Styled by <a href=\"https://material.angularjs.org\" target=\"_blank\">Angular Material</a>.</div>\r\n\t\t<div>Icons by <a href=\"http://fortawesome.github.io/Font-Awesome\" target=\"_blank\">Font Awesome</a>.</div>\r\n\t\t<div>Hosted by <a href=\"https://github.com/furti/evalquiz\" target=\"_blank\">GitHub</a>.</div>\r\n\t</md-dialog-content>\r\n\r\n\t<md-dialog-actions layout=\"row\">\r\n\t\t<md-button ng-click=\"$ctrl.close()\">\r\n\t\t\tClose\r\n\t\t</md-button>\r\n\t</md-dialog-actions>\r\n</md-dialog>";
 
-/***/ },
+/***/ }),
 /* 14 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -621,6 +629,7 @@ webpackJsonp([0],[
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
+	Object.defineProperty(exports, "__esModule", { value: true });
 	var module = angular.module('evalquiz');
 	var storage_service_1 = __webpack_require__(9);
 	var ui_service_1 = __webpack_require__(15);
@@ -772,7 +781,7 @@ webpackJsonp([0],[
 	    EvalQuizService.prototype.saveRiddle = function () {
 	        var riddles = [];
 	        for (var _i = 0; _i < arguments.length; _i++) {
-	            riddles[_i - 0] = arguments[_i];
+	            riddles[_i] = arguments[_i];
 	        }
 	        (_a = this.storageService).saveRiddles.apply(_a, riddles);
 	        this.updateStatistics();
@@ -790,18 +799,17 @@ webpackJsonp([0],[
 	    });
 	    EvalQuizService.$inject = ['$location', '$http', '$q', 'storageService', 'uiService'];
 	    EvalQuizService = __decorate([
-	        utils_1.Injectable(module, 'evalQuizService'), 
-	        __metadata('design:paramtypes', [Object, Object, Object, (typeof (_a = typeof storage_service_1.StorageService !== 'undefined' && storage_service_1.StorageService) === 'function' && _a) || Object, (typeof (_b = typeof ui_service_1.UIService !== 'undefined' && ui_service_1.UIService) === 'function' && _b) || Object])
+	        utils_1.Injectable(module, 'evalQuizService'),
+	        __metadata("design:paramtypes", [Object, Function, Function, storage_service_1.StorageService, ui_service_1.UIService])
 	    ], EvalQuizService);
 	    return EvalQuizService;
-	    var _a, _b;
 	}());
 	exports.EvalQuizService = EvalQuizService;
 
 
-/***/ },
+/***/ }),
 /* 15 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -813,6 +821,7 @@ webpackJsonp([0],[
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
+	Object.defineProperty(exports, "__esModule", { value: true });
 	var module = angular.module('evalquiz');
 	var utils_1 = __webpack_require__(3);
 	var MenuController = (function () {
@@ -908,17 +917,17 @@ webpackJsonp([0],[
 	    };
 	    UIService.$inject = ['$mdPanel', '$mdDialog', '$mdToast', '$q', '$timeout', '$sanitize', 'markdownConverter'];
 	    UIService = __decorate([
-	        utils_1.Injectable(module, 'uiService'), 
-	        __metadata('design:paramtypes', [Object, Object, Object, Object, Object, Object, Object])
+	        utils_1.Injectable(module, 'uiService'),
+	        __metadata("design:paramtypes", [Object, Object, Object, Function, Function, Function, Object])
 	    ], UIService);
 	    return UIService;
 	}());
 	exports.UIService = UIService;
 
 
-/***/ },
+/***/ }),
 /* 16 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -930,10 +939,10 @@ webpackJsonp([0],[
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
+	Object.defineProperty(exports, "__esModule", { value: true });
 	var module = angular.module('evalquiz');
 	var evalquiz_service_1 = __webpack_require__(14);
-	var riddle_1 = __webpack_require__(17);
-	__webpack_require__(18);
+	__webpack_require__(17);
 	var ui_service_1 = __webpack_require__(15);
 	var utils_1 = __webpack_require__(3);
 	var Controller = (function () {
@@ -960,26 +969,17 @@ webpackJsonp([0],[
 	            escapeToClose: true,
 	            focusOnOpen: true,
 	            hasBackdrop: true,
-	            template: __webpack_require__(94)
-	        }), 
-	        __metadata('design:paramtypes', [Object, (typeof (_a = typeof evalquiz_service_1.EvalQuizService !== 'undefined' && evalquiz_service_1.EvalQuizService) === 'function' && _a) || Object, (typeof (_b = typeof ui_service_1.UIService !== 'undefined' && ui_service_1.UIService) === 'function' && _b) || Object, Array, (typeof (_c = typeof riddle_1.Riddle !== 'undefined' && riddle_1.Riddle) === 'function' && _c) || Object])
+	            template: __webpack_require__(93)
+	        }),
+	        __metadata("design:paramtypes", [Object, evalquiz_service_1.EvalQuizService, ui_service_1.UIService, Array, Object])
 	    ], Controller);
 	    return Controller;
-	    var _a, _b, _c;
 	}());
 
 
-/***/ },
+/***/ }),
 /* 17 */
-/***/ function(module, exports) {
-
-	"use strict";
-	var module = angular.module('evalquiz');
-
-
-/***/ },
-/* 18 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -991,9 +991,10 @@ webpackJsonp([0],[
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
+	Object.defineProperty(exports, "__esModule", { value: true });
 	var module = angular.module('evalquiz');
 	var evalquiz_service_1 = __webpack_require__(14);
-	var riddle_service_1 = __webpack_require__(19);
+	var riddle_service_1 = __webpack_require__(18);
 	var utils_1 = __webpack_require__(3);
 	var Controller = (function () {
 	    function Controller(evalQuizService, riddleService, $mdDialog, $timeout) {
@@ -1021,22 +1022,21 @@ webpackJsonp([0],[
 	    Controller.$inject = ['evalQuizService', 'riddleService', '$mdDialog', '$timeout'];
 	    Controller = __decorate([
 	        utils_1.Component(module, 'riddleList', {
-	            template: __webpack_require__(93),
+	            template: __webpack_require__(92),
 	            bindings: {
 	                riddles: '<',
 	                selectedRiddle: '<'
 	            }
-	        }), 
-	        __metadata('design:paramtypes', [(typeof (_a = typeof evalquiz_service_1.EvalQuizService !== 'undefined' && evalquiz_service_1.EvalQuizService) === 'function' && _a) || Object, (typeof (_b = typeof riddle_service_1.RiddleService !== 'undefined' && riddle_service_1.RiddleService) === 'function' && _b) || Object, Object, Object])
+	        }),
+	        __metadata("design:paramtypes", [evalquiz_service_1.EvalQuizService, riddle_service_1.RiddleService, Object, Function])
 	    ], Controller);
 	    return Controller;
-	    var _a, _b;
 	}());
 
 
-/***/ },
-/* 19 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -1048,10 +1048,11 @@ webpackJsonp([0],[
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
+	Object.defineProperty(exports, "__esModule", { value: true });
 	var module = angular.module('evalquiz');
-	var console_service_1 = __webpack_require__(20);
+	var console_service_1 = __webpack_require__(19);
 	var evalquiz_service_1 = __webpack_require__(14);
-	var riddle_runner_1 = __webpack_require__(21);
+	var riddle_runner_1 = __webpack_require__(20);
 	var ui_service_1 = __webpack_require__(15);
 	var utils_1 = __webpack_require__(3);
 	var RiddleService = (function () {
@@ -1188,7 +1189,7 @@ webpackJsonp([0],[
 	                var solved = result.score >= riddle.minScoreToSolve;
 	                var logItem = _this.consoleService.log().withContentClass('center');
 	                if (solved) {
-	                    logItem.h2('Contrgatulations').addClass('fade-in');
+	                    logItem.h2('Congratulations').addClass('fade-in');
 	                }
 	                else {
 	                    logItem.h2('Tests passed').addClass('fade-in');
@@ -1288,18 +1289,17 @@ webpackJsonp([0],[
 	    };
 	    RiddleService.$inject = ['evalQuizService', '$http', '$q', '$timeout', 'consoleService', 'uiService'];
 	    RiddleService = __decorate([
-	        utils_1.Injectable(module, 'riddleService'), 
-	        __metadata('design:paramtypes', [(typeof (_a = typeof evalquiz_service_1.EvalQuizService !== 'undefined' && evalquiz_service_1.EvalQuizService) === 'function' && _a) || Object, Object, Object, Object, (typeof (_b = typeof console_service_1.ConsoleService !== 'undefined' && console_service_1.ConsoleService) === 'function' && _b) || Object, (typeof (_c = typeof ui_service_1.UIService !== 'undefined' && ui_service_1.UIService) === 'function' && _c) || Object])
+	        utils_1.Injectable(module, 'riddleService'),
+	        __metadata("design:paramtypes", [evalquiz_service_1.EvalQuizService, Function, Function, Function, console_service_1.ConsoleService, ui_service_1.UIService])
 	    ], RiddleService);
 	    return RiddleService;
-	    var _a, _b, _c;
 	}());
 	exports.RiddleService = RiddleService;
 
 
-/***/ },
-/* 20 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -1311,6 +1311,7 @@ webpackJsonp([0],[
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
+	Object.defineProperty(exports, "__esModule", { value: true });
 	var module = angular.module('evalquiz');
 	var ui_service_1 = __webpack_require__(15);
 	var utils_1 = __webpack_require__(3);
@@ -1365,11 +1366,10 @@ webpackJsonp([0],[
 	    };
 	    ConsoleService.$inject = ['uiService'];
 	    ConsoleService = __decorate([
-	        utils_1.Injectable(module, 'consoleService'), 
-	        __metadata('design:paramtypes', [(typeof (_a = typeof ui_service_1.UIService !== 'undefined' && ui_service_1.UIService) === 'function' && _a) || Object])
+	        utils_1.Injectable(module, 'consoleService'),
+	        __metadata("design:paramtypes", [ui_service_1.UIService])
 	    ], ConsoleService);
 	    return ConsoleService;
-	    var _a;
 	}());
 	exports.ConsoleService = ConsoleService;
 	var ConsoleLogItem = (function () {
@@ -1489,15 +1489,16 @@ webpackJsonp([0],[
 	exports.ConsoleLogItem = ConsoleLogItem;
 
 
-/***/ },
-/* 21 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
+	Object.defineProperty(exports, "__esModule", { value: true });
 	var utils_1 = __webpack_require__(3);
-	var esprima = __webpack_require__(22);
-	var esmangle = __webpack_require__(23);
-	var escodegen = __webpack_require__(78);
+	var esprima = __webpack_require__(21);
+	var esmangle = __webpack_require__(22);
+	var escodegen = __webpack_require__(77);
 	exports.ABORTED = 'Execution aborted.';
 	exports.SKIPPED = 'Test skipped.';
 	exports.INSTRUMENTATION_CALLBACK = '___';
@@ -1597,14 +1598,14 @@ webpackJsonp([0],[
 	    RiddleRunner.prototype.prepare = function () {
 	        var _this = this;
 	        try {
-	            var exports = this.suiteFactory();
-	            var suiteClass = exports['Suite'];
+	            var exports_1 = this.suiteFactory();
+	            var suiteClass = exports_1['Suite'];
 	            if (!suiteClass) {
-	                var keys = Object.keys(exports);
+	                var keys = Object.keys(exports_1);
 	                if (keys.length < 1) {
 	                    throw new Error('Expected at least one class in suite');
 	                }
-	                suiteClass = exports[keys[0]];
+	                suiteClass = exports_1[keys[0]];
 	            }
 	            this.suite = new (suiteClass)(this);
 	        }
@@ -1746,14 +1747,14 @@ webpackJsonp([0],[
 	    RiddleRunner.prototype.invokeFn = function () {
 	        var params = [];
 	        for (var _i = 0; _i < arguments.length; _i++) {
-	            params[_i - 0] = arguments[_i];
+	            params[_i] = arguments[_i];
 	        }
 	        return this.invokeFnInternal.apply(this, [true].concat(params));
 	    };
 	    RiddleRunner.prototype.invokeInstrumentedFn = function () {
 	        var params = [];
 	        for (var _i = 0; _i < arguments.length; _i++) {
-	            params[_i - 0] = arguments[_i];
+	            params[_i] = arguments[_i];
 	        }
 	        return this.invokeFnInternal.apply(this, [true].concat(params));
 	    };
@@ -1765,7 +1766,7 @@ webpackJsonp([0],[
 	        }
 	        this.check();
 	        var fnParams = [];
-	        var _loop_1 = function(fnWrapperArg) {
+	        var _loop_1 = function (fnWrapperArg) {
 	            if (this_1.suite[fnWrapperArg] === undefined) {
 	                var message = "API reference \"" + fnWrapperArg + "\" of riddle \"" + this_1.riddle.id + "\" is missing in suite.";
 	                console.error(message);
@@ -1774,7 +1775,7 @@ webpackJsonp([0],[
 	            fnParams.push(function () {
 	                var args = [];
 	                for (var _i = 0; _i < arguments.length; _i++) {
-	                    args[_i - 0] = arguments[_i];
+	                    args[_i] = arguments[_i];
 	                }
 	                try {
 	                    _this.check();
@@ -1867,7 +1868,7 @@ webpackJsonp([0],[
 	    RiddleRunner.prototype.sequence = function () {
 	        var secondsOrStep = [];
 	        for (var _i = 0; _i < arguments.length; _i++) {
-	            secondsOrStep[_i - 0] = arguments[_i];
+	            secondsOrStep[_i] = arguments[_i];
 	        }
 	        return this.sequenceStep.apply(this, [this.defer(), undefined].concat(secondsOrStep));
 	    };
@@ -1920,7 +1921,7 @@ webpackJsonp([0],[
 	            deferred.resolve(undefined);
 	        }
 	        else if (source === null) {
-	            deferred.resolve(null);
+	            deferred.resolve();
 	        }
 	        else if (!source.length) {
 	            deferred.resolve([]);
@@ -2134,7 +2135,7 @@ webpackJsonp([0],[
 	    RiddleRunner.prototype.countTypes = function () {
 	        var types = [];
 	        for (var _i = 0; _i < arguments.length; _i++) {
-	            types[_i - 0] = arguments[_i];
+	            types[_i] = arguments[_i];
 	        }
 	        var count = 0;
 	        this.crawl(this.ast, function (node) {
@@ -2156,7 +2157,7 @@ webpackJsonp([0],[
 	    RiddleRunner.prototype.countIdentifiers = function () {
 	        var identifiers = [];
 	        for (var _i = 0; _i < arguments.length; _i++) {
-	            identifiers[_i - 0] = arguments[_i];
+	            identifiers[_i] = arguments[_i];
 	        }
 	        var count = 0;
 	        this.crawl(this.ast, function (node) {
@@ -2185,7 +2186,7 @@ webpackJsonp([0],[
 	    RiddleRunner.prototype.countOperators = function () {
 	        var operators = [];
 	        for (var _i = 0; _i < arguments.length; _i++) {
-	            operators[_i - 0] = arguments[_i];
+	            operators[_i] = arguments[_i];
 	        }
 	        var count = 0;
 	        this.crawl(this.ast, function (node) {
@@ -2239,7 +2240,8 @@ webpackJsonp([0],[
 	exports.RiddleRunner = RiddleRunner;
 
 
-/***/ },
+/***/ }),
+/* 21 */,
 /* 22 */,
 /* 23 */,
 /* 24 */,
@@ -2310,27 +2312,26 @@ webpackJsonp([0],[
 /* 89 */,
 /* 90 */,
 /* 91 */,
-/* 92 */,
-/* 93 */
-/***/ function(module, exports) {
+/* 92 */
+/***/ (function(module, exports) {
 
 	module.exports = "<md-list class=\"riddle-list\">\r\n    <md-list-item class=\"md-3-line\" ng-repeat=\"riddle in $ctrl.riddles\" ng-click=\"$ctrl.gotoRiddle(riddle.id)\" ng-disabled=\"!$ctrl.isAvailable(riddle)\" ng-class=\"{'lightest': !$ctrl.isAvailable(riddle)}\">\r\n         <img ng-src=\"riddles/{{riddle.location}}/icon.svg\" class=\"riddle-icon-small\" />\r\n         <div class=\"md-list-item-text\" layout=\"column\">\r\n            <md-headline class=\"no-wrap\" layout=\"row\">\r\n                <i class=\"layout-no-resize fa\" ng-class=\"{'fa-square-o': !$ctrl.isSolved(riddle), 'fa-check-square-o': $ctrl.isSolved(riddle)}\"></i>&nbsp;\r\n                <div flex style=\"min-width: 16em\"><span class=\"lighter\">Level {{riddle.level}}:</span>&nbsp;<span>{{riddle.title}}</span></div>\r\n                &nbsp;\r\n                <i class=\"layout-no-resize fa\" ng-class=\"{'fa-star-o lightest': riddle.state.score <= 0, 'fa-star': riddle.state.score > 0}\"></i>&nbsp;\r\n                <i class=\"layout-no-resize fa\" ng-class=\"{'fa-star-o lightest': riddle.state.score <= 1, 'fa-star': riddle.state.score > 1}\"></i>&nbsp;\r\n                <i class=\"layout-no-resize fa\" ng-class=\"{'fa-star-o lightest': riddle.state.score <= 2, 'fa-star': riddle.state.score > 2}\"></i>\r\n            </md-headline>\r\n            <p>{{riddle.shortDescription}}</p>\r\n        </div>\r\n    </md-list-item>\r\n</md-list>";
 
-/***/ },
-/* 94 */
-/***/ function(module, exports) {
+/***/ }),
+/* 93 */
+/***/ (function(module, exports) {
 
 	module.exports = "<md-dialog aria-label=\"List of Riddles\">\r\n    <md-toolbar>\r\n        <div class=\"md-toolbar-tools\">List of Riddles</div>\r\n    </md-toolbar>\r\n\r\n    <md-dialog-content class=\"md-dialog-content\">\r\n        <riddle-list riddles = \"$ctrl.riddles\" selected-riddle=\"$ctrl.selectedRiddle\"></riddle-list>\r\n\r\n        <div layout-padding>\r\n            <p class=\"align-right\">\r\n                Want more riddles?\r\n                <a href=\"https://github.com/furti/evalquiz\" target=\"_blank\">Fork me on GitHub</a>!\r\n            </p>\r\n        </div>\r\n    </md-dialog-content>\r\n\r\n    <md-dialog-actions layout=\"row\">\r\n        <md-button ng-click=\"$ctrl.clear()\">Clear</md-button>\r\n        <span flex class=\"flex\"></span>\r\n        <md-button class=\"md-primary md-raised\" ng-click=\"$ctrl.close()\">Close</md-button>\r\n    </md-dialog-actions>\r\n</md-dialog>";
 
-/***/ },
-/* 95 */
-/***/ function(module, exports) {
+/***/ }),
+/* 94 */
+/***/ (function(module, exports) {
 
 	module.exports = "<md-toolbar class=\"md-default-theme md-whiteframe-1dp\">\r\n    <div class=\"md-toolbar-tools\" layout=\"row\">\r\n        <div class=\"md-toolbar-item\">\r\n            <h1>eval(Quiz)</h1>\r\n        </div>\r\n\r\n        <div class=\"md-toolbar-item\">\r\n            <md-button ng-click=\"$ctrl.showCreditsDialog()\">About</md-button>\r\n        </div>\r\n\r\n        <div flex></div>\r\n\r\n        <div class=\"md-toolbar-item\">\r\n            <md-button ng-click=\"$ctrl.showOverview()\" class=\"md-raised\" ng-disabled=\"!$ctrl.riddles || $ctrl.running\">\r\n                Score:&nbsp;&nbsp;<i class=\"fa fa-star\"></i> {{$ctrl.totalScore}}\r\n            </md-button>\r\n        </div>\r\n\r\n        <div class=\"md-toolbar-item\">\r\n            <md-button ng-click=\"$ctrl.showRiddleListDialog()\" class=\"md-raised\" ng-disabled=\"!$ctrl.riddles || $ctrl.running\">\r\n                <i class=\"fa fa-bars separated\" aria-hidden=\"true\"></i> List of Riddles\r\n            </md-button>\r\n        </div>\r\n\r\n        <div class=\"md-toolbar-item\">\r\n            <md-button ng-click=\"$ctrl.gotoRiddle($ctrl.nextRiddleId)\" class=\"md-raised md-accent\" ng-disabled=\"!$ctrl.nextAvailable || $ctrl.running\">\r\n                Next Riddle\r\n                <i class=\"fa fa-arrow-right separated\" aria-hidden=\"true\"></i>\r\n            </md-button>\r\n        </div>\r\n    </div>\r\n</md-toolbar>";
 
-/***/ },
-/* 96 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+/* 95 */
+/***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -2342,12 +2343,13 @@ webpackJsonp([0],[
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
+	Object.defineProperty(exports, "__esModule", { value: true });
 	var module = angular.module('evalquiz');
-	__webpack_require__(97);
-	var console_service_1 = __webpack_require__(20);
+	__webpack_require__(96);
+	var console_service_1 = __webpack_require__(19);
 	var evalquiz_service_1 = __webpack_require__(14);
-	__webpack_require__(99);
-	var riddle_service_1 = __webpack_require__(19);
+	__webpack_require__(98);
+	var riddle_service_1 = __webpack_require__(18);
 	var ui_service_1 = __webpack_require__(15);
 	var utils_1 = __webpack_require__(3);
 	var WorkbenchComponent = (function () {
@@ -2448,21 +2450,20 @@ webpackJsonp([0],[
 	    WorkbenchComponent.$inject = ['evalQuizService', 'riddleService', 'consoleService', 'uiService'];
 	    WorkbenchComponent = __decorate([
 	        utils_1.Component(module, 'workbench', {
-	            template: __webpack_require__(101),
+	            template: __webpack_require__(100),
 	            bindings: {
 	                riddle: '<'
 	            }
-	        }), 
-	        __metadata('design:paramtypes', [(typeof (_a = typeof evalquiz_service_1.EvalQuizService !== 'undefined' && evalquiz_service_1.EvalQuizService) === 'function' && _a) || Object, (typeof (_b = typeof riddle_service_1.RiddleService !== 'undefined' && riddle_service_1.RiddleService) === 'function' && _b) || Object, (typeof (_c = typeof console_service_1.ConsoleService !== 'undefined' && console_service_1.ConsoleService) === 'function' && _c) || Object, (typeof (_d = typeof ui_service_1.UIService !== 'undefined' && ui_service_1.UIService) === 'function' && _d) || Object])
+	        }),
+	        __metadata("design:paramtypes", [evalquiz_service_1.EvalQuizService, riddle_service_1.RiddleService, console_service_1.ConsoleService, ui_service_1.UIService])
 	    ], WorkbenchComponent);
 	    return WorkbenchComponent;
-	    var _a, _b, _c, _d;
 	}());
 
 
-/***/ },
-/* 97 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+/* 96 */
+/***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -2474,6 +2475,7 @@ webpackJsonp([0],[
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
+	Object.defineProperty(exports, "__esModule", { value: true });
 	var module = angular.module('evalquiz');
 	var utils_1 = __webpack_require__(3);
 	var Controller = (function () {
@@ -2481,26 +2483,26 @@ webpackJsonp([0],[
 	    }
 	    Controller = __decorate([
 	        utils_1.Component(module, 'apiInfo', {
-	            template: __webpack_require__(98),
+	            template: __webpack_require__(97),
 	            bindings: {
 	                api: '<'
 	            }
-	        }), 
-	        __metadata('design:paramtypes', [])
+	        }),
+	        __metadata("design:paramtypes", [])
 	    ], Controller);
 	    return Controller;
 	}());
 
 
-/***/ },
-/* 98 */
-/***/ function(module, exports) {
+/***/ }),
+/* 97 */
+/***/ (function(module, exports) {
 
 	module.exports = "<div ng-repeat=\"member in $ctrl.api\" class=\"md-padding md-body-1\">\r\n    <div class=\"md-headline\">\r\n        Function <code>{{member.signature}}</code>\r\n    </div>\r\n\r\n    <p class=\"md-subhead markdown\" btf-markdown=\"member.description\"></p>\r\n\r\n    <p class=\"markdown\" btf-markdown=\"member.explanation\"></p>\r\n\r\n    <member-info member=\"member\"></member-info>\r\n</div>";
 
-/***/ },
-/* 99 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+/* 98 */
+/***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -2512,6 +2514,7 @@ webpackJsonp([0],[
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
+	Object.defineProperty(exports, "__esModule", { value: true });
 	var module = angular.module('evalquiz');
 	var utils_1 = __webpack_require__(3);
 	var Controller = (function () {
@@ -2519,35 +2522,35 @@ webpackJsonp([0],[
 	    }
 	    Controller = __decorate([
 	        utils_1.Component(module, 'memberInfo', {
-	            template: __webpack_require__(100),
+	            template: __webpack_require__(99),
 	            bindings: {
 	                member: '<'
 	            }
-	        }), 
-	        __metadata('design:paramtypes', [])
+	        }),
+	        __metadata("design:paramtypes", [])
 	    ], Controller);
 	    return Controller;
 	}());
 
 
-/***/ },
-/* 100 */
-/***/ function(module, exports) {
+/***/ }),
+/* 99 */
+/***/ (function(module, exports) {
 
 	module.exports = "<ul class=\"member-info\" ng-if=\"$ctrl.member.params && $ctrl.member.params.length\">\r\n    <li ng-repeat=\"param in $ctrl.member.params\">\r\n        <div class=\"markdown\" btf-markdown=\"param.signatureDescription\"></div>\r\n        <member-info ng-if=\"param.params || param.properties\" member=\"param\"></member-info>\r\n    </li>\r\n</ul>\r\n\r\n<ul class=\"member-info\" ng-if=\"$ctrl.member.properties && $ctrl.member.properties.length\">\r\n    <li ng-repeat=\"property in $ctrl.member.properties\">\r\n        <div class=\"markdown\" btf-markdown=\"property.signatureDescription\"></div>\r\n        <member-info ng-if=\"property.params || property.properties\" member=\"property\"></member-info>\r\n    </li>\r\n</ul>";
 
-/***/ },
-/* 101 */
-/***/ function(module, exports) {
+/***/ }),
+/* 100 */
+/***/ (function(module, exports) {
 
 	module.exports = "<md-content class=\"text\" flex=\"50\" layout=\"column\" class=\"layout-stretch\">\r\n\t<md-card flex class=\"riddle-left-card\">\r\n\t\t<img ng-src=\"riddles/{{$ctrl.riddle.location}}/icon.svg\" class=\"riddle-icon\" />\r\n\r\n\t\t<md-card-title>\r\n\r\n\t\t\t<md-card-title-text>\r\n\t\t\t\t<div class=\"md-headline\">\r\n\t\t\t\t\t<i class=\"fa\" ng-class=\"{'fa-square-o': !$ctrl.solved, 'fa-check-square-o': $ctrl.solved}\"></i>&nbsp;\r\n\t\t\t\t\t<span class=\"lighter\">Level {{$ctrl.riddle.level}}:</span>&nbsp;<span>{{$ctrl.riddle.title}}</span>&nbsp;\r\n\t\t\t\t\t<i class=\"fa\" ng-class=\"{'fa-star-o lightest': $ctrl.riddle.state.score <= 0, 'fa-star': $ctrl.riddle.state.score > 0}\"></i>\r\n\t\t\t\t\t<i class=\"fa\" ng-class=\"{'fa-star-o lightest': $ctrl.riddle.state.score <= 1, 'fa-star': $ctrl.riddle.state.score > 1}\"></i>\r\n\t\t\t\t\t<i class=\"fa\" ng-class=\"{'fa-star-o lightest': $ctrl.riddle.state.score <= 2, 'fa-star': $ctrl.riddle.state.score > 2}\"></i>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"md-subhead\">\r\n\t\t\t\t\t{{$ctrl.riddle.shortDescription}}\r\n\t\t\t\t</div>\r\n\t\t\t</md-card-title-text>\r\n\t\t</md-card-title>\r\n\r\n\t\t<md-tabs flex md-selected=\"$ctrl.selectedTab\">\r\n\t\t\t<md-tab label=\"Info\" class=\"info-tab\">\r\n\t\t\t\t<div flex layout=\"column\" class=\"lined-top\">\r\n\t\t\t\t\t<div flex class=\"scrolls md-padding md-body-1\">\r\n\t\t\t\t\t\t<div btf-markdown=\"$ctrl.riddle.detail.description\"></div>\r\n\r\n\t\t\t\t\t\t<p ng-if=\"$ctrl.riddle.minScoreToSolve == 2\">\r\n\t\t\t\t\t\t\t<i class=\"fa fa-exclamation-circle\"></i> You need at least two stars (\r\n\t\t\t\t\t\t\t<i class=\"fa fa-star\"></i>&nbsp;<i class=\"fa fa-star\"></i>&nbsp;<i class=\"fa fa-star-o lightest\"></i>) to solve the\r\n\t\t\t\t\t\t\triddle!\r\n\t\t\t\t\t\t</p>\r\n\r\n\t\t\t\t\t\t<p ng-if=\"$ctrl.riddle.minScoreToSolve == 3\">\r\n\t\t\t\t\t\t\t<i class=\"fa fa-exclamation-circle\"></i> You need all three stars (\r\n\t\t\t\t\t\t\t<i class=\"fa fa-star\">&nbsp;</i><i class=\"fa fa-star\"></i>&nbsp;<i class=\"fa fa-star\"></i>) to solve the riddle!\r\n\t\t\t\t\t\t</p>\r\n\t\t\t\t\t</div>\r\n\r\n\t\t\t\t\t<div class=\"md-headline md-padding layout-no-resize lined-top\">\r\n\t\t\t\t\t\t<i class=\"fa fa-bullseye\"></i>&nbsp;Goals\r\n\t\t\t\t\t</div>\r\n\r\n\t\t\t\t\t<div class=\"md-padding layout-no-resize md-body-1\">\r\n\t\t\t\t\t\t<table>\r\n\t\t\t\t\t\t\t<tbody>\r\n\t\t\t\t\t\t\t\t<tr ng-repeat=\"goal in $ctrl.riddle.detail.goals track by $index\" ng-if=\"$index <= $ctrl.riddle.state.score\">\r\n\t\t\t\t\t\t\t\t\t<td>\r\n\t\t\t\t\t\t\t\t\t\t<i class=\"fa\" ng-class=\"{'fa-square-o': $ctrl.riddle.state.score <= $index, 'fa-check-square-o': $ctrl.riddle.state.score > $index}\"></i>\r\n\t\t\t\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t\t\t\t<td style=\"min-width: 5em; text-align: center;\">\r\n\t\t\t\t\t\t\t\t\t\t<i class=\"fa fa-star\"></i>\r\n\t\t\t\t\t\t\t\t\t\t<i class=\"fa\" ng-class=\"{'fa-star-o lightest': $index <= 0, 'fa-star': $index > 0}\"></i>\r\n\t\t\t\t\t\t\t\t\t\t<i class=\"fa\" ng-class=\"{'fa-star-o lightest': $index <= 1, 'fa-star': $index > 1}\"></i>\r\n\t\t\t\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t\t\t\t<td>\r\n\t\t\t\t\t\t\t\t\t\t<div class=\"markdown\" btf-markdown=\"goal\"></div>\r\n\t\t\t\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t</tbody>\r\n\t\t\t\t\t\t</table>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</md-tab>\r\n\r\n\t\t\t<md-tab label=\"API\">\r\n\t\t\t\t<div flex layout=\"column\" class=\"no-scroll lined-top\">\r\n\t\t\t\t\t<div flex class=\"scrolls md-body-1\">\r\n\t\t\t\t\t\t<api-info api=\"$ctrl.riddle.detail.api\" />\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</md-tab>\r\n\r\n\t\t\t<md-tab label=\"Console\">\r\n\t\t\t\t<div flex layout=\"column\" class=\"no-scroll\">\r\n\t\t\t\t\t<div flex id=\"console\" class=\"console\">\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</md-tab>\r\n\r\n\t\t\t<md-tab label=\"Hints\" class=\"hints-tab\" ng-if=\"$ctrl.riddle.detail.hints\">\r\n\t\t\t\t<div flex layout=\"column\" class=\"lined-top\">\r\n\t\t\t\t\t<div flex class=\"scrolls md-padding md-body-1\">\r\n\t\t\t\t\t\t<div btf-markdown=\"$ctrl.riddle.detail.hints\"></div>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</md-tab>\r\n\t\t</md-tabs>\r\n\t</md-card>\r\n</md-content>\r\n\r\n<md-content flex=\"50\" layout=\"column\">\r\n\t<md-card flex class=\"riddle-right-card no-scrolls\">\r\n\t\t<md-card-title class=\"layout-no-resize\">\r\n\t\t\t<md-card-title-text>\r\n\t\t\t\t<div class=\"md-headline\">\r\n\t\t\t\t\t<i class=\"fa fa-code\"></i>&nbsp;Function\r\n\t\t\t\t\t<code>{{$ctrl.riddle.detail.member.signature}}</code>\r\n\t\t\t\t</div>\r\n\r\n\t\t\t\t<div class=\"md-subhead markdown\" btf-markdown=\"$ctrl.riddle.detail.member.description\"></div>\r\n\t\t\t</md-card-title-text>\r\n\t\t</md-card-title>\r\n\r\n\t\t<md-card-content class=\"members layout-no-resize md-body-1\">\r\n\t\t\t<div btf-markdown=\"$ctrl.riddle.detail.member.explanation\"></div>\r\n\t\t\t<member-info member=\"$ctrl.riddle.detail.member\"></member-info>\r\n\t\t</md-card-content>\r\n\r\n\t\t<md-card-content flex layout=\"column\" class=\"editor lined-top lined-bottom\">\r\n\t\t\t<textarea ng-model=\"$ctrl.riddle.state.code\" ui-codemirror=\"$ctrl.editorOptions\"></textarea>\r\n\t\t</md-card-content>\r\n\r\n\t\t<md-card-actions layout=\"row\" layout-align=\"end center\">\r\n\t\t\t<md-button ng-click=\"$ctrl.save()\" ng-disabled=\"$ctrl.running\">Save</md-button>\r\n\t\t\t<md-button class=\"code-load-button\" ng-click=\"$ctrl.load()\" ng-disabled=\"!$ctrl.hasSaves || $ctrl.running\">Load</md-button>\r\n\t\t\t<md-button ng-click=\"$ctrl.trash()\" ng-disabled=\"$ctrl.running\">Trash</md-button>\r\n\r\n\t\t\t<span flex=\"\" class=\"flex\"></span>\r\n\r\n\t\t\t<md-button class=\"md-primary md-raised\" ng-click=\"$ctrl.solve($event)\" ng-disabled=\"$ctrl.running\">\r\n\t\t\t\t<i class=\"fa fa-play-circle separated\" aria-hidden=\"true\"></i> Solve\r\n\t\t\t</md-button>\r\n\t\t\t<md-button class=\"md-accent md-raised\" ng-click=\"$ctrl.solve($event)\" ng-disabled=\"!$ctrl.running\">\r\n\t\t\t\tAbort\r\n\t\t\t</md-button>\r\n\t\t</md-card-actions>\r\n\t</md-card>\r\n</md-content>";
 
-/***/ },
-/* 102 */
-/***/ function(module, exports) {
+/***/ }),
+/* 101 */
+/***/ (function(module, exports) {
 
 	module.exports = "<toolbar riddles=\"$ctrl.riddles\" selected-riddle=\"$ctrl.selectedRiddle\"></toolbar>\r\n\r\n<storage-info-bar></storage-info-bar>\r\n\r\n<md-content ng-if=\"!$ctrl.selectedRiddle\">\r\n\t<div class=\"loader\">\r\n\t\t<md-progress-linear md-mode=\"indeterminate\"></md-progress-linear>\r\n\t\t<p>Loading ...</p>\r\n\t</div>\r\n</md-content>\r\n\r\n<md-content ng-if=\"$ctrl.selectedRiddle && !$ctrl.isAvailable($ctrl.selectedRiddle)\">\r\n\t<div class=\"loader\">\r\n\t\tThe riddle \"{{$ctrl.selectedRiddle.title}}\" is not yet available. You have to solve some earlier riddle, first!\r\n\t</div>\r\n</md-content>\r\n\r\n<workbench ng-if=\"$ctrl.selectedRiddle && $ctrl.isAvailable($ctrl.selectedRiddle)\" riddle=\"$ctrl.selectedRiddle\" layout=\"row\"\r\n\tflex layout-padding></workbench>";
 
-/***/ }
+/***/ })
 ]);
 //# sourceMappingURL=app.js.map

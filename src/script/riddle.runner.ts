@@ -564,14 +564,14 @@ export class RiddleRunner implements suite.Context {
         return deferred.promise;
     }
 
-    map<Item, Result>(source: Item[], fn: (item: Item) => angular.IPromise<Result> | Result): angular.IPromise<Result[]> {
-        let deferred = this.defer<(Result | undefined | null)[] | undefined | null>();
+    map<Item, Result>(source: Item[], fn: (item: Item) => angular.IPromise<Result> | Result): angular.IPromise<Result[] | void> {
+        let deferred = this.defer<Result[] | void>();
 
         if (source === undefined) {
             deferred.resolve(undefined);
         }
         else if (source === null) {
-            deferred.resolve(null);
+            deferred.resolve();
         }
         else if (!source.length) {
             deferred.resolve([]);
@@ -585,7 +585,7 @@ export class RiddleRunner implements suite.Context {
         return deferred.promise;
     }
 
-    private mapStep<Item, Result>(deferred: angular.IDeferred<(Result | undefined | null)[]>, source: (Item | undefined | null)[], sourceIndex: number, target: (Result | undefined | null)[], fn: (item: Item | undefined | null) => angular.IPromise<Result> | Result | undefined | null): void {
+    private mapStep<Item, Result>(deferred: angular.IDeferred<(Result | undefined | null)[] | void>, source: (Item | undefined | null)[], sourceIndex: number, target: (Result | undefined | null)[], fn: (item: Item | undefined | null) => angular.IPromise<Result> | Result | undefined | null): void {
         this.check();
 
         if (sourceIndex >= source.length) {

@@ -3,7 +3,7 @@
   "description": "A game for solving riddles with JavaScript.",
   "main": "index.js",
   "devDependencies": {
-    "awesome-typescript-loader": "^2.2.4",
+    "awesome-typescript-loader": "^3.0.0",
     "grunt": "^1.0.1",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-watch": "^1.0.0",

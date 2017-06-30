@@ -20,7 +20,7 @@ export class RiddleService {
     }
 
     prepare(riddle: Riddle): angular.IPromise<Riddle> {
-        var deferred = this.$q.defer();
+        var deferred = this.$q.defer<Riddle>();
 
         if (riddle.detail) {
             deferred.resolve(riddle);

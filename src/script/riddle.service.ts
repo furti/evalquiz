@@ -183,7 +183,7 @@ export class RiddleService {
                 let logItem = this.consoleService.log().withContentClass('center');
 
                 if (solved) {
-                    logItem.h2('Contrgatulations').addClass('fade-in');
+                    logItem.h2('Congratulations').addClass('fade-in');
                 }
                 else {
                     logItem.h2('Tests passed').addClass('fade-in');
